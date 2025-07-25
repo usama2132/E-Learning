@@ -1,0 +1,528 @@
+/* Student Profile Page Styles */
+.student-profile {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: var(--bg-color);
+  min-height: 100vh;
+}
+
+.student-profile__container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Profile Header Section */
+.student-profile__header {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.student-profile__avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.student-profile__avatar:hover {
+  transform: scale(1.05);
+}
+
+.student-profile__name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.student-profile__email {
+  font-size: 1rem;
+  opacity: 0.9;
+  margin-bottom: 1rem;
+}
+
+.student-profile__join-date {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.student-profile__join-date i {
+  font-size: 1rem;
+}
+
+/* Profile Stats */
+.student-profile__stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.student-profile__stat {
+  text-align: center;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+}
+
+.student-profile__stat-number {
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: block;
+}
+
+.student-profile__stat-label {
+  font-size: 0.8rem;
+  opacity: 0.9;
+  margin-top: 0.25rem;
+}
+
+/* Profile Details Section */
+.student-profile__details {
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-color);
+}
+
+.student-profile__section-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--primary-color);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.student-profile__info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.student-profile__info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.student-profile__info-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.student-profile__info-value {
+  font-size: 1rem;
+  color: var(--text-primary);
+  padding: 0.75rem;
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.student-profile__info-value:hover {
+  border-color: var(--primary-color);
+  background: var(--bg-color);
+}
+
+/* Bio Section */
+.student-profile__bio {
+  margin-top: 1.5rem;
+}
+
+.student-profile__bio-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+  padding: 1rem;
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  min-height: 120px;
+  resize: none;
+}
+
+/* Action Buttons */
+.student-profile__actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  justify-content: flex-end;
+}
+
+.student-profile__btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.student-profile__btn--primary {
+  background: var(--primary-color);
+  color: white;
+}
+
+.student-profile__btn--primary:hover {
+  background: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.student-profile__btn--secondary {
+  background: transparent;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+}
+
+.student-profile__btn--secondary:hover {
+  background: var(--primary-color);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Learning Progress Section */
+.student-profile__progress {
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-color);
+  margin-top: 2rem;
+}
+
+.student-profile__courses-enrolled {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.student-profile__course-item {
+  background: var(--input-bg);
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.student-profile__course-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary-color);
+}
+
+.student-profile__course-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.student-profile__course-instructor {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+.student-profile__course-progress {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.student-profile__progress-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--border-color);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.student-profile__progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--success-color), var(--primary-color));
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.student-profile__progress-text {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  min-width: 45px;
+  text-align: right;
+}
+
+/* Achievements Section */
+.student-profile__achievements {
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--border-color);
+  margin-top: 2rem;
+}
+
+.student-profile__badges {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.student-profile__badge {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--input-bg);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.student-profile__badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-color: var(--success-color);
+}
+
+.student-profile__badge-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--success-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.student-profile__badge-info h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.student-profile__badge-info p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Edit Mode Styles */
+.student-profile--editing .student-profile__info-value {
+  background: white;
+  border-color: var(--primary-color);
+}
+
+.student-profile--editing .student-profile__bio-text {
+  background: white;
+  border-color: var(--primary-color);
+}
+
+/* Loading State */
+.student-profile--loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.student-profile--loading::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 10;
+  border-radius: 12px;
+}
+
+.student-profile--loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--border-color);
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  z-index: 11;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .student-profile__container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .student-profile__info-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .student-profile__stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .student-profile {
+    padding: 1rem;
+  }
+  
+  .student-profile__header,
+  .student-profile__details,
+  .student-profile__progress,
+  .student-profile__achievements {
+    padding: 1.5rem;
+  }
+  
+  .student-profile__avatar {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .student-profile__name {
+    font-size: 1.5rem;
+  }
+  
+  .student-profile__stats {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .student-profile__actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .student-profile__btn {
+    text-align: center;
+    justify-content: center;
+  }
+  
+  .student-profile__courses-enrolled,
+  .student-profile__badges {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .student-profile {
+    padding: 0.5rem;
+  }
+  
+  .student-profile__header,
+  .student-profile__details,
+  .student-profile__progress,
+  .student-profile__achievements {
+    padding: 1rem;
+  }
+  
+  .student-profile__avatar {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .student-profile__name {
+    font-size: 1.3rem;
+  }
+  
+  .student-profile__section-title {
+    font-size: 1.2rem;
+  }
+}
+
+/* Animations */
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.student-profile__course-item,
+.student-profile__badge {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+/* Dark Theme Adjustments */
+[data-theme="dark"] .student-profile__stat {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .student-profile__info-value,
+[data-theme="dark"] .student-profile__bio-text,
+[data-theme="dark"] .student-profile__course-item,
+[data-theme="dark"] .student-profile__badge {
+  background: var(--dark-card-bg);
+  border-color: var(--dark-border-color);
+}
+
+[data-theme="dark"] .student-profile--editing .student-profile__info-value,
+[data-theme="dark"] .student-profile--editing .student-profile__bio-text {
+  background: var(--dark-input-bg);
+}
+
+/* Print Styles */
+@media print {
+  .student-profile {
+    max-width: none;
+    padding: 0;
+    background: white;
+    color: black;
+  }
+  
+  .student-profile__actions {
+    display: none;
+  }
+  
+  .student-profile__header {
+    background: #f5f5f5 !important;
+    color: black !important;
+  }
+  
+  .student-profile__container {
+    grid-template-columns: 1fr;
+  }
+}
