@@ -1,0 +1,12 @@
+{
+  "files": {
+    "main.css": "/e-learning/static/css/main.796b6cbe.css",
+    "main.js": "/e-learning/static/js/main.005cae09.js",
+    "static/js/206.1430d834.chunk.js": "/e-learning/static/js/206.1430d834.chunk.js",
+    "index.html": "/e-learning/index.html"
+  },
+  "entrypoints": [
+    "static/css/main.796b6cbe.css",
+    "static/js/main.005cae09.js"
+  ]
+}
