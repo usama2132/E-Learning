@@ -4461,8 +4461,8 @@ a:focus {
   flex-shrink: 0;
   width: 18px;
   height: 18px;
-  margin-top: 2px;
-  margin-bottom: -3.5px;
+  margin-top: 2\.5px;
+  margin-bottom: -4px;
   margin-left: -2px; /* Nudge play icon slightly left */
   margin-right: 6px;
 }
