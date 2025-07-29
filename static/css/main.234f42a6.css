@@ -4462,9 +4462,9 @@ a:focus {
   width: 18px;
   height: 18px;
   margin-top: 2px;
-  margin-bottom: -2px;
+  margin-bottom: -3.5px;
   margin-left: -2px; /* Nudge play icon slightly left */
-  margin-right: 2px;
+  margin-right: 6px;
 }
 
 .primary-cta {
