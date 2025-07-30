@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { AuthContext } from '../../context/AuthContext';
-import { NotificationContext } from '../../context/NotificationContext';
+import  AuthContext  from '../../context/AuthContext';
+import  NotificationContext  from '../../context/NotificationContext';
 import Button from '../common/Button';
 import Input from '../common/Input';
 import Loading from '../common/Loading';

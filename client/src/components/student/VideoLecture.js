@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ProgressContext } from '../../context/ProgressContext';
-import { AuthContext } from '../../context/AuthContext';
-import { NotificationContext } from '../../context/NotificationContext';
+import  AuthContext  from '../../context/AuthContext';
+import  NotificationContext from '../../context/NotificationContext';
 import VideoPlayer from '../common/VideoPlayer';
 import Button from '../common/Button';
 import Loading from '../common/Loading';

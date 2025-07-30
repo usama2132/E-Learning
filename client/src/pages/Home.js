@@ -1,65 +1,65 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useCourses } from '../hooks/useCourses';
 import CourseCard from '../components/student/CourseCard';
-import SearchBar from '../components/common/SearchBar';
 import Button from '../components/common/Button';
 import Loading from '../components/common/Loading';
 import '../styles/pages/Home.css';
-import { Search, Book, Clock, Award, Users } from 'lucide-react';
+import { Search, Book, Clock, Award, Users, ArrowRight, Play, Star, TrendingUp } from 'lucide-react';
 
 const Home = () => {
   const { user } = useAuth();
   const { courses, loading, fetchCourses } = useCourses();
-  const [featuredCourses, setFeaturedCourses] = useState([]);
-  const [popularCourses, setPopularCourses] = useState([]);
-  const [recentCourses, setRecentCourses] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   useEffect(() => {
     fetchCourses();
   }, []);
 
-  useEffect(() => {
-    if (courses.length > 0) {
-      // Featured courses (highest rated)
-      const featured = courses
-        .filter(course => course.rating >= 4.5)
-        .sort((a, b) => b.rating - a.rating)
-        .slice(0, 6);
-      
-      // Popular courses (most enrolled)
-      const popular = courses
-        .sort((a, b) => b.enrollmentCount - a.enrollmentCount)
-        .slice(0, 8);
-      
-      // Recent courses
-      const recent = courses
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-        .slice(0, 6);
+  // Memoize processed courses to prevent recalculation on every render
+  const processedCourses = useMemo(() => {
+    if (courses.length === 0) return { featured: [], popular: [], recent: [] };
+    
+    // Featured courses (highest rated)
+    const featured = courses
+      .filter(course => course.rating >= 4.5)
+      .sort((a, b) => b.rating - a.rating)
+      .slice(0, 6);
+    
+    // Popular courses (most enrolled)
+    const popular = courses
+      .sort((a, b) => b.enrollmentCount - a.enrollmentCount)
+      .slice(0, 6); // Reduced from 8 to 6 for performance
+    
+    // Recent courses
+    const recent = courses
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .slice(0, 6);
 
-      setFeaturedCourses(featured);
-      setPopularCourses(popular);
-      setRecentCourses(recent);
-    }
+    return { featured, popular, recent };
   }, [courses]);
 
-  const handleSearch = (term) => {
-    setSearchTerm(term);
-    if (term.trim()) {
-      // Navigate to courses page with search term
-      window.location.href = `/courses?search=${encodeURIComponent(term)}`;
-    }
-  };
-
-  const stats = {
+  // Memoize stats to prevent recalculation
+  const stats = useMemo(() => ({
     totalCourses: courses.length,
     totalStudents: courses.reduce((sum, course) => sum + course.enrollmentCount, 0),
     totalInstructors: new Set(courses.map(course => course.instructorId)).size,
     avgRating: courses.length > 0 
       ? (courses.reduce((sum, course) => sum + course.rating, 0) / courses.length).toFixed(1)
       : '0.0'
+  }), [courses]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      window.location.href = `/courses?search=${encodeURIComponent(searchTerm)}`;
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
   };
 
   if (loading) {
@@ -70,56 +70,145 @@ const Home = () => {
     <div className="home-page">
       {/* Hero Section */}
       <section className="hero-section">
+        <div className="hero-background">
+          <div className="hero-gradient"></div>
+          <div className="hero-particles">
+            {/* Reduced particles from 20 to 5 for performance */}
+            {[...Array(5)].map((_, i) => (
+              <div key={i} className={`particle particle-${i + 1}`}></div>
+            ))}
+          </div>
+        </div>
+        
         <div className="hero-content">
           <div className="hero-text">
-            <h1>Learn Without Limits</h1>
-            <p>
+            <h1 className="hero-title">
+              <span className="title-main">Learn Without</span>
+              <span className="title-highlight">Limits</span>
+            </h1>
+            
+            <p className="hero-description">
               Discover thousands of courses from expert instructors and advance your career 
               with skills that matter in today's world.
             </p>
             
-            <div className="hero-search">
-              <SearchBar 
-                onSearch={handleSearch}
-                placeholder="What do you want to learn today?"
-                size="large"
-              />
+            <div className="hero-search-container">
+              <form onSubmit={handleSearch} className="search-form">
+                <div className={`search-input-wrapper ${isSearchFocused ? 'focused' : ''}`}>
+                  <div className="search-icon">
+                    <Search size={20} />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="What do you want to learn today?"
+                    className="search-input"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    onFocus={() => setIsSearchFocused(true)}
+                    onBlur={() => setIsSearchFocused(false)}
+                  />
+                  <button type="submit" className="search-submit">
+                    <ArrowRight size={20} />
+                  </button>
+                </div>
+              </form>
             </div>
 
             <div className="hero-actions">
               {!user ? (
                 <>
-                  <Button as={Link} to="/register" size="large">
+                  <Button as={Link} to="/register" className="primary-cta">
+                    <Play size={18} />
                     Get Started Free
                   </Button>
-                  <Button as={Link} to="/courses" variant="outline" size="large">
+                  <Button as={Link} to="/courses" variant="outline" className="secondary-cta">
                     Browse Courses
                   </Button>
                 </>
               ) : (
                 <>
-                  <Button as={Link} to="/dashboard" size="large">
+                  <Button as={Link} to="/dashboard" className="primary-cta">
+                    <Book size={18} />
                     Go to Dashboard
                   </Button>
-                  <Button as={Link} to="/courses" variant="outline" size="large">
+                  <Button as={Link} to="/courses" variant="outline" className="secondary-cta">
                     Explore Courses
                   </Button>
                 </>
               )}
             </div>
+
+            <div className="hero-trust-indicators">
+              <div className="trust-item">
+                <Star className="trust-icon" />
+                <span>4.8/5 Average Rating</span>
+              </div>
+              <div className="trust-item">
+                <Users className="trust-icon" />
+                <span>50K+ Happy Students</span>
+              </div>
+              <div className="trust-item">
+                <TrendingUp className="trust-icon" />
+                <span>95% Success Rate</span>
+              </div>
+            </div>
           </div>
 
-          <div className="hero-image">
+          <div className="hero-visual">
             <div className="hero-illustration">
-              <svg viewBox="0 0 400 300" fill="none">
-                <rect x="50" y="50" width="300" height="200" rx="10" fill="#f0f9ff" stroke="#0ea5e9"/>
-                <circle cx="100" cy="100" r="30" fill="#0ea5e9"/>
-                <rect x="150" y="85" width="120" height="10" rx="5" fill="#cbd5e1"/>
-                <rect x="150" y="105" width="80" height="10" rx="5" fill="#cbd5e1"/>
-                <rect x="80" y="150" width="200" height="60" rx="8" fill="#e0f2fe"/>
-                <circle cx="320" cy="80" r="8" fill="#10b981"/>
-                <path d="M315 80L318 83L325 76" stroke="white" strokeWidth="2" fill="none"/>
-              </svg>
+              <div className="floating-cards">
+                <div className="floating-card card-1">
+                  <div className="card-icon">
+                    <Book size={24} />
+                  </div>
+                  <div className="card-content">
+                    <h4>Web Development</h4>
+                    <p>2,847 students</p>
+                  </div>
+                </div>
+                
+                <div className="floating-card card-2">
+                  <div className="card-icon">
+                    <Award size={24} />
+                  </div>
+                  <div className="card-content">
+                    <h4>Get Certified</h4>
+                    <p>Industry recognized</p>
+                  </div>
+                </div>
+                
+                <div className="floating-card card-3">
+                  <div className="card-icon">
+                    <Clock size={24} />
+                  </div>
+                  <div className="card-content">
+                    <h4>Learn at your pace</h4>
+                    <p>24/7 access</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="hero-main-visual">
+                <div className="visual-backdrop"></div>
+                <div className="visual-content">
+                  <div className="progress-ring">
+                    <svg width="160" height="160" viewBox="0 0 200 200">
+                      <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="4"/>
+                      <circle cx="100" cy="100" r="90" fill="none" stroke="url(#gradient)" strokeWidth="4" 
+                              strokeDasharray="565" strokeDashoffset="113" />
+                      <defs>
+                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="#3b82f6" />
+                          <stop offset="100%" stopColor="#10b981" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                    <div className="ring-center">
+                      <Play size={24} className="play-icon" />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -129,18 +218,30 @@ const Home = () => {
       <section className="stats-section">
         <div className="stats-container">
           <div className="stat-item">
+            <div className="stat-icon">
+              <Book size={32} />
+            </div>
             <h3>{stats.totalCourses.toLocaleString()}</h3>
             <p>Courses Available</p>
           </div>
           <div className="stat-item">
+            <div className="stat-icon">
+              <Users size={32} />
+            </div>
             <h3>{stats.totalStudents.toLocaleString()}</h3>
             <p>Students Enrolled</p>
           </div>
           <div className="stat-item">
+            <div className="stat-icon">
+              <Award size={32} />
+            </div>
             <h3>{stats.totalInstructors}</h3>
             <p>Expert Instructors</p>
           </div>
           <div className="stat-item">
+            <div className="stat-icon">
+              <Star size={32} />
+            </div>
             <h3>{stats.avgRating}</h3>
             <p>Average Rating</p>
           </div>
@@ -148,17 +249,17 @@ const Home = () => {
       </section>
 
       {/* Featured Courses */}
-      {featuredCourses.length > 0 && (
+      {processedCourses.featured.length > 0 && (
         <section className="courses-section">
           <div className="section-header">
             <h2>Featured Courses</h2>
             <p>Top-rated courses chosen by our community</p>
             <Link to="/courses?filter=featured" className="view-all-link">
-              View All Featured →
+              View All Featured <ArrowRight size={16} />
             </Link>
           </div>
           <div className="courses-grid">
-            {featuredCourses.map(course => (
+            {processedCourses.featured.map(course => (
               <CourseCard 
                 key={course.id} 
                 course={course}
@@ -170,17 +271,17 @@ const Home = () => {
       )}
 
       {/* Popular Courses */}
-      {popularCourses.length > 0 && (
+      {processedCourses.popular.length > 0 && (
         <section className="courses-section">
           <div className="section-header">
             <h2>Most Popular</h2>
             <p>Courses with the highest enrollment</p>
             <Link to="/courses?filter=popular" className="view-all-link">
-              View All Popular →
+              View All Popular <ArrowRight size={16} />
             </Link>
           </div>
           <div className="courses-grid">
-            {popularCourses.slice(0, 6).map(course => (
+            {processedCourses.popular.map(course => (
               <CourseCard 
                 key={course.id} 
                 course={course}
@@ -192,17 +293,17 @@ const Home = () => {
       )}
 
       {/* Recent Courses */}
-      {recentCourses.length > 0 && (
+      {processedCourses.recent.length > 0 && (
         <section className="courses-section">
           <div className="section-header">
             <h2>New & Fresh</h2>
             <p>Recently added courses from our instructors</p>
             <Link to="/courses?filter=recent" className="view-all-link">
-              View All New →
+              View All New <ArrowRight size={16} />
             </Link>
           </div>
           <div className="courses-grid">
-            {recentCourses.map(course => (
+            {processedCourses.recent.map(course => (
               <CourseCard 
                 key={course.id} 
                 course={course}
@@ -213,55 +314,77 @@ const Home = () => {
         </section>
       )}
 
-      {/* Features Section */}
-      <section className="features-section">
-        <h2>Why Choose Our Platform?</h2>
-        <div className="features-grid">
-          <div className="feature-card">
-            <div className="feature-icon">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-              </svg>
+      {/* Simplified Features Section */}
+      <section style={{
+        padding: '60px 20px',
+        backgroundColor: 'var(--bg-color, #ffffff)',
+        color: 'var(--text-color, #333333)'
+      }}>
+        <h2 style={{
+          textAlign: 'center',
+          fontSize: '2.5rem',
+          fontWeight: '700',
+          marginBottom: '50px',
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text'
+        }}>
+          Why Choose Our Platform?
+        </h2>
+        
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: '25px',
+          maxWidth: '1200px',
+          margin: '0 auto'
+        }}>
+          {[
+            { icon: Book, title: 'Expert-Led Content', desc: 'Learn from industry professionals with years of experience', gradient: 'linear-gradient(135deg, #667eea, #764ba2)' },
+            { icon: Clock, title: 'Learn at Your Pace', desc: 'Flexible scheduling that fits your lifestyle and commitments', gradient: 'linear-gradient(135deg, #f093fb, #f5576c)' },
+            { icon: Award, title: 'Certification', desc: 'Earn certificates to showcase your new skills to employers', gradient: 'linear-gradient(135deg, #4facfe, #00f2fe)' },
+            { icon: Users, title: 'Community Support', desc: 'Connect with peers and get help from our active community', gradient: 'linear-gradient(135deg, #fa709a, #fee140)' }
+          ].map((feature, index) => (
+            <div key={index} style={{
+              background: 'var(--card-bg, #ffffff)',
+              padding: '35px 25px',
+              borderRadius: '15px',
+              textAlign: 'center',
+              transition: 'transform 0.2s ease',
+              boxShadow: 'var(--card-shadow, 0 8px 25px rgba(0,0,0,0.1))',
+              border: '1px solid var(--border-color, rgba(0,0,0,0.1))'
+            }}>
+              <div style={{
+                width: '70px',
+                height: '70px',
+                margin: '0 auto 20px auto',
+                background: feature.gradient,
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <feature.icon size={28} color="white" />
+              </div>
+              <h3 style={{
+                fontSize: '1.3rem',
+                fontWeight: '600',
+                marginBottom: '12px',
+                color: 'var(--text-color, #333333)'
+              }}>
+                {feature.title}
+              </h3>
+              <p style={{
+                fontSize: '0.95rem',
+                lineHeight: '1.5',
+                color: 'var(--text-secondary, #666666)',
+                margin: '0'
+              }}>
+                {feature.desc}
+              </p>
             </div>
-            <h3>Expert-Led Content</h3>
-            <p>Learn from industry professionals with years of experience</p>
-          </div>
-          
-          <div className="feature-card">
-            <div className="feature-icon">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <circle cx="12" cy="12" r="10"/>
-                <polyline points="12,6 12,12 16,14"/>
-              </svg>
-            </div>
-            <h3>Learn at Your Pace</h3>
-            <p>Flexible scheduling that fits your lifestyle and commitments</p>
-          </div>
-          
-          <div className="feature-card">
-            <div className="feature-icon">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                <polyline points="22,4 12,14.01 9,11.01"/>
-              </svg>
-            </div>
-            <h3>Certification</h3>
-            <p>Earn certificates to showcase your new skills to employers</p>
-          </div>
-          
-          <div className="feature-card">
-            <div className="feature-icon">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                <circle cx="9" cy="7" r="4"/>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-              </svg>
-            </div>
-            <h3>Community Support</h3>
-            <p>Connect with peers and get help from our active community</p>
-          </div>
+          ))}
         </div>
       </section>
 
@@ -273,15 +396,15 @@ const Home = () => {
           <div className="cta-buttons">
             {!user ? (
               <>
-                <Button as={Link} to="/register" size="large">
+                <Button as={Link} to="/register" className="cta-primary">
                   Sign Up Now
                 </Button>
-                <Button as={Link} to="/login" variant="outline" size="large">
+                <Button as={Link} to="/login" variant="outline" className="cta-secondary">
                   Sign In
                 </Button>
               </>
             ) : (
-              <Button as={Link} to="/courses" size="large">
+              <Button as={Link} to="/courses" className="cta-primary">
                 Browse All Courses
               </Button>
             )}

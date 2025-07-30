@@ -1,9 +1,199 @@
-import React, { useState, useRef } from 'react';
-import useUpload from '../../hooks/useUpload'; // ✅ Correct
-import Button from '../common/Button';
-import Loading from '../common/Loading';
-import Modal from '../common/Modal';
+import React, { useState, useRef, useCallback, useMemo } from 'react';
+import useUpload from '../../hooks/useUpload';
 import '../../styles/dashboards/VideoUpload.css';
+
+// ISOLATED FORM COMPONENT - This prevents parent re-renders from affecting inputs
+const VideoFormModal = React.memo(({ 
+  isOpen, 
+  onClose, 
+  title, 
+  initialData, 
+  onSubmit, 
+  selectedVideo, 
+  formatFileSize, 
+  uploading,
+  onFileSelect 
+}) => {
+  // LOCAL STATE - Only this component controls these inputs
+  const [localForm, setLocalForm] = useState({
+    title: initialData?.title || '',
+    description: initialData?.description || '',
+    duration: initialData?.duration || '',
+    order: initialData?.order || 1
+  });
+
+  // Update local state when modal opens with new data
+  React.useEffect(() => {
+    if (isOpen && initialData) {
+      setLocalForm({
+        title: initialData.title || '',
+        description: initialData.description || '',
+        duration: initialData.duration || '',
+        order: initialData.order || 1
+      });
+    }
+  }, [isOpen, initialData]);
+
+  // STABLE input handlers - never recreated
+  const handleInputChange = useCallback((field) => (e) => {
+    const value = field === 'order' ? parseInt(e.target.value) || 1 : e.target.value;
+    setLocalForm(prev => ({ ...prev, [field]: value }));
+  }, []);
+
+  const handleSubmit = useCallback(() => {
+    onSubmit(localForm);
+  }, [localForm, onSubmit]);
+
+  const handleClose = useCallback(() => {
+    setLocalForm({
+      title: '',
+      description: '',
+      duration: '',
+      order: 1
+    });
+    onClose();
+  }, [onClose]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 overflow-y-auto">
+      <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <div 
+          className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" 
+          onClick={handleClose}
+        />
+        
+        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+          <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-medium text-gray-900">{title}</h3>
+              <button
+                onClick={handleClose}
+                className="text-gray-400 hover:text-gray-600 focus:outline-none"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Video Title *
+                </label>
+                <input
+                  type="text"
+                  value={localForm.title}
+                  onChange={handleInputChange('title')}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Enter video title"
+                  autoComplete="off"
+                  autoFocus={false}
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Description
+                </label>
+                <textarea
+                  value={localForm.description}
+                  onChange={handleInputChange('description')}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  rows="3"
+                  placeholder="Enter video description (optional)"
+                  autoComplete="off"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Duration
+                  </label>
+                  <input
+                    type="text"
+                    value={localForm.duration}
+                    onChange={handleInputChange('duration')}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="e.g., 5:30"
+                    readOnly={!!selectedVideo}
+                    autoComplete="off"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Order
+                  </label>
+                  <input
+                    type="number"
+                    value={localForm.order}
+                    onChange={handleInputChange('order')}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    min="1"
+                    autoComplete="off"
+                  />
+                </div>
+              </div>
+
+              {selectedVideo && (
+                <div className="bg-blue-50 p-3 rounded-md">
+                  <h6 className="text-sm font-medium text-blue-900 mb-1">Selected File:</h6>
+                  <p className="text-sm text-blue-700">{selectedVideo.name}</p>
+                  <p className="text-xs text-blue-600">Size: {formatFileSize(selectedVideo.size)}</p>
+                </div>
+              )}
+
+              {initialData && !selectedVideo && (
+                <div className="bg-gray-50 p-3 rounded-md">
+                  <p className="text-sm text-gray-600 mb-2">
+                    Leave file selection empty to keep the existing video, or select a new file to replace it.
+                  </p>
+                  <label
+                    htmlFor="edit-video-upload-isolated"
+                    className="cursor-pointer inline-flex items-center px-3 py-1 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                  >
+                    Choose New Video
+                  </label>
+                  <input
+                    type="file"
+                    accept="video/*"
+                    onChange={onFileSelect}
+                    className="hidden"
+                    id="edit-video-upload-isolated"
+                  />
+                </div>
+              )}
+
+              <div className="flex justify-end space-x-3 pt-4 border-t">
+                <button
+                  onClick={handleClose}
+                  className="px-4 py-2 text-sm border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSubmit}
+                  disabled={uploading || !localForm.title.trim()}
+                  className={`px-4 py-2 text-sm rounded-md transition-colors ${
+                    uploading || !localForm.title.trim()
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      : 'bg-blue-600 text-white hover:bg-blue-700'
+                  }`}
+                >
+                  {uploading ? 'Uploading...' : (initialData ? 'Update Video' : 'Add Video')}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+});
 
 const VideoUpload = ({ videos, setVideos }) => {
   const { uploadVideo, uploading, uploadProgress } = useUpload();
@@ -11,15 +201,10 @@ const VideoUpload = ({ videos, setVideos }) => {
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [editingVideo, setEditingVideo] = useState(null);
-  const [videoForm, setVideoForm] = useState({
-    title: '',
-    description: '',
-    duration: '',
-    order: videos.length + 1
-  });
   const fileInputRef = useRef(null);
 
-  const handleDrag = (e) => {
+  // Memoize handlers to prevent recreation
+  const handleDrag = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
     if (e.type === 'dragenter' || e.type === 'dragover') {
@@ -27,9 +212,9 @@ const VideoUpload = ({ videos, setVideos }) => {
     } else if (e.type === 'dragleave') {
       setDragActive(false);
     }
-  };
+  }, []);
 
-  const handleDrop = (e) => {
+  const handleDrop = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
@@ -37,15 +222,15 @@ const VideoUpload = ({ videos, setVideos }) => {
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       handleVideoFile(e.dataTransfer.files[0]);
     }
-  };
+  }, []);
 
-  const handleFileInput = (e) => {
+  const handleFileInput = useCallback((e) => {
     if (e.target.files && e.target.files[0]) {
       handleVideoFile(e.target.files[0]);
     }
-  };
+  }, []);
 
-  const handleVideoFile = (file) => {
+  const handleVideoFile = useCallback((file) => {
     // Validate file type
     const validTypes = ['video/mp4', 'video/webm', 'video/ogg', 'video/avi', 'video/mov'];
     if (!validTypes.includes(file.type)) {
@@ -68,28 +253,26 @@ const VideoUpload = ({ videos, setVideos }) => {
       const minutes = Math.floor(duration / 60);
       const seconds = duration % 60;
       
-      setVideoForm(prev => ({
-        ...prev,
+      setSelectedVideo({
+        file,
         duration: `${minutes}:${seconds.toString().padStart(2, '0')}`,
-        title: file.name.replace(/\.[^/.]+$/, '') // Remove file extension
-      }));
-      
-      setSelectedVideo(file);
+        title: file.name.replace(/\.[^/.]+$/, '')
+      });
       setShowVideoModal(true);
       
       window.URL.revokeObjectURL(video.src);
     };
     
     video.src = URL.createObjectURL(file);
-  };
+  }, []);
 
-  const handleVideoSubmit = async () => {
+  const handleModalSubmit = useCallback(async (formData) => {
     if (!selectedVideo && !editingVideo) {
       alert('Please select a video file');
       return;
     }
 
-    if (!videoForm.title.trim()) {
+    if (!formData.title.trim()) {
       alert('Please provide a title for the video');
       return;
     }
@@ -98,8 +281,8 @@ const VideoUpload = ({ videos, setVideos }) => {
       let videoUrl = null;
 
       // Only upload if we have a new file
-      if (selectedVideo) {
-        videoUrl = await uploadVideo(selectedVideo, 'course-videos');
+      if (selectedVideo?.file) {
+        videoUrl = await uploadVideo(selectedVideo.file, 'course-videos');
       }
 
       if (editingVideo) {
@@ -108,11 +291,8 @@ const VideoUpload = ({ videos, setVideos }) => {
           video.id === editingVideo.id 
             ? {
                 ...video,
-                title: videoForm.title,
-                description: videoForm.description,
-                duration: videoForm.duration,
-                order: videoForm.order,
-                ...(videoUrl && { url: videoUrl, file: selectedVideo })
+                ...formData,
+                ...(videoUrl && { url: videoUrl, file: selectedVideo.file })
               }
             : video
         ));
@@ -120,12 +300,9 @@ const VideoUpload = ({ videos, setVideos }) => {
         // Add new video
         const newVideo = {
           id: Date.now(),
-          title: videoForm.title,
-          description: videoForm.description,
+          ...formData,
           url: videoUrl,
-          duration: videoForm.duration,
-          order: videoForm.order,
-          file: selectedVideo
+          file: selectedVideo.file
         };
 
         setVideos(prev => [...prev, newVideo]);
@@ -137,50 +314,37 @@ const VideoUpload = ({ videos, setVideos }) => {
       console.error('Error uploading video:', error);
       alert('Failed to upload video. Please try again.');
     }
-  };
+  }, [selectedVideo, editingVideo, uploadVideo, setVideos]);
 
-  const resetForm = () => {
-    setVideoForm({
-      title: '',
-      description: '',
-      duration: '',
-      order: videos.length + 1
-    });
+  const resetForm = useCallback(() => {
     setSelectedVideo(null);
     setEditingVideo(null);
     setShowVideoModal(false);
     
-    // Reset file input
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
-  };
+  }, []);
 
-  const editVideo = (video) => {
+  const editVideo = useCallback((video) => {
     setEditingVideo(video);
-    setVideoForm({
-      title: video.title,
-      description: video.description || '',
-      duration: video.duration,
-      order: video.order
-    });
+    setSelectedVideo(null);
     setShowVideoModal(true);
-  };
+  }, []);
 
-  const removeVideo = (videoId) => {
+  const removeVideo = useCallback((videoId) => {
     if (window.confirm('Are you sure you want to remove this video?')) {
       setVideos(prev => {
         const filteredVideos = prev.filter(video => video.id !== videoId);
-        // Reorder remaining videos
         return filteredVideos.map((video, index) => ({
           ...video,
           order: index + 1
         }));
       });
     }
-  };
+  }, [setVideos]);
 
-  const moveVideo = (videoId, direction) => {
+  const moveVideo = useCallback((videoId, direction) => {
     setVideos(prev => {
       const videoIndex = prev.findIndex(video => video.id === videoId);
       if (videoIndex === -1) return prev;
@@ -191,7 +355,6 @@ const VideoUpload = ({ videos, setVideos }) => {
       if (newIndex >= 0 && newIndex < newVideos.length) {
         [newVideos[videoIndex], newVideos[newIndex]] = [newVideos[newIndex], newVideos[videoIndex]];
         
-        // Update order numbers
         newVideos.forEach((video, index) => {
           video.order = index + 1;
         });
@@ -199,17 +362,17 @@ const VideoUpload = ({ videos, setVideos }) => {
       
       return newVideos;
     });
-  };
+  }, [setVideos]);
 
-  const formatFileSize = (bytes) => {
+  const formatFileSize = useCallback((bytes) => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  };
+  }, []);
 
-  const previewVideo = (video) => {
+  const previewVideo = useCallback((video) => {
     if (video.url) {
       window.open(video.url, '_blank');
     } else if (video.file) {
@@ -227,7 +390,47 @@ const VideoUpload = ({ videos, setVideos }) => {
         </html>
       `);
     }
-  };
+  }, []);
+
+  // Memoized components
+  const LoadingSpinner = useMemo(() => React.memo(({ size = 'md' }) => {
+    const sizeClasses = {
+      sm: 'w-4 h-4',
+      md: 'w-8 h-8',
+      lg: 'w-12 h-12'
+    };
+
+    return (
+      <div className={`animate-spin rounded-full border-2 border-gray-300 border-t-blue-600 ${sizeClasses[size]}`}></div>
+    );
+  }), []);
+
+  // Prepare modal data
+  const modalData = useMemo(() => {
+    if (editingVideo) {
+      return editingVideo;
+    }
+    if (selectedVideo) {
+      return {
+        title: selectedVideo.title,
+        description: '',
+        duration: selectedVideo.duration,
+        order: videos.length + 1
+      };
+    }
+    return {
+      title: '',
+      description: '',
+      duration: '',
+      order: videos.length + 1
+    };
+  }, [editingVideo, selectedVideo, videos.length]);
+
+  // Stable sorted videos
+  const sortedVideos = useMemo(() => 
+    videos.sort((a, b) => a.order - b.order), 
+    [videos]
+  );
 
   return (
     <div className="video-upload">
@@ -257,7 +460,7 @@ const VideoUpload = ({ videos, setVideos }) => {
         
         {uploading ? (
           <div className="space-y-4">
-            <Loading size="lg" />
+            <LoadingSpinner size="lg" />
             <div>
               <p className="text-sm text-gray-600 mb-2">Uploading video...</p>
               <div className="w-full bg-gray-200 rounded-full h-2">
@@ -288,7 +491,7 @@ const VideoUpload = ({ videos, setVideos }) => {
             <div className="space-y-2">
               <label
                 htmlFor="video-upload"
-                className="cursor-pointer inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                className="cursor-pointer inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
               >
                 Choose Video Files
               </label>
@@ -311,207 +514,110 @@ const VideoUpload = ({ videos, setVideos }) => {
           </h5>
           
           <div className="space-y-3">
-            {videos
-              .sort((a, b) => a.order - b.order)
-              .map((video, index) => (
-                <div
-                  key={video.id}
-                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border"
-                >
-                  <div className="flex items-center space-x-4">
-                    <div className="flex flex-col items-center space-y-1">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => moveVideo(video.id, 'up')}
-                        disabled={index === 0}
-                        className="p-1 h-6 w-6"
-                      >
-                        ↑
-                      </Button>
-                      <span className="text-xs text-gray-500">{video.order}</span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => moveVideo(video.id, 'down')}
-                        disabled={index === videos.length - 1}
-                        className="p-1 h-6 w-6"
-                      >
-                        ↓
-                      </Button>
-                    </div>
-                    
-                    <div className="flex-shrink-0">
-                      <div 
-                        className="w-16 h-12 bg-gray-200 rounded flex items-center justify-center cursor-pointer hover:bg-gray-300 transition-colors"
-                        onClick={() => previewVideo(video)}
-                        title="Click to preview video"
-                      >
-                        <svg className="h-6 w-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-                        </svg>
-                      </div>
-                    </div>
-                    
-                    <div className="flex-1 min-w-0">
-                      <h6 className="text-sm font-medium text-gray-900 truncate">
-                        {video.title}
-                      </h6>
-                      <div className="flex items-center space-x-4 text-xs text-gray-500">
-                        <span>Duration: {video.duration}</span>
-                        {video.file && (
-                          <span>Size: {formatFileSize(video.file.size)}</span>
-                        )}
-                        {video.url && (
-                          <span className="text-green-600">Uploaded</span>
-                        )}
-                      </div>
-                      {video.description && (
-                        <p className="text-xs text-gray-400 truncate mt-1">
-                          {video.description}
-                        </p>
-                      )}
+            {sortedVideos.map((video, index) => (
+              <div
+                key={video.id} // Stable key
+                className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border"
+              >
+                <div className="flex items-center space-x-4">
+                  <div className="flex flex-col items-center space-y-1">
+                    <button
+                      onClick={() => moveVideo(video.id, 'up')}
+                      disabled={index === 0}
+                      className={`p-1 h-6 w-6 text-xs border rounded ${
+                        index === 0 
+                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
+                          : 'bg-white text-gray-700 hover:bg-gray-50 cursor-pointer'
+                      }`}
+                    >
+                      ↑
+                    </button>
+                    <span className="text-xs text-gray-500">{video.order}</span>
+                    <button
+                      onClick={() => moveVideo(video.id, 'down')}
+                      disabled={index === videos.length - 1}
+                      className={`p-1 h-6 w-6 text-xs border rounded ${
+                        index === videos.length - 1
+                          ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                          : 'bg-white text-gray-700 hover:bg-gray-50 cursor-pointer'
+                      }`}
+                    >
+                      ↓
+                    </button>
+                  </div>
+                  
+                  <div className="flex-shrink-0">
+                    <div 
+                      className="w-16 h-12 bg-gray-200 rounded flex items-center justify-center cursor-pointer hover:bg-gray-300 transition-colors"
+                      onClick={() => previewVideo(video)}
+                      title="Click to preview video"
+                    >
+                      <svg className="h-6 w-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                      </svg>
                     </div>
                   </div>
                   
-                  <div className="flex items-center space-x-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => previewVideo(video)}
-                      title="Preview video"
-                    >
-                      Preview
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => editVideo(video)}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      onClick={() => removeVideo(video.id)}
-                    >
-                      Remove
-                    </Button>
+                  <div className="flex-1 min-w-0">
+                    <h6 className="text-sm font-medium text-gray-900 truncate">
+                      {video.title}
+                    </h6>
+                    <div className="flex items-center space-x-4 text-xs text-gray-500">
+                      <span>Duration: {video.duration}</span>
+                      {video.file && (
+                        <span>Size: {formatFileSize(video.file.size)}</span>
+                      )}
+                      {video.url && (
+                        <span className="text-green-600">Uploaded</span>
+                      )}
+                    </div>
+                    {video.description && (
+                      <p className="text-xs text-gray-400 truncate mt-1">
+                        {video.description}
+                      </p>
+                    )}
                   </div>
                 </div>
-              ))}
+                
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => previewVideo(video)}
+                    className="px-3 py-1 text-sm border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                    title="Preview video"
+                  >
+                    Preview
+                  </button>
+                  <button
+                    onClick={() => editVideo(video)}
+                    className="px-3 py-1 text-sm border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => removeVideo(video.id)}
+                    className="px-3 py-1 text-sm border border-red-300 rounded-md text-red-700 bg-red-50 hover:bg-red-100 transition-colors"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       )}
 
-      {/* Video Details Modal */}
-      <Modal
+      {/* Isolated Video Form Modal */}
+      <VideoFormModal
         isOpen={showVideoModal}
         onClose={resetForm}
         title={editingVideo ? "Edit Video Details" : "Video Details"}
-      >
-        <div className="p-6 space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Video Title *
-            </label>
-            <input
-              type="text"
-              value={videoForm.title}
-              onChange={(e) => setVideoForm(prev => ({ ...prev, title: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              placeholder="Enter video title"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Description
-            </label>
-            <textarea
-              value={videoForm.description}
-              onChange={(e) => setVideoForm(prev => ({ ...prev, description: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              rows="3"
-              placeholder="Enter video description (optional)"
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Duration
-              </label>
-              <input
-                type="text"
-                value={videoForm.duration}
-                onChange={(e) => setVideoForm(prev => ({ ...prev, duration: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                placeholder="e.g., 5:30"
-                readOnly={!!selectedVideo}
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Order
-              </label>
-              <input
-                type="number"
-                value={videoForm.order}
-                onChange={(e) => setVideoForm(prev => ({ ...prev, order: parseInt(e.target.value) || 1 }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                min="1"
-              />
-            </div>
-          </div>
-
-          {selectedVideo && (
-            <div className="bg-blue-50 p-3 rounded-md">
-              <h6 className="text-sm font-medium text-blue-900 mb-1">Selected File:</h6>
-              <p className="text-sm text-blue-700">{selectedVideo.name}</p>
-              <p className="text-xs text-blue-600">Size: {formatFileSize(selectedVideo.size)}</p>
-            </div>
-          )}
-
-          {editingVideo && !selectedVideo && (
-            <div className="bg-gray-50 p-3 rounded-md">
-              <p className="text-sm text-gray-600">
-                Leave file selection empty to keep the existing video, or select a new file to replace it.
-              </p>
-              <label
-                htmlFor="edit-video-upload"
-                className="mt-2 cursor-pointer inline-flex items-center px-3 py-1 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-              >
-                Choose New Video
-              </label>
-              <input
-                type="file"
-                accept="video/*"
-                onChange={handleFileInput}
-                className="hidden"
-                id="edit-video-upload"
-              />
-            </div>
-          )}
-
-          <div className="flex justify-end space-x-3 pt-4 border-t">
-            <Button
-              variant="outline"
-              onClick={resetForm}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleVideoSubmit}
-              disabled={uploading || !videoForm.title.trim()}
-            >
-              {uploading ? 'Uploading...' : editingVideo ? 'Update Video' : 'Add Video'}
-            </Button>
-          </div>
-        </div>
-      </Modal>
+        initialData={modalData}
+        onSubmit={handleModalSubmit}
+        selectedVideo={selectedVideo?.file}
+        formatFileSize={formatFileSize}
+        uploading={uploading}
+        onFileSelect={handleFileInput}
+      />
     </div>
   );
 };

@@ -336,6 +336,7 @@ const InstructorDashboard = () => {
         <div style={{
           width: '50px',
           height: '50px',
+        
           border: `3px solid ${colors.blue}`,
           borderTop: '3px solid transparent',
           borderRadius: '50%',
@@ -397,11 +398,8 @@ const InstructorDashboard = () => {
           <h1 style={{
             fontSize: 'clamp(28px, 5vw, 36px)',
             fontWeight: '800',
-            background: `linear-gradient(135deg, ${colors.textPrimary}, ${colors.blue})`,
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            margin: '0 0 8px 0',
+           color: isDarkMode ? colors.blue : colors.blue,
+             margin: '0 0 8px 0',
             lineHeight: '1.2',
           }}>
             Welcome back, {user?.firstName || user?.name || 'Instructor'}!

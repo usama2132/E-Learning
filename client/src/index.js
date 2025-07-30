@@ -4,17 +4,11 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-// Import CSS files in logical order (base styles first, then themes, then utilities)
-import './styles/variables.css';
-import './styles/base/reset.css';
-import './styles/base/typography.css';
-import './styles/base/grid.css';
-import './styles/globals.css';
-import './styles/utilities.css';
-import './styles/animations.css';
-import './styles/responsive.css';
-import './styles/themes/light.css';
-import './styles/themes/dark.css';
+
+
+
+
+
 import { enableMockAPI } from './utils/api';
 enableMockAPI();
 

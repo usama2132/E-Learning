@@ -1,9 +1,26 @@
-/* About Page Styles */
+/* Reset and base styles for full screen coverage */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* About Page Styles - Full Screen Coverage */
 .about-page {
-  min-height: 100vh;
+  width: 100vw !important;
+  min-height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   position: relative;
-  overflow-x: hidden;
 }
 
 .about-page::before {
@@ -20,9 +37,10 @@
 }
 
 .about-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 80px 20px;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 80px 20px !important;
   position: relative;
   z-index: 1;
 }
@@ -157,6 +175,7 @@
   position: relative;
   overflow: hidden;
   animation: fadeInUp 1s ease-out 0.3s both;
+  width: 100%;
 }
 
 .about-content::before {
@@ -206,6 +225,7 @@
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 40px;
   margin-bottom: 60px;
+  width: 100%;
 }
 
 .feature-card {
@@ -217,6 +237,7 @@
   position: relative;
   overflow: hidden;
   animation: slideInUp 1s ease-out var(--delay, 0s) both;
+  width: 100%;
 }
 
 .feature-card:nth-child(1) { --delay: 0.1s; }
@@ -306,6 +327,7 @@
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 40px;
   margin-bottom: 60px;
+  width: 100%;
 }
 
 .value-card {
@@ -318,6 +340,7 @@
   position: relative;
   overflow: hidden;
   animation: fadeInScale 1s ease-out var(--delay, 0s) both;
+  width: 100%;
 }
 
 .value-card:nth-child(1) { --delay: 0.2s; }
@@ -381,6 +404,7 @@
   position: relative;
   overflow: hidden;
   animation: fadeInUp 1s ease-out 0.8s both;
+  width: 100%;
 }
 
 .about-cta::before {
@@ -805,3 +829,13 @@
   white-space: nowrap;
   border: 0;
 }
+.about-container {
+  
+  margin: 0 auto;
+}
+
+.section {
+  width: 100%;
+  box-sizing: border-box;
+}
+

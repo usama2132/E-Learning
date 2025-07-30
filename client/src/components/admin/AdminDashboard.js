@@ -8,14 +8,13 @@ import CourseApproval from './CourseApproval';
 import TransactionList from './TransactionList';
 import SystemSettings from './SystemSettings';
 import Loading from '../common/Loading';
-import '../../styles/dashboards/AdminDashboard.css';
 
 // Tab configuration
 const ADMIN_TABS = {
   overview: {
     id: 'overview',
     label: 'Overview',
-    icon: 'dashboard',
+    icon: 'tachometer-alt',
     component: PlatformStats
   },
   users: {
@@ -27,19 +26,19 @@ const ADMIN_TABS = {
   courses: {
     id: 'courses',
     label: 'Course Approval',
-    icon: 'courses',
+    icon: 'book',
     component: CourseApproval
   },
   transactions: {
     id: 'transactions',
     label: 'Transactions',
-    icon: 'transactions',
+    icon: 'credit-card',
     component: TransactionList
   },
   settings: {
     id: 'settings',
     label: 'System Settings',
-    icon: 'settings',
+    icon: 'cog',
     component: SystemSettings
   }
 };
@@ -74,10 +73,35 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [retryAttempts, setRetryAttempts] = useState(0);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   // Hooks
   const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  // Theme toggle functionality
+  const toggleTheme = () => {
+    const newTheme = !isDarkMode;
+    setIsDarkMode(newTheme);
+    
+    if (newTheme) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+  };
+
+  // Initialize theme
+  useEffect(() => {
+    const savedTheme = false;
+    setIsDarkMode(savedTheme);
+    
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+  }, []);
 
   // Authorization check
   useEffect(() => {
@@ -93,13 +117,8 @@ const AdminDashboard = () => {
       setLoading(true);
       setError(null);
       
-      console.log('Fetching admin dashboard data...');
-      console.log('API object:', api);
-      console.log('Admin API:', api?.admin);
-      
       let response;
       
-      // Try different API call patterns with proper error handling
       if (api?.admin && typeof api.admin.getDashboardData === 'function') {
         response = await api.admin.getDashboardData();
       } else if (api?.get && typeof api.get === 'function') {
@@ -107,8 +126,6 @@ const AdminDashboard = () => {
       } else if (api?.admin && typeof api.admin.dashboard === 'function') {
         response = await api.admin.dashboard();
       } else {
-        console.warn('Admin API methods not available, using mock data');
-        // Simulate API delay
         await new Promise(resolve => setTimeout(resolve, 1000));
         response = {
           success: true,
@@ -147,7 +164,6 @@ const AdminDashboard = () => {
       const errorMessage = err?.message || 'Failed to load dashboard data';
       setError(errorMessage);
       
-      // Set fallback data to keep UI functional
       setDashboardData(MOCK_DASHBOARD_DATA);
       setRetryAttempts(prev => prev + 1);
     } finally {
@@ -166,7 +182,6 @@ const AdminDashboard = () => {
   useEffect(() => {
     if (error && retryAttempts > 0 && retryAttempts < 3) {
       const retryTimeout = setTimeout(() => {
-        console.log(`Auto-retry attempt ${retryAttempts + 1}`);
         fetchDashboardData();
       }, 5000 * retryAttempts);
 
@@ -191,104 +206,471 @@ const AdminDashboard = () => {
     return num?.toLocaleString() || '0';
   };
 
+  // Define theme-aware colors
+  const getThemeColors = () => ({
+    primary: isDarkMode ? '#0f172a' : '#ffffff',
+    secondary: isDarkMode ? '#1e293b' : '#f8fafc',
+    tertiary: isDarkMode ? '#334155' : '#e2e8f0',
+    textPrimary: isDarkMode ? '#f1f5f9' : '#1e293b',
+    textSecondary: isDarkMode ? '#cbd5e1' : '#64748b',
+    textMuted: isDarkMode ? '#94a3b8' : '#94a3b8',
+    blue: isDarkMode ? '#3b82f6' : '#2563eb',
+    green: isDarkMode ? '#10b981' : '#059669',
+    purple: isDarkMode ? '#8b5cf6' : '#7c3aed',
+    orange: isDarkMode ? '#f59e0b' : '#d97706',
+    red: isDarkMode ? '#ef4444' : '#dc2626',
+    cardBg: isDarkMode ? '#1e293b' : '#ffffff',
+    cardBorder: isDarkMode ? '#334155' : '#e2e8f0',
+    cardShadow: isDarkMode ? 'rgba(0, 0, 0, 0.3)' : 'rgba(0, 0, 0, 0.1)',
+    buttonPrimary: isDarkMode ? '#3b82f6' : '#2563eb',
+    buttonSecondary: isDarkMode ? '#475569' : '#e2e8f0',
+    buttonHover: isDarkMode ? '#2563eb' : '#1d4ed8',
+  });
+
+  const colors = getThemeColors();
+
+  // StatCard Component
+  const StatCard = ({ title, value, icon, trend, color = 'blue' }) => {
+    const colorMap = {
+      blue: colors.blue,
+      green: colors.green,
+      purple: colors.purple,
+      orange: colors.orange,
+      red: colors.red,
+    };
+
+    return (
+      <div style={{
+        background: `linear-gradient(135deg, ${colors.cardBg} 0%, ${isDarkMode ? '#2d3748' : '#f7fafc'} 100%)`,
+        border: `1px solid ${colors.cardBorder}`,
+        borderRadius: '20px',
+        padding: '24px',
+        boxShadow: `0 10px 30px ${colors.cardShadow}, 0 0 0 1px ${colors.cardBorder}`,
+        backdropFilter: 'blur(10px)',
+        position: 'relative',
+        overflow: 'hidden',
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        cursor: 'pointer',
+        minHeight: '140px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = 'translateY(-5px)';
+        e.currentTarget.style.boxShadow = `0 20px 40px ${colors.cardShadow}, 0 0 0 1px ${colorMap[color]}`;
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = 'translateY(0)';
+        e.currentTarget.style.boxShadow = `0 10px 30px ${colors.cardShadow}, 0 0 0 1px ${colors.cardBorder}`;
+      }}>
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          width: '100px',
+          height: '100px',
+          background: `linear-gradient(135deg, ${colorMap[color]}20, transparent)`,
+          borderRadius: '0 20px 0 100px',
+        }} />
+        
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+          <div style={{
+            width: '50px',
+            height: '50px',
+            background: `linear-gradient(135deg, ${colorMap[color]}, ${colorMap[color]}dd)`,
+            borderRadius: '12px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'white',
+            fontSize: '20px',
+            boxShadow: `0 4px 20px ${colorMap[color]}40`,
+          }}>
+            <i className={`fas fa-${icon}`}></i>
+          </div>
+          {trend !== undefined && (
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              padding: '4px 8px',
+              backgroundColor: trend > 0 ? '#10b98120' : '#ef444420',
+              color: trend > 0 ? '#10b981' : '#ef4444',
+              borderRadius: '20px',
+              fontSize: '12px',
+              fontWeight: '600',
+            }}>
+              <i className={`fas fa-arrow-${trend > 0 ? 'up' : 'down'}`}></i>
+              <span>{Math.abs(trend)}%</span>
+            </div>
+          )}
+        </div>
+        
+        <div>
+          <h3 style={{
+            fontSize: '32px',
+            fontWeight: '700',
+            color: colors.textPrimary,
+            margin: '0 0 4px 0',
+            lineHeight: '1',
+          }}>{value || 0}</h3>
+          <p style={{
+            color: colors.textSecondary,
+            margin: 0,
+            fontSize: '14px',
+            fontWeight: '500',
+          }}>{title}</p>
+        </div>
+      </div>
+    );
+  };
+
+  // TabButton Component
+  const TabButton = ({ id, label, icon, isActive, onClick }) => (
+    <button
+      style={{
+        background: isActive 
+          ? `linear-gradient(135deg, ${colors.blue}, ${colors.blue}dd)` 
+          : 'transparent',
+        color: isActive ? 'white' : colors.textSecondary,
+        border: `1px solid ${isActive ? colors.blue : colors.cardBorder}`,
+        borderRadius: '12px',
+        padding: '12px 24px',
+        fontSize: '14px',
+        fontWeight: '600',
+        cursor: 'pointer',
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        position: 'relative',
+        overflow: 'hidden',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+      }}
+      onClick={() => onClick(id)}
+      onMouseEnter={(e) => {
+        if (!isActive) {
+          e.currentTarget.style.backgroundColor = colors.secondary;
+          e.currentTarget.style.color = colors.textPrimary;
+        }
+      }}
+      onMouseLeave={(e) => {
+        if (!isActive) {
+          e.currentTarget.style.backgroundColor = 'transparent';
+          e.currentTarget.style.color = colors.textSecondary;
+        }
+      }}
+    >
+      <i className={`fas fa-${icon}`}></i>
+      <span>{label}</span>
+    </button>
+  );
+
+  // Theme Toggle Button Component
+  const ThemeToggle = () => (
+    <button 
+      style={{
+        minWidth: '50px',
+        width: '50px',
+        height: '50px',
+        borderRadius: '50%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '0',
+        marginLeft: '0.5rem',
+        background: `linear-gradient(135deg, ${colors.buttonSecondary}, ${isDarkMode ? '#64748b' : '#cbd5e1'})`,
+        border: `1px solid ${colors.cardBorder}`,
+        color: colors.textPrimary,
+        cursor: 'pointer',
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        boxShadow: `0 4px 15px ${colors.cardShadow}`,
+      }}
+      onClick={toggleTheme}
+      title={`Switch to ${isDarkMode ? 'light' : 'dark'} mode`}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = 'scale(1.1)';
+        e.currentTarget.style.boxShadow = `0 8px 25px ${colors.cardShadow}`;
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = 'scale(1)';
+        e.currentTarget.style.boxShadow = `0 4px 15px ${colors.cardShadow}`;
+      }}
+    >
+      <i className={`fas fa-${isDarkMode ? 'sun' : 'moon'}`}></i>
+    </button>
+  );
+
   // Dashboard Stats Cards Component
   const DashboardStatsCards = () => {
     const statsCards = [
       {
         title: 'Total Users',
-        value: dashboardData?.totalUsers || 0,
+        value: formatNumber(dashboardData?.totalUsers || 0),
         growth: dashboardData?.userGrowth || 0,
-        icon: '👥',
-        color: '#667eea',
-        bgGradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        iconBg: 'rgba(102, 126, 234, 0.1)'
+        icon: 'users',
+        color: 'blue'
       },
       {
-        title: 'Instructors',
-        value: dashboardData?.totalInstructors || 0,
+        title: 'Total Instructors',
+        value: formatNumber(dashboardData?.totalInstructors || 0),
         growth: dashboardData?.instructorGrowth || 0,
-        icon: '👨‍🏫',
-        color: '#f093fb',
-        bgGradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-        iconBg: 'rgba(240, 147, 251, 0.1)'
+        icon: 'chalkboard-teacher',
+        color: 'purple'
       },
       {
         title: 'Total Courses',
-        value: dashboardData?.totalCourses || 0,
+        value: formatNumber(dashboardData?.totalCourses || 0),
         growth: dashboardData?.courseGrowth || 0,
-        icon: '📚',
-        color: '#fa709a',
-        bgGradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
-        iconBg: 'rgba(250, 112, 154, 0.1)'
+        icon: 'book',
+        color: 'green'
       },
       {
         title: 'Total Revenue',
         value: `$${formatNumber(dashboardData?.totalRevenue || 0)}`,
         growth: dashboardData?.revenueGrowth || 0,
-        icon: '💰',
-        color: '#4facfe',
-        bgGradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-        iconBg: 'rgba(79, 172, 254, 0.1)'
+        icon: 'dollar-sign',
+        color: 'blue'
       },
       {
         title: 'Total Enrollments',
         value: formatNumber(dashboardData?.totalEnrollments || 0),
         growth: dashboardData?.enrollmentGrowth || 0,
-        icon: '✅',
-        color: '#43e97b',
-        bgGradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
-        iconBg: 'rgba(67, 233, 123, 0.1)'
+        icon: 'graduation-cap',
+        color: 'green'
       },
       {
         title: 'Pending Approvals',
         value: dashboardData?.pendingApprovals || 0,
         growth: dashboardData?.approvalGrowth || 0,
-        icon: '⏳',
-        color: '#ffa726',
-        bgGradient: 'linear-gradient(135deg, #ffa726 0%, #ff7043 100%)',
-        iconBg: 'rgba(255, 167, 38, 0.1)'
+        icon: 'clock',
+        color: 'orange'
       }
     ];
 
     return (
-      <div className="dashboard-stats-container">
-        <div className="stats-header">
-          <h2>Platform Overview</h2>
-          <p>Monitor your platform's key performance metrics</p>
-        </div>
-        
-        <div className="dashboard-stats-grid">
+      <div>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: '24px',
+          marginBottom: '32px',
+        }}>
           {statsCards.map((card, index) => (
-            <div key={index} className="dashboard-stat-card">
-              <div className="stat-card-background" style={{ background: card.bgGradient }}></div>
-              
-              <div className="stat-card-content">
-                <div className="stat-header">
-                  <div className="stat-icon-container" style={{ backgroundColor: card.iconBg }}>
-                    <span className="stat-icon" style={{ color: card.color }}>
-                      {card.icon}
-                    </span>
-                  </div>
-                  
-                  <div className="stat-growth-container">
-                    <span className={`stat-growth ${card.growth >= 0 ? 'positive' : 'negative'}`}>
-                      <span className="growth-arrow">
-                        {card.growth >= 0 ? '↗' : '↘'}
-                      </span>
-                      {Math.abs(card.growth)}%
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="stat-body">
-                  <h3 className="stat-title">{card.title}</h3>
-                  <div className="stat-value">{card.value}</div>
-                </div>
+            <StatCard
+              key={index}
+              title={card.title}
+              value={card.value}
+              icon={card.icon}
+              trend={card.growth}
+              color={card.color}
+            />
+          ))}
+        </div>
+
+        {/* Quick Overview Section */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gap: '32px',
+        }}>
+          <div style={{
+            background: colors.cardBg,
+            borderRadius: '20px',
+            padding: '24px',
+            border: `1px solid ${colors.cardBorder}`,
+            boxShadow: `0 10px 30px ${colors.cardShadow}`,
+          }}>
+            <h3 style={{
+              color: colors.textPrimary,
+              fontSize: '20px',
+              fontWeight: '700',
+              marginBottom: '20px',
+            }}>System Status</h3>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '16px',
+                background: colors.secondary,
+                borderRadius: '12px',
+              }}>
+                <span style={{ color: colors.textPrimary, fontWeight: '500' }}>Server Status</span>
+                <span style={{
+                  color: dashboardData?.serverStatus === 'online' ? colors.green : colors.red,
+                  fontWeight: '600',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}>
+                  <div style={{
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    backgroundColor: dashboardData?.serverStatus === 'online' ? colors.green : colors.red,
+                  }} />
+                  {dashboardData?.serverStatus || 'Unknown'}
+                </span>
               </div>
               
-              <div className="stat-card-shine"></div>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '16px',
+                background: colors.secondary,
+                borderRadius: '12px',
+              }}>
+                <span style={{ color: colors.textPrimary, fontWeight: '500' }}>Database Status</span>
+                <span style={{
+                  color: dashboardData?.databaseStatus === 'connected' ? colors.green : colors.red,
+                  fontWeight: '600',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}>
+                  <div style={{
+                    width: '8px',
+                    height: '8px',
+                    borderRadius: '50%',
+                    backgroundColor: dashboardData?.databaseStatus === 'connected' ? colors.green : colors.red,
+                  }} />
+                  {dashboardData?.databaseStatus || 'Unknown'}
+                </span>
+              </div>
             </div>
-          ))}
+          </div>
+          
+          <div style={{
+            background: colors.cardBg,
+            borderRadius: '20px',
+            padding: '24px',
+            border: `1px solid ${colors.cardBorder}`,
+            boxShadow: `0 10px 30px ${colors.cardShadow}`,
+          }}>
+            <h3 style={{
+              color: colors.textPrimary,
+              fontSize: '20px',
+              fontWeight: '700',
+              marginBottom: '20px',
+            }}>Quick Actions</h3>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
+              {[
+                { icon: 'clock', label: 'Pending Courses', value: dashboardData?.pendingCourses || 0, color: colors.orange, onClick: () => handleTabChange('courses') },
+                { icon: 'user-plus', label: 'New Users', value: dashboardData?.newUsers || 0, color: colors.blue, onClick: () => handleTabChange('users') },
+                { icon: 'credit-card', label: 'Recent Transactions', value: dashboardData?.recentTransactions || 0, color: colors.green, onClick: () => handleTabChange('transactions') },
+                { icon: 'exclamation-triangle', label: 'System Alerts', value: dashboardData?.systemAlerts || 0, color: colors.red, onClick: () => handleTabChange('settings') },
+              ].map((item, index) => (
+                <div key={index} 
+                  style={{
+                    padding: '16px',
+                    background: colors.secondary,
+                    borderRadius: '12px',
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                  }}
+                  onClick={item.onClick}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = colors.tertiary;
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = colors.secondary;
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '10px',
+                    background: `${item.color}20`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: item.color,
+                    margin: '0 auto 8px',
+                  }}>
+                    <i className={`fas fa-${item.icon}`}></i>
+                  </div>
+                  <div style={{
+                    fontSize: '20px',
+                    fontWeight: '700',
+                    color: colors.textPrimary,
+                    marginBottom: '4px',
+                  }}>{item.value}</div>
+                  <div style={{
+                    fontSize: '12px',
+                    color: colors.textSecondary,
+                    fontWeight: '500',
+                  }}>{item.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Recent Activity Section */}
+          <div style={{
+            background: colors.cardBg,
+            borderRadius: '20px',
+            padding: '24px',
+            border: `1px solid ${colors.cardBorder}`,
+            boxShadow: `0 10px 30px ${colors.cardShadow}`,
+            gridColumn: 'span 2',
+          }}>
+            <h3 style={{
+              color: colors.textPrimary,
+              fontSize: '20px',
+              fontWeight: '700',
+              marginBottom: '20px',
+            }}>Recent Platform Activity</h3>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {[
+                { icon: 'user-plus', color: colors.green, text: '12 new users registered today', time: '2 hours ago' },
+                { icon: 'book', color: colors.blue, text: '3 courses submitted for approval', time: '4 hours ago' },
+                { icon: 'dollar-sign', color: colors.green, text: '$2,450 revenue generated from course sales', time: '6 hours ago' },
+                { icon: 'shield-alt', color: colors.orange, text: 'System backup completed successfully', time: '1 day ago' },
+              ].map((activity, index) => (
+                <div key={index} style={{
+                  display: 'flex',
+                  gap: '16px',
+                  alignItems: 'flex-start',
+                  padding: '16px',
+                  background: colors.secondary,
+                  borderRadius: '12px',
+                  transition: 'all 0.3s ease',
+                }}>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '10px',
+                    background: `${activity.color}20`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: activity.color,
+                  }}>
+                    <i className={`fas fa-${activity.icon}`}></i>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <p style={{
+                      color: colors.textPrimary,
+                      margin: '0 0 4px 0',
+                      fontSize: '14px',
+                      fontWeight: '500',
+                    }}>{activity.text}</p>
+                    <span style={{
+                      color: colors.textMuted,
+                      fontSize: '12px',
+                    }}>{activity.time}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -302,12 +684,12 @@ const AdminDashboard = () => {
     
     const currentTab = ADMIN_TABS[activeTab];
     if (!currentTab || !currentTab.component) {
-      return <div className="error-message">Tab content not found</div>;
+      return <div style={{ color: colors.textPrimary }}>Tab content not found</div>;
     }
     
     const Component = currentTab.component;
     return <Component data={dashboardData} onRefresh={fetchDashboardData} />;
-  }, [activeTab, dashboardData, fetchDashboardData]);
+  }, [activeTab, dashboardData, fetchDashboardData, colors.textPrimary]);
 
   // Format last updated time
   const formatLastUpdated = useCallback((timestamp) => {
@@ -329,183 +711,380 @@ const AdminDashboard = () => {
 
   // Loading state
   if (loading && !dashboardData) {
-    return <Loading message="Loading admin dashboard..." />;
+    return (
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+        background: colors.primary,
+        color: colors.textPrimary,
+      }}>
+        <div style={{
+          width: '50px',
+          height: '50px',
+          border: `3px solid ${colors.blue}`,
+          borderTop: '3px solid transparent',
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite',
+          marginBottom: '20px',
+        }} />
+        <p style={{ fontSize: '16px', fontWeight: '500' }}>Loading admin dashboard...</p>
+      </div>
+    );
   }
 
-  // Critical error state (no fallback data)
+  // Critical error state
   if (error && !dashboardData && retryAttempts >= 3) {
     return (
-      <div className="admin-dashboard-error">
-        <h2>Dashboard Unavailable</h2>
-        <p>Unable to load the admin dashboard after multiple attempts.</p>
-        <p className="error-details">{error}</p>
-        <button 
-          onClick={fetchDashboardData} 
-          className="retry-button"
-          disabled={loading}
-        >
-          {loading ? 'Retrying...' : 'Try Again'}
-        </button>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+        background: colors.primary,
+        color: colors.textPrimary,
+        padding: '20px',
+        textAlign: 'center',
+      }}>
+        <div style={{
+          background: colors.cardBg,
+          padding: '40px',
+          borderRadius: '20px',
+          border: `1px solid ${colors.cardBorder}`,
+          boxShadow: `0 20px 40px ${colors.cardShadow}`,
+        }}>
+          <h2 style={{ color: colors.red, marginBottom: '16px' }}>Dashboard Unavailable</h2>
+          <p style={{ marginBottom: '16px' }}>Unable to load the admin dashboard after multiple attempts.</p>
+          <p style={{ color: colors.textSecondary, marginBottom: '24px', fontSize: '14px' }}>{error}</p>
+          <button 
+            onClick={fetchDashboardData} 
+            disabled={loading}
+            style={{
+              background: `linear-gradient(135deg, ${colors.blue}, ${colors.blue}dd)`,
+              color: 'white',
+              border: 'none',
+              borderRadius: '12px',
+              padding: '12px 24px',
+              fontSize: '14px',
+              fontWeight: '600',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              opacity: loading ? 0.7 : 1,
+            }}
+          >
+            {loading ? 'Retrying...' : 'Try Again'}
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="admin-dashboard" data-theme="light">
-      {/* Dashboard Header */}
-      <header className="admin-dashboard-header">
-        <div className="header-left">
-          <h1>Admin Dashboard</h1>
-          <p className="admin-subtitle">
-            Manage your learning platform efficiently
+    <div style={{
+      minHeight: '100vh',
+      background: `linear-gradient(135deg, ${colors.primary} 0%, ${colors.secondary} 100%)`,
+      padding: '20px',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      maxWidth: '100%',
+      overflow: 'hidden',
+    }}>
+      {/* Global styles */}
+      <style>
+        {`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+          @keyframes fadeInUp {
+            from {
+              opacity: 0;
+              transform: translateY(30px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+          }
+        `}
+      </style>
+      
+      {/* Header */}
+      <div style={{
+        background: `linear-gradient(135deg, ${colors.cardBg}f0 0%, ${colors.secondary}f0 100%)`,
+        borderRadius: '24px',
+        padding: '32px',
+        marginBottom: '32px',
+        border: `1px solid ${colors.cardBorder}`,
+        boxShadow: `0 20px 40px ${colors.cardShadow}`,
+        backdropFilter: 'blur(20px)',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        gap: '20px',
+      }}>
+        <div className="fade-in-up">
+          <h1 style={{
+            fontSize: 'clamp(28px, 5vw, 36px)',
+            fontWeight: '800',
+            color: isDarkMode ? colors.blue : colors.blue,
+            margin: '0 0 8px 0',
+            lineHeight: '1.2',
+          }}>
+            Welcome back, {user?.name || user?.email || 'Administrator'}!
+          </h1>
+          <p style={{
+            color: colors.textSecondary,
+            margin: 0,
+            fontSize: '16px',
+            fontWeight: '500',
+          }}>
+            Manage your platform and monitor key performance metrics
           </p>
         </div>
-        <div className="header-right">
-          <div className="admin-info">
-            <span>Welcome back, {user?.name || user?.email || 'Administrator'}</span>
-            <div className="admin-badge">
-              Administrator
-            </div>
-          </div>
+        
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+          <button style={{
+            background: `linear-gradient(135deg, ${colors.blue}, ${colors.blue}dd)`,
+            color: 'white',
+            border: 'none',
+            borderRadius: '12px',
+            padding: '12px 20px',
+            fontSize: '14px',
+            fontWeight: '600',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            boxShadow: `0 4px 20px ${colors.blue}40`,
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-2px)';
+            e.currentTarget.style.boxShadow = `0 8px 30px ${colors.blue}50`;
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = `0 4px 20px ${colors.blue}40`;
+          }}>
+            <i className="fas fa-plus"></i>
+            Quick Actions
+          </button>
+          
+          <button style={{
+            background: colors.buttonSecondary,
+            color: colors.textPrimary,
+            border: `1px solid ${colors.cardBorder}`,
+            borderRadius: '12px',
+            padding: '12px 20px',
+            fontSize: '14px',
+            fontWeight: '600',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          }}
+          onClick={fetchDashboardData}
+          disabled={loading}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = colors.tertiary;
+            e.currentTarget.style.transform = 'translateY(-2px)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = colors.buttonSecondary;
+            e.currentTarget.style.transform = 'translateY(0)';
+          }}>
+            <i className={`fas fa-sync-alt ${loading ? 'fa-spin' : ''}`}></i>
+            {loading ? 'Refreshing...' : 'Refresh Data'}
+          </button>
+          
+          <ThemeToggle />
         </div>
-      </header>
+      </div>
 
       {/* Error Warning */}
       {error && dashboardData && (
-        <div className="admin-warning">
-          <span role="img" aria-label="warning">⚠️</span>
-          {error} (Using cached data)
-          {retryAttempts > 0 && (
-            <span> - Auto-retry {retryAttempts}/3</span>
-          )}
+        <div style={{
+          background: `linear-gradient(135deg, ${colors.orange}20, ${colors.red}20)`,
+          border: `1px solid ${colors.orange}`,
+          borderRadius: '12px',
+          padding: '16px',
+          marginBottom: '24px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '12px',
+          color: colors.textPrimary,
+        }}>
+          <i className="fas fa-exclamation-triangle" style={{ color: colors.orange, fontSize: '20px' }}></i>
+          <div>
+            <strong>Warning:</strong> {error} (Using cached data)
+            {retryAttempts > 0 && (
+              <span> - Auto-retry {retryAttempts}/3</span>
+            )}
+          </div>
         </div>
       )}
 
       {/* Navigation Tabs */}
-      <nav className="admin-nav-tabs" role="tablist">
-        {Object.values(ADMIN_TABS).map(tab => (
-          <button
-            key={tab.id}
-            className={`nav-tab ${activeTab === tab.id ? 'active' : ''}`}
-            onClick={() => handleTabChange(tab.id)}
-            role="tab"
-            aria-selected={activeTab === tab.id}
-            aria-controls={`tab-panel-${tab.id}`}
-          >
-            <i className={`icon-${tab.icon}`} aria-hidden="true"></i>
-            <span>{tab.label}</span>
-          </button>
-        ))}
-      </nav>
+      <div style={{
+        background: `linear-gradient(135deg, ${colors.cardBg}f0 0%, ${colors.secondary}f0 100%)`,
+        borderRadius: '20px',
+        padding: '20px',
+        marginBottom: '32px',
+        border: `1px solid ${colors.cardBorder}`,
+        boxShadow: `0 10px 30px ${colors.cardShadow}`,
+        backdropFilter: 'blur(20px)',
+      }}>
+        <div style={{
+          display: 'flex',
+          gap: '12px',
+          flexWrap: 'wrap',
+          overflowX: 'auto',
+        }}>
+          {Object.values(ADMIN_TABS).map(tab => (
+            <TabButton
+              key={tab.id}
+              id={tab.id}
+              label={tab.label}
+              icon={tab.icon}
+              isActive={activeTab === tab.id}
+              onClick={handleTabChange}
+            />
+          ))}
+        </div>
+      </div>
 
       {/* Main Content */}
-      <main className="admin-content">
-        <div 
-          id={`tab-panel-${activeTab}`}
-          role="tabpanel"
-          aria-labelledby={`tab-${activeTab}`}
-        >
+      <div style={{
+        background: `linear-gradient(135deg, ${colors.cardBg}f0 0%, ${colors.secondary}f0 100%)`,
+        borderRadius: '24px',
+        border: `1px solid ${colors.cardBorder}`,
+        boxShadow: `0 20px 40px ${colors.cardShadow}`,
+        backdropFilter: 'blur(20px)',
+        overflow: 'hidden',
+        maxWidth: '100%',
+        marginBottom: '32px',
+      }}>
+        <div style={{ padding: '32px', maxWidth: '100%', overflow: 'hidden' }}>
           {renderTabContent()}
         </div>
-      </main>
+      </div>
 
-      {/* Quick Actions Panel */}
-      <aside className="quick-actions-panel">
-        <h3>Quick Actions</h3>
-        <div className="quick-actions-grid">
-          <button 
-            className="quick-action-btn"
-            onClick={() => handleTabChange('courses')}
-            aria-label={`View pending courses (${dashboardData?.pendingCourses || 0})`}
-          >
-            <div className="quick-action-content">
-              <i className="icon-pending" aria-hidden="true"></i>
-              <span>Pending Courses</span>
-            </div>
-            <span className="quick-action-badge">{dashboardData?.pendingCourses || 0}</span>
-          </button>
-          
-          <button 
-            className="quick-action-btn"
-            onClick={() => handleTabChange('users')}
-            aria-label={`View new users (${dashboardData?.newUsers || 0})`}
-          >
-            <div className="quick-action-content">
-              <i className="icon-user-plus" aria-hidden="true"></i>
-              <span>New Users</span>
-            </div>
-            <span className="quick-action-badge">{dashboardData?.newUsers || 0}</span>
-          </button>
-          
-          <button 
-            className="quick-action-btn"
-            onClick={() => handleTabChange('transactions')}
-            aria-label={`View recent transactions (${dashboardData?.recentTransactions || 0})`}
-          >
-            <div className="quick-action-content">
-              <i className="icon-money" aria-hidden="true"></i>
-              <span>Recent Transactions</span>
-            </div>
-            <span className="quick-action-badge">{dashboardData?.recentTransactions || 0}</span>
-          </button>
-          
-          <button 
-            className="quick-action-btn"
-            onClick={() => handleTabChange('settings')}
-            aria-label={`View system alerts (${dashboardData?.systemAlerts || 0})`}
-          >
-            <div className="quick-action-content">
-              <i className="icon-alert" aria-hidden="true"></i>
-              <span>System Alerts</span>
-            </div>
-            <span className={`quick-action-badge ${(dashboardData?.systemAlerts || 0) > 0 ? 'danger' : ''}`}>
-              {dashboardData?.systemAlerts || 0}
+      {/* System Status Footer */}
+      <div style={{
+        background: `linear-gradient(135deg, ${colors.cardBg}f0 0%, ${colors.secondary}f0 100%)`,
+        borderRadius: '20px',
+        padding: '24px',
+        border: `1px solid ${colors.cardBorder}`,
+        boxShadow: `0 10px 30px ${colors.cardShadow}`,
+        backdropFilter: 'blur(20px)',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        gap: '20px',
+      }}>
+        <div style={{ display: 'flex', gap: '32px', alignItems: 'center', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ color: colors.textSecondary, fontSize: '14px', fontWeight: '500' }}>
+              Server Status:
             </span>
-          </button>
-        </div>
-      </aside>
-
-      {/* System Status */}
-      <footer className="system-status">
-        <div className="status-item">
-          <span className="status-label">Server Status</span>
-          <span className={`status-indicator ${dashboardData?.serverStatus === 'online' ? 'online' : 'offline'}`}>
-            {dashboardData?.serverStatus || 'Unknown'}
-          </span>
+            <span style={{
+              color: dashboardData?.serverStatus === 'online' ? colors.green : colors.red,
+              fontWeight: '600',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              fontSize: '14px',
+            }}>
+              <div style={{
+                width: '8px',
+                height: '8px',
+                borderRadius: '50%',
+                backgroundColor: dashboardData?.serverStatus === 'online' ? colors.green : colors.red,
+              }} />
+              {dashboardData?.serverStatus || 'Unknown'}
+            </span>
+          </div>
+          
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ color: colors.textSecondary, fontSize: '14px', fontWeight: '500' }}>
+              Database:
+            </span>
+            <span style={{
+              color: dashboardData?.databaseStatus === 'connected' ? colors.green : colors.red,
+              fontWeight: '600',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              fontSize: '14px',
+            }}>
+              <div style={{
+                width: '8px',
+                height: '8px',
+                borderRadius: '50%',
+                backgroundColor: dashboardData?.databaseStatus === 'connected' ? colors.green : colors.red,
+              }} />
+              {dashboardData?.databaseStatus || 'Unknown'}
+            </span>
+          </div>
+          
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ color: colors.textSecondary, fontSize: '14px', fontWeight: '500' }}>
+              Last Updated:
+            </span>
+            <span style={{ color: colors.textPrimary, fontSize: '14px', fontWeight: '500' }}>
+              {formatLastUpdated(dashboardData?.lastUpdated)}
+            </span>
+          </div>
         </div>
         
-        <div className="status-item">
-          <span className="status-label">Database Status</span>
-          <span className={`status-indicator ${dashboardData?.databaseStatus === 'connected' ? 'online' : 'offline'}`}>
-            {dashboardData?.databaseStatus || 'Unknown'}
-          </span>
-        </div>
-        
-        <div className="status-item">
-          <span className="status-label">Last Updated</span>
-          <span className="status-time">
-            {formatLastUpdated(dashboardData?.lastUpdated)}
-          </span>
-        </div>
-        
-        <div className="status-item">
-          <span className="status-label">Refresh Data</span>
-          <button 
-            onClick={fetchDashboardData}
-            disabled={loading}
-            className="status-refresh-btn"
-            aria-label="Refresh dashboard data"
-          >
-            <i className={`icon-refresh ${loading ? 'spinning' : ''}`} aria-hidden="true"></i>
-            {loading ? 'Updating...' : 'Refresh'}
-          </button>
-        </div>
-      </footer>
+        <button 
+          onClick={fetchDashboardData}
+          disabled={loading}
+          style={{
+            background: colors.buttonSecondary,
+            color: colors.textPrimary,
+            border: `1px solid ${colors.cardBorder}`,
+            borderRadius: '10px',
+            padding: '10px 16px',
+            fontSize: '14px',
+            fontWeight: '600',
+            cursor: loading ? 'not-allowed' : 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            opacity: loading ? 0.7 : 1,
+          }}
+          onMouseEnter={(e) => {
+            if (!loading) {
+              e.currentTarget.style.backgroundColor = colors.tertiary;
+              e.currentTarget.style.transform = 'translateY(-1px)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!loading) {
+              e.currentTarget.style.backgroundColor = colors.buttonSecondary;
+              e.currentTarget.style.transform = 'translateY(0)';
+            }
+          }}
+        >
+          <i className={`fas fa-sync-alt ${loading ? 'fa-spin' : ''}`}></i>
+          {loading ? 'Updating...' : 'Refresh'}
+        </button>
+      </div>
     </div>
   );
 };
 
-// PropTypes for better development experience (optional)
+// PropTypes for better development experience
 AdminDashboard.displayName = 'AdminDashboard';
 
 export default AdminDashboard;
