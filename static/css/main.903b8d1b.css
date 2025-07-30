@@ -16287,9 +16287,9 @@ input:checked + .toggle-slider:before {
   flex-direction: column;
   justify-content: space-between;
 }
-/* Ultra-Fast Minimal CSS - Only Essential Styles */
+/* Ultra-Fast Minimal CSS - Zero Animations, Maximum Performance */
 
-/* CSS Variables - Minimal */
+/* CSS Variables - Essential Only */
 :root[data-theme="light"] {
   --bg: #f8fafc;
   --card: #fff;
@@ -16314,7 +16314,7 @@ input:checked + .toggle-slider:before {
   --orange: #f59e0b;
 }
 
-/* Base */
+/* Base - No transitions */
 .student-dashboard {
   min-height: 100vh;
   background: var(--bg);
@@ -16323,9 +16323,9 @@ input:checked + .toggle-slider:before {
   padding: 1rem;
 }
 
-/* Header */
+/* Header - Simplified */
 .dashboard-header {
-  background: var(--card) !important;
+  background: var(--card);
   border-radius: 8px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
@@ -16345,7 +16345,7 @@ input:checked + .toggle-slider:before {
 }
 
 .dashboard-header__content p {
-  color: var(--text2) !important;
+  color: var(--text2);
   margin: 0;
   font-size: 0.875rem;
 }
@@ -16393,7 +16393,7 @@ input:checked + .toggle-slider:before {
   cursor: pointer;
 }
 
-/* Stats */
+/* Stats Grid - Simplified */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -16403,7 +16403,7 @@ input:checked + .toggle-slider:before {
 }
 
 .stat-card {
-  background: var(--card) !important;
+  background: var(--card);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1.25rem;
@@ -16432,19 +16432,19 @@ input:checked + .toggle-slider:before {
 .stat-card__value {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--text) !important;
+  color: var(--text);
   margin: 0 0 0.25rem 0;
 }
 
 .stat-card__title {
-  color: var(--text2) !important;
+  color: var(--text2);
   margin: 0;
   font-size: 0.875rem;
 }
 
-/* Main Content */
+/* Main Content - Fixed Visibility */
 .main-content {
-  background: var(--card) !important;
+  background: var(--card);
   border-radius: 8px;
   border: 1px solid var(--border);
   overflow: hidden;
@@ -16460,7 +16460,7 @@ input:checked + .toggle-slider:before {
 
 .tab-button {
   background: transparent;
-  color: var(--text2) !important;
+  color: var(--text2);
   border: 1px solid var(--border);
   border-radius: 4px;
   padding: 0.5rem 1rem;
@@ -16473,12 +16473,17 @@ input:checked + .toggle-slider:before {
 
 .tab-button--active {
   background: var(--blue);
-  color: white !important;
+  color: white;
   border-color: var(--blue);
 }
 
+/* Tab Content - Fixed Display Issue */
 .tab-content {
   padding: 1.5rem;
+}
+
+.tab-content > div {
+  display: block;
 }
 
 .section-title {
@@ -16488,29 +16493,29 @@ input:checked + .toggle-slider:before {
   margin-bottom: 1.5rem;
 }
 
-/* Grids */
-.overview-grid, .course-grid, .progress-list {
+/* Overview Grid - Ensure Visibility */
+.overview-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 1.5rem;
   gap: 1.5rem;
 }
 
-.content-card, .course-card, .progress-item {
-  background: var(--card);
+.content-card {
+  background: var(--bg);
   border-radius: 8px;
   padding: 1.25rem;
   border: 1px solid var(--border);
 }
 
-.content-card__title, .course-title, .progress-course-title {
+.content-card__title {
   color: var(--text);
   font-size: 1rem;
   font-weight: 600;
   margin: 0 0 1rem 0;
 }
 
-/* Activity */
+/* Activity List */
 .activity-list {
   display: flex;
   flex-direction: column;
@@ -16521,8 +16526,9 @@ input:checked + .toggle-slider:before {
   display: flex;
   gap: 0.75rem;
   padding: 0.75rem;
-  background: var(--bg);
+  background: var(--card);
   border-radius: 6px;
+  border: 1px solid var(--border);
 }
 
 .activity-icon {
@@ -16569,8 +16575,9 @@ input:checked + .toggle-slider:before {
 .quick-stat {
   text-align: center;
   padding: 1rem;
-  background: var(--bg);
+  background: var(--card);
   border-radius: 6px;
+  border: 1px solid var(--border);
 }
 
 .quick-stat__value {
@@ -16589,8 +16596,19 @@ input:checked + .toggle-slider:before {
   color: var(--text2);
 }
 
-/* Course specific */
+/* Course Grid */
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-gap: 1.5rem;
+  gap: 1.5rem;
+}
+
 .course-card {
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
   display: flex;
   flex-direction: column;
 }
@@ -16599,9 +16617,16 @@ input:checked + .toggle-slider:before {
   width: 100%;
   height: 160px;
   object-fit: cover;
-  background: var(--bg);
+  background: var(--border);
   border-radius: 4px;
   margin-bottom: 1rem;
+}
+
+.course-title {
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
 }
 
 .course-instructor {
@@ -16657,7 +16682,7 @@ input:checked + .toggle-slider:before {
 .progress-bar {
   width: 100%;
   height: 6px;
-  background: var(--bg);
+  background: var(--border);
   border-radius: 3px;
   overflow: hidden;
 }
@@ -16681,8 +16706,19 @@ input:checked + .toggle-slider:before {
   margin-top: auto;
 }
 
-/* Progress specific */
+/* Progress List */
+.progress-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 1.5rem;
+  gap: 1.5rem;
+}
+
 .progress-item {
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -16692,6 +16728,13 @@ input:checked + .toggle-slider:before {
   width: 60px;
   height: 60px;
   flex-shrink: 0;
+}
+
+.progress-course-title {
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
 }
 
 .progress-lesson-count {
@@ -16730,6 +16773,10 @@ input:checked + .toggle-slider:before {
   margin-bottom: 0.75rem;
 }
 
+.empty-state__description {
+  margin-bottom: 1rem;
+}
+
 .empty-state__action {
   display: inline-block;
   background: var(--blue);
@@ -16744,14 +16791,14 @@ input:checked + .toggle-slider:before {
 /* Quick Actions */
 .quick-actions {
   margin-top: 1.5rem;
-  background: var(--card) !important;
+  background: var(--card);
   border-radius: 8px;
   padding: 1.5rem;
   border: 1px solid var(--border);
 }
 
 .quick-actions__title {
-  color: var(--text) !important;
+  color: var(--text);
   font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 1.25rem;
@@ -16766,7 +16813,7 @@ input:checked + .toggle-slider:before {
 
 .quick-action {
   display: block;
-  background: var(--bg) !important;
+  background: var(--bg);
   border-radius: 8px;
   padding: 1.25rem;
   border: 1px solid var(--border);
@@ -16791,38 +16838,56 @@ input:checked + .toggle-slider:before {
 .quick-action--orange .quick-action__icon { background: var(--orange); }
 
 .quick-action__title {
-  color: var(--text) !important;
+  color: var(--text);
   font-size: 1rem;
   font-weight: 600;
   margin: 0 0 0.5rem 0;
 }
 
 .quick-action__description {
-  color: var(--text2) !important;
+  color: var(--text2);
   font-size: 0.875rem;
   margin: 0;
 }
 
-/* Mobile - Super Minimal */
+/* Mobile Optimized */
 @media (max-width: 768px) {
   .student-dashboard { padding: 0.75rem; }
-  .dashboard-header { padding: 1rem; flex-direction: column; text-align: center; }
+  .dashboard-header { 
+    padding: 1rem; 
+    flex-direction: column; 
+    text-align: center; 
+  }
   .dashboard-header__actions { margin-top: 1rem; }
   .header-button span { display: none; }
-  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+  .stats-grid { 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 0.75rem; 
+  }
   .stat-card { padding: 1rem; }
   .tab-nav { padding: 1rem; }
   .tab-content { padding: 1rem; }
-  .overview-grid, .course-grid, .progress-list { grid-template-columns: 1fr; }
+  .overview-grid, .course-grid, .progress-list { 
+    grid-template-columns: 1fr; 
+  }
   .quick-actions { padding: 1rem; }
-  .quick-actions__grid { grid-template-columns: repeat(2, 1fr); }
+  .quick-actions__grid { 
+    grid-template-columns: repeat(2, 1fr); 
+  }
 }
 
 @media (max-width: 480px) {
   .student-dashboard { padding: 0.5rem; }
   .stats-grid { grid-template-columns: 1fr; }
   .quick-actions__grid { grid-template-columns: 1fr; }
-  .progress-item { flex-direction: column; text-align: center; }
+  .progress-item { 
+    flex-direction: column; 
+    text-align: center; 
+  }
+  .quick-stats {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
 }
 /* Profile Component - Stunning CSS with White Background Fix */
 
