@@ -4874,13 +4874,21 @@ html {
   box-sizing: border-box;
 }
 
+/* Reset body and html margins/padding */
+body, html {
+  margin: 0;
+  padding: 0;
+}
+
 .login-container {
-  min-height: 100vh;
+  min-height: 100vh; /* Change back to full height */
+  margin-top: 0; /* Remove margin-top */
+  padding-top: 80px; /* Add padding-top instead for navbar space */
   display: flex;
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 20px;
+  padding: 80px 20px 20px 20px; /* Top padding for navbar, others remain same */
   font-family: 'Inter', sans-serif;
   position: relative;
   overflow: hidden;
@@ -5087,7 +5095,7 @@ html {
   display: flex;
   align-items: center;
   cursor: pointer;
-  color: #e2e8f0;
+  color: #4a5568;
   font-weight: 500;
   transition: all 0.2s ease;
   padding: 4px 8px;
@@ -5096,7 +5104,7 @@ html {
 }
 
 .remember-me:hover {
-  color: #ffffff;
+  color: #2d3748;
   background: rgba(102, 126, 234, 0.1);
 }
 
@@ -5304,20 +5312,15 @@ html {
   transform: none;
 }
 
+/* Hide social button images */
 .social-button img {
-  width: 20px;
-  height: 20px;
-  transition: transform 0.2s ease;
-}
-
-.social-button:hover:not(:disabled) img {
-  transform: scale(1.05);
+  display: none;
 }
 
 /* Responsive Design */
 @media (max-width: 480px) {
   .login-container {
-    padding: 16px;
+    padding: 70px 16px 16px 16px; /* Adjust top padding for smaller navbar on mobile */
   }
   
   .login-card {
@@ -5394,6 +5397,14 @@ html {
   .register-link:hover {
     background: rgba(102, 126, 234, 0.1);
   }
+  
+  .remember-me {
+    color: #a0aec0;
+  }
+  
+  .remember-me:hover {
+    color: #e2e8f0;
+  }
 }
 /* Register.css */
 
@@ -5401,46 +5412,33 @@ html {
   box-sizing: border-box;
 }
 
+/* Reset body and html margins/padding */
+body, html {
+  margin: 0;
+  padding: 0;
+}
+
 .register-page {
   min-height: 100vh;
+  padding-top: 60px; /* Reduced gap from navbar */
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 20px;
+  background: linear-gradient(135deg, #5c77f2 0%, #6f39a6 100%);
+  padding: 60px 20px 20px 20px;
   font-family: 'Inter', sans-serif;
-  position: relative;
-  overflow: hidden;
 }
 
-.register-page::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url("data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><defs><pattern id=\"grain\" width=\"100\" height=\"100\" patternUnits=\"userSpaceOnUse\"><circle cx=\"25\" cy=\"25\" r=\"1\" fill=\"rgba%28255,255,255,0.1%29\"/><circle cx=\"75\" cy=\"75\" r=\"1\" fill=\"rgba%28255,255,255,0.1%29\"/><circle cx=\"50\" cy=\"10\" r=\"0.5\" fill=\"rgba%28255,255,255,0.05%29\"/><circle cx=\"10\" cy=\"50\" r=\"0.5\" fill=\"rgba%28255,255,255,0.05%29\"/><circle cx=\"90\" cy=\"30\" r=\"0.5\" fill=\"rgba%28255,255,255,0.05%29\"/></pattern></defs><rect width=\"100\" height=\"100\" fill=\"url%28%23grain%29\"/></svg>");
-  opacity: 0.3;
-  animation: float 20s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(1deg); }
-}
+/* Removed the ::before pseudo-element that was creating the conflicting background pattern */
 
 .register-container {
-  background: rgba(255, 255, 255, 0.95);
-  -webkit-backdrop-filter: blur(20px);
-          backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 1); /* Completely solid white background */
   border-radius: 24px;
   padding: 48px 40px;
   box-shadow: 
-    0 32px 64px rgba(0, 0, 0, 0.1),
-    0 16px 32px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+    0 32px 64px rgba(0, 0, 0, 0.15),
+    0 16px 32px rgba(0, 0, 0, 0.08);
+  border: none; /* Remove border that was causing conflicts */
   width: 100%;
   max-width: 480px;
   position: relative;
@@ -5559,8 +5557,8 @@ html {
   border-radius: 12px;
   font-size: 16px;
   font-weight: 500;
-  color: #ffffff !important; /* Force white text color */
-  background: transparent !important; /* Force transparent background */
+  color: #2d3748;
+  background: #ffffff;
   transition: all 0.2s ease;
   outline: none;
   font-family: 'Inter', sans-serif;
@@ -5568,14 +5566,13 @@ html {
 
 /* Fix placeholder text color */
 .form-input::placeholder {
-  color: #a0aec0 !important;
+  color: #a0aec0;
   opacity: 1;
 }
 
 .form-input:focus {
   border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.08);
-  color: #ffffff !important; /* Ensure text stays white on focus */
 }
 
 .form-input:hover:not(:focus):not(:disabled) {
@@ -5588,7 +5585,7 @@ html {
 }
 
 .form-input:disabled {
-  background-color: transparent !important;
+  background-color: #f7fafc;
   cursor: not-allowed;
   opacity: 0.6;
 }
@@ -5941,7 +5938,7 @@ html {
 /* Responsive Design */
 @media (max-width: 640px) {
   .register-page {
-    padding: 16px;
+    padding: 50px 16px 16px 16px; /* Reduced top gap on mobile */
   }
   
   .register-container {
@@ -5990,7 +5987,7 @@ html {
   }
 }
 
-/* Dark mode support - removed conflicting styles */
+/* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .register-container {
     background: rgba(26, 32, 44, 0.95);
@@ -6017,20 +6014,18 @@ html {
     display: none; /* Keep it hidden in dark mode too */
   }
   
-  /* Override form input styles for dark mode */
   .form-input {
-    background: transparent !important;
+    background: #2d3748;
     border-color: #4a5568;
-    color: #ffffff !important;
+    color: #f7fafc;
   }
   
   .form-input::placeholder {
-    color: #718096 !important;
+    color: #718096;
   }
   
   .form-input:focus {
     border-color: #667eea;
-    color: #ffffff !important;
   }
   
   .form-input:hover:not(:focus):not(:disabled) {
@@ -6038,7 +6033,7 @@ html {
   }
   
   .form-input:disabled {
-    background-color: transparent !important;
+    background-color: #1a202c;
   }
   
   .role-option {
