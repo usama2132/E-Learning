@@ -13275,7 +13275,7 @@ body, html {
     text-align: center;
   }
 }
-/* System Settings Dashboard Styles - Fixed for Light Mode */
+/* System Settings Dashboard Styles - Fixed for Light Mode Text Visibility */
 
 /* Add CSS custom properties for light and dark modes */
 :root {
@@ -13310,6 +13310,15 @@ body, html {
   --shadow-medium: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
 }
 
+/* Base text styles - Ensure text is visible in light mode */
+body {
+  color: #1e293b;
+}
+
+[data-theme="dark"] body {
+  color: #f8fafc;
+}
+
 .settings-container {
   display: flex;
   gap: 2rem;
@@ -13341,6 +13350,11 @@ body, html {
   margin-left: 0;
   border: 1px solid #e2e8f0;
   border: 1px solid var(--border-light);
+  color: #1e293b; /* Force dark text in light mode */
+}
+
+[data-theme="dark"] .settings-content {
+  color: #f8fafc; /* Light text in dark mode */
 }
 
 .page-header {
@@ -13351,45 +13365,52 @@ body, html {
 .page-header h2 {
   margin: 0;
   padding: 0;
-  color: #1e293b !important;
-  color: var(--text-primary) !important;
+  color: #1e293b !important; /* Force dark text in light mode */
   font-size: 2rem;
   font-weight: 700;
 }
 
-/* Fix all heading colors */
+[data-theme="dark"] .page-header h2 {
+  color: #f8fafc !important; /* Light text in dark mode */
+}
+
+/* Fix all heading colors with proper fallbacks */
 .system-settings h2,
 .page-header h2,
 .settings-container h2,
 h2,
 h3 {
-  color: #1e293b !important;
-  color: var(--text-primary) !important;
+  color: #1e293b !important; /* Dark text for light mode */
+}
+
+[data-theme="dark"] .system-settings h2,
+[data-theme="dark"] .page-header h2,
+[data-theme="dark"] .settings-container h2,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3 {
+  color: #f8fafc !important; /* Light text for dark mode */
 }
 
 .settings-section h3 {
   color: #1e293b !important;
-  color: var(--text-primary) !important;
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
 }
 
+[data-theme="dark"] .settings-section h3 {
+  color: #f8fafc !important;
+}
+
 .header-actions {
-  position: absolute;
-  bottom: 2rem;
-  right: 2rem;
-  left: 2rem;
   display: flex;
   gap: 1rem;
   justify-content: flex-end;
-  padding-top: 1rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
   border-top: 1px solid #e2e8f0;
   border-top: 1px solid var(--border-light);
-  background: #f8fafc;
-  background: var(--background-secondary);
-  z-index: 10;
-  pointer-events: auto;
+  background: transparent;
 }
 
 .system-settings-container {
@@ -13397,6 +13418,11 @@ h3 {
   background: #ffffff;
   background: var(--background-primary);
   min-height: 100vh;
+  color: #1e293b; /* Base text color for light mode */
+}
+
+[data-theme="dark"] .system-settings-container {
+  color: #f8fafc; /* Base text color for dark mode */
 }
 
 .system-settings-header {
@@ -13410,11 +13436,14 @@ h3 {
   font-size: 2rem;
   font-weight: 700;
   color: #1e293b !important;
-  color: var(--text-primary) !important;
   display: flex;
   align-items: center;
   gap: 0.75rem;
   margin-bottom: 0.5rem;
+}
+
+[data-theme="dark"] .system-settings-title {
+  color: #f8fafc !important;
 }
 
 .system-settings-title::before {
@@ -13424,9 +13453,12 @@ h3 {
 
 .system-settings-subtitle {
   color: #64748b !important;
-  color: var(--text-secondary) !important;
   font-size: 1rem;
   margin: 0;
+}
+
+[data-theme="dark"] .system-settings-subtitle {
+  color: #cbd5e1 !important;
 }
 
 .settings-navigation {
@@ -13439,13 +13471,12 @@ h3 {
   overflow-x: visible;
 }
 
-/* Fix tab button styles */
+/* Fix tab button styles with proper text colors */
 .tab-button {
   padding: 0.75rem 1rem;
   border: none;
   background: transparent;
-  color: #64748b !important;
-  color: var(--text-secondary) !important;
+  color: #64748b !important; /* Secondary text color for light mode */
   font-size: 0.875rem;
   font-weight: 600;
   border-radius: 0.5rem;
@@ -13461,11 +13492,18 @@ h3 {
   width: 100%;
 }
 
+[data-theme="dark"] .tab-button {
+  color: #cbd5e1 !important; /* Secondary text color for dark mode */
+}
+
 .tab-button:hover {
-  color: #1e293b !important;
-  color: var(--text-primary) !important;
+  color: #1e293b !important; /* Primary text color on hover */
   background: #f1f5f9;
   background: var(--background-tertiary);
+}
+
+[data-theme="dark"] .tab-button:hover {
+  color: #f8fafc !important; /* Primary text color on hover for dark mode */
 }
 
 .tab-button.active {
@@ -13479,7 +13517,6 @@ h3 {
   border: none;
   background: transparent;
   color: #64748b;
-  color: var(--text-secondary);
   font-size: 0.875rem;
   font-weight: 600;
   border-radius: 0.5rem;
@@ -13493,11 +13530,18 @@ h3 {
   justify-content: flex-start;
 }
 
+[data-theme="dark"] .nav-item {
+  color: #cbd5e1;
+}
+
 .nav-item:hover {
   color: #1e293b;
-  color: var(--text-primary);
   background: #f1f5f9;
   background: var(--background-tertiary);
+}
+
+[data-theme="dark"] .nav-item:hover {
+  color: #f8fafc;
 }
 
 .nav-item.active {
@@ -13508,8 +13552,12 @@ h3 {
 
 .settings-section {
   margin-bottom: 0;
-  padding-bottom: 80px;
   overflow: visible; 
+  color: #1e293b; /* Ensure text is visible */
+}
+
+[data-theme="dark"] .settings-section {
+  color: #f8fafc;
 }
 
 .settings-section:last-child {
@@ -13520,19 +13568,25 @@ h3 {
   font-size: 1.25rem;
   font-weight: 700;
   color: #1e293b !important;
-  color: var(--text-primary) !important;
   margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
+[data-theme="dark"] .section-title {
+  color: #f8fafc !important;
+}
+
 .section-description {
   color: #64748b !important;
-  color: var(--text-secondary) !important;
   font-size: 0.875rem;
   margin-bottom: 1.5rem;
   line-height: 1.5;
+}
+
+[data-theme="dark"] .section-description {
+  color: #cbd5e1 !important;
 }
 
 .settings-grid {
@@ -13571,27 +13625,33 @@ h3 {
   font-size: 1rem;
   font-weight: 600;
   color: #1e293b !important;
-  color: var(--text-primary) !important;
   margin-bottom: 0.25rem;
+}
+
+[data-theme="dark"] .setting-name {
+  color: #f8fafc !important;
 }
 
 .setting-description {
   font-size: 0.875rem;
   color: #64748b !important;
-  color: var(--text-secondary) !important;
   line-height: 1.4;
+}
+
+[data-theme="dark"] .setting-description {
+  color: #cbd5e1 !important;
 }
 
 .setting-control {
   margin-left: 1rem;
 }
 
-/* Form Controls - Enhanced */
+/* Form Controls - Enhanced with proper text colors */
 .form-group {
   margin-bottom: 1.5rem;
 }
 
-/* Target ALL possible label elements */
+/* Target ALL possible label elements with specific colors */
 .form-group label,
 .settings-section label,
 .system-settings label,
@@ -13599,17 +13659,30 @@ label {
   display: block;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #1e293b !important;
-  color: var(--text-primary) !important;
+  color: #1e293b !important; /* Dark text for light mode */
   margin-bottom: 0.5rem;
 }
 
-/* Force visibility for all text elements */
-.settings-section *,
-.settings-content *,
-.form-group * {
-  color: #1e293b !important;
-  color: var(--text-primary) !important;
+[data-theme="dark"] .form-group label,
+[data-theme="dark"] .settings-section label,
+[data-theme="dark"] .system-settings label,
+[data-theme="dark"] label {
+  color: #f8fafc !important; /* Light text for dark mode */
+}
+
+/* Ensure all text in the settings area is visible */
+.settings-content,
+.settings-content p,
+.settings-content span,
+.settings-content div {
+  color: #1e293b !important; /* Dark text for light mode */
+}
+
+[data-theme="dark"] .settings-content,
+[data-theme="dark"] .settings-content p,
+[data-theme="dark"] .settings-content span,
+[data-theme="dark"] .settings-content div {
+  color: #f8fafc !important; /* Light text for dark mode */
 }
 
 /* Override for secondary text */
@@ -13618,18 +13691,14 @@ label {
 small {
   font-size: 0.75rem;
   color: #64748b !important;
-  color: var(--text-secondary) !important;
   margin-top: 0.25rem;
   display: block;
 }
 
-/* Ensure all text in the settings area is visible */
-.settings-content,
-.settings-content p,
-.settings-content span,
-.settings-content div {
-  color: #1e293b !important;
-  color: var(--text-primary) !important;
+[data-theme="dark"] .form-group small,
+[data-theme="dark"] .settings-section small,
+[data-theme="dark"] small {
+  color: #cbd5e1 !important;
 }
 
 .form-label {
@@ -13637,8 +13706,11 @@ small {
   font-size: 0.875rem;
   font-weight: 600;
   color: #1e293b !important;
-  color: var(--text-primary) !important;
   margin-bottom: 0.5rem;
+}
+
+[data-theme="dark"] .form-label {
+  color: #f8fafc !important;
 }
 
 .form-input,
@@ -13657,9 +13729,19 @@ textarea {
   font-size: 0.875rem;
   background: #ffffff;
   background: var(--background-primary);
-  color: #1e293b !important;
-  color: var(--text-primary) !important;
+  color: #1e293b !important; /* Dark text for light mode */
   transition: all 0.2s ease;
+}
+
+[data-theme="dark"] .form-input,
+[data-theme="dark"] .form-select,
+[data-theme="dark"] .form-textarea,
+[data-theme="dark"] input[type="text"],
+[data-theme="dark"] input[type="email"],
+[data-theme="dark"] input[type="number"],
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+  color: #f8fafc !important; /* Light text for dark mode */
 }
 
 .form-input:focus,
@@ -13684,8 +13766,11 @@ textarea {
 .form-help {
   font-size: 0.75rem;
   color: #64748b !important;
-  color: var(--text-secondary) !important;
   margin-top: 0.25rem;
+}
+
+[data-theme="dark"] .form-help {
+  color: #cbd5e1 !important;
 }
 
 /* Checkbox styles */
@@ -13700,10 +13785,13 @@ textarea {
   align-items: flex-start;
   gap: 0.5rem;
   color: #1e293b !important;
-  color: var(--text-primary) !important;
   font-weight: 500;
   cursor: pointer;
   margin-bottom: 0;
+}
+
+[data-theme="dark"] .checkbox-group label {
+  color: #f8fafc !important;
 }
 
 .checkbox-group input[type="checkbox"] {
@@ -13814,13 +13902,19 @@ input:checked + .toggle-slider:before {
   font-size: 2rem;
   margin-bottom: 0.5rem;
   color: #64748b;
-  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .upload-icon {
+  color: #cbd5e1;
 }
 
 .upload-text {
   color: #64748b;
-  color: var(--text-secondary);
   font-size: 0.875rem;
+}
+
+[data-theme="dark"] .upload-text {
+  color: #cbd5e1;
 }
 
 .upload-text strong {
@@ -13878,9 +13972,12 @@ input:checked + .toggle-slider:before {
   background: #f1f5f9 !important;
   background: var(--background-tertiary) !important;
   color: #1e293b !important;
-  color: var(--text-primary) !important;
   border: 2px solid #e2e8f0;
   border: 2px solid var(--border-light);
+}
+
+[data-theme="dark"] .btn-secondary {
+  color: #f8fafc !important;
 }
 
 .btn-secondary:hover {
@@ -13946,8 +14043,11 @@ input:checked + .toggle-slider:before {
   align-items: center;
   height: 200px;
   color: #64748b;
-  color: var(--text-secondary);
   font-size: 1.1rem;
+}
+
+[data-theme="dark"] .loading-spinner {
+  color: #cbd5e1;
 }
 
 /* Backup & Maintenance */
@@ -13980,14 +14080,20 @@ input:checked + .toggle-slider:before {
 .backup-name {
   font-weight: 600;
   color: #1e293b;
-  color: var(--text-primary);
   margin-bottom: 0.25rem;
+}
+
+[data-theme="dark"] .backup-name {
+  color: #f8fafc;
 }
 
 .backup-details {
   font-size: 0.875rem;
   color: #64748b;
-  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .backup-details {
+  color: #cbd5e1;
 }
 
 .backup-actions {
@@ -14030,9 +14136,12 @@ input:checked + .toggle-slider:before {
 .stat-label {
   font-size: 0.875rem;
   color: #64748b;
-  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+[data-theme="dark"] .stat-label {
+  color: #cbd5e1;
 }
 
 /* Notification Settings */
@@ -14061,56 +14170,99 @@ input:checked + .toggle-slider:before {
 .notification-title {
   font-weight: 600;
   color: #1e293b;
-  color: var(--text-primary);
   margin-bottom: 0.25rem;
+}
+
+[data-theme="dark"] .notification-title {
+  color: #f8fafc;
 }
 
 .notification-description {
   font-size: 0.875rem;
   color: #64748b;
-  color: var(--text-secondary);
 }
 
-/* Responsive design */
+[data-theme="dark"] .notification-description {
+  color: #cbd5e1;
+}
+
+/* Enhanced Responsive design */
 @media (max-width: 768px) {
   .system-settings-container {
-    padding: 1rem;
+    padding: 0.5rem;
   }
   
   .settings-container {
     flex-direction: column;
     gap: 1rem;
+    max-width: 100%;
+    overflow-x: hidden;
   }
   
   .settings-sidebar {
     flex: none;
     width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
   }
   
   .settings-navigation {
     flex-direction: row;
     overflow-x: auto;
     padding-bottom: 0.5rem;
+    gap: 0.5rem;
+    -webkit-overflow-scrolling: touch;
   }
   
   .tab-button,
   .nav-item {
     flex-shrink: 0;
     justify-content: center;
-    min-width: 120px;
+    min-width: 100px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
   }
   
   .settings-content {
     padding: 1rem;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  
+  .settings-section {
+    margin-bottom: 0;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .form-input,
+  .form-select,
+  .form-textarea,
+  input[type="text"],
+  input[type="email"],
+  input[type="number"],
+  select,
+  textarea {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.75rem;
+    font-size: 16px; /* Prevents zoom on iOS */
+    box-sizing: border-box;
   }
   
   .settings-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
   
   .setting-header {
     flex-direction: column;
     align-items: stretch;
+    gap: 0.5rem;
   }
   
   .setting-control {
@@ -14119,17 +14271,28 @@ input:checked + .toggle-slider:before {
   }
   
   .header-actions {
-    position: relative;
-    bottom: auto;
-    right: auto;
-    left: auto;
-    flex-direction: column;
+    display: flex;
+    gap: 0.75rem;
     margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e2e8f0;
+    border-top: 1px solid var(--border-light);
+    background: transparent;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .btn {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem;
+    font-size: 1rem;
   }
   
   .color-picker-group {
     flex-direction: column;
     align-items: stretch;
+    gap: 0.75rem;
   }
   
   .backup-item {
@@ -14140,11 +14303,101 @@ input:checked + .toggle-slider:before {
   
   .backup-actions {
     justify-content: stretch;
+    flex-direction: column;
+    gap: 0.5rem;
   }
   
   .btn-small {
     flex: 1 1;
     justify-content: center;
+    width: 100%;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  
+  .page-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .settings-section h3 {
+    font-size: 1.25rem;
+  }
+  
+  .checkbox-group {
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  .checkbox-group label {
+    line-height: 1.4;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  .system-settings-container {
+    padding: 0.25rem;
+  }
+  
+  .settings-content {
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+  }
+  
+  .settings-sidebar {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+  }
+  
+  .tab-button,
+  .nav-item {
+    min-width: 80px;
+    padding: 0.5rem;
+    font-size: 0.7rem;
+  }
+  
+  .form-input,
+  .form-select,
+  .form-textarea,
+  input[type="text"],
+  input[type="email"],
+  input[type="number"],
+  select,
+  textarea {
+    padding: 0.6rem;
+  }
+  
+  .page-header h2 {
+    font-size: 1.25rem;
+  }
+  
+  .settings-section h3 {
+    font-size: 1.1rem;
+  }
+}
+
+/* Landscape mobile orientation */
+@media (max-width: 768px) and (orientation: landscape) {
+  .settings-container {
+    flex-direction: row;
+  }
+  
+  .settings-sidebar {
+    flex: 0 0 200px;
+    width: 200px;
+  }
+  
+  .settings-navigation {
+    flex-direction: column;
+  }
+  
+  .tab-button,
+  .nav-item {
+    min-width: auto;
+    width: 100%;
   }
 }
 /* Course Analytics Styles */
