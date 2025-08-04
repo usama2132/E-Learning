@@ -16816,19 +16816,13 @@ body {
   width: 100%;
 }
 
-/* Tab Navigation - Horizontal Scroll */
+/* Tab Navigation - Mobile First (Vertical) */
 .student-dashboard .tab-nav {
   padding: 1rem;
   border-bottom: 1px solid var(--border);
   display: flex;
+  flex-direction: column;
   gap: 0.5rem;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.student-dashboard .tab-nav::-webkit-scrollbar {
-  display: none;
 }
 
 .student-dashboard .tab-button {
@@ -16836,12 +16830,12 @@ body {
   color: var(--text2);
   border: 1px solid var(--border);
   border-radius: 4px;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  white-space: nowrap;
-  flex-shrink: 0;
+  width: 100%;
+  text-align: left;
 }
 
 .student-dashboard .tab-button--active {
@@ -17324,6 +17318,28 @@ body {
   .student-dashboard .quick-action__icon {
     margin: 0 0 0.75rem 0;
   }
+  
+  /* Switch to horizontal tabs on tablet */
+  .student-dashboard .tab-nav {
+    flex-direction: row;
+    gap: 0.75rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .student-dashboard .tab-nav::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .student-dashboard .tab-button {
+    width: auto;
+    white-space: nowrap;
+    flex-shrink: 0;
+    text-align: center;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
+  }
 }
 
 /* Desktop Responsive */
@@ -17342,6 +17358,24 @@ body {
   
   .student-dashboard .progress-list {
     grid-template-columns: repeat(3, 1fr);
+  }
+  
+  /* Horizontal tabs on desktop */
+  .student-dashboard .tab-nav {
+    flex-direction: row;
+    padding: 1.5rem;
+    gap: 1rem;
+    justify-content: flex-start;
+    overflow-x: visible;
+  }
+  
+  .student-dashboard .tab-button {
+    width: auto;
+    white-space: nowrap;
+    flex-shrink: 0;
+    text-align: center;
+    padding: 1rem 1.5rem;
+    font-size: 0.9rem;
   }
 }
 
