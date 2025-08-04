@@ -17095,24 +17095,13 @@ body {
   display: block;
 }
 /* PROFILE PAGE THEME OVERRIDE - Add this to the END of your Profile.css file */
-
 /* IMPORTANT: Only add this CSS to pages that actually contain .profile-container */
-/* This ensures it won't affect other pages like the home page */
 
-/* Basic profile header styling */
-.profile-container .profile-header h1 {
-  text-align: center;
-  margin: 0 auto;
-}
+/* ============================================================================
+   THEME OVERRIDES - PROPERLY SCOPED FOR PROFILE ONLY
+   ============================================================================ */
 
-.profile-container .profile-header {
-  padding: 2rem 1rem 1.5rem;
-  text-align: center;
-  position: relative;
-  z-index: 2;
-}
-
-/* Override theme system specifically for profile page content areas */
+/* Light Mode - Force white backgrounds and dark text */
 .profile-container .profile-main,
 .profile-container .form-section,
 .profile-container .settings-section,
@@ -17122,115 +17111,52 @@ body {
 .profile-container .security-actions,
 .profile-container .danger-zone,
 .profile-container .modal-content {
-  /* Force white background regardless of theme */
   background-color: #ffffff !important;
-  background: #ffffff !important;
-  
-  /* Override theme CSS variables locally */
-  --color-background: #ffffff !important;
-  --color-backgroundSecondary: #ffffff !important;
-  --color-card: #ffffff !important;
-  --color-text: #333333 !important;
-  --color-textSecondary: #666666 !important;
-  --color-textMuted: #999999 !important;
-}
-
-/* Force all text elements to use dark colors - PROPERLY SCOPED */
-.profile-container .profile-main *,
-.profile-container .form-section *,
-.profile-container .settings-section *,
-.profile-container .avatar-section *,
-.profile-container .settings-group *,
-.profile-container .account-info *,
-.profile-container .security-actions *,
-.profile-container .danger-zone *,
-.profile-container .modal-content * {
   color: #333333 !important;
 }
 
-/* Specific text elements - PROPERLY SCOPED */
+/* Force all text to be readable */
 .profile-container h1,
 .profile-container h2,
 .profile-container h3,
 .profile-container h4,
-.profile-container h5,
-.profile-container h6,
 .profile-container p,
 .profile-container span,
-.profile-container div:not(.avatar-overlay):not(.error-message):not(.status),
 .profile-container label,
 .profile-container .form-label,
 .profile-container .info-item .label,
 .profile-container .info-item .value,
-.profile-container .setting-item span,
-.profile-container .character-count,
-.profile-container .help-text {
+.profile-container .setting-item span {
   color: #333333 !important;
 }
 
-/* Force input fields - PROPERLY SCOPED */
-/* Force input fields - PROPERLY SCOPED - LIGHT MODE ONLY */
-:not([data-theme="dark"]) .profile-container input[type="text"],
-:not([data-theme="dark"]) .profile-container input[type="email"],
-:not([data-theme="dark"]) .profile-container input[type="url"],
-:not([data-theme="dark"]) .profile-container input[type="password"],
-:not([data-theme="dark"]) .profile-container textarea {
+/* Fix input fields - CRITICAL FIX */
+.profile-container input[type="text"],
+.profile-container input[type="email"],
+.profile-container input[type="url"],
+.profile-container input[type="password"],
+.profile-container textarea {
   background-color: #ffffff !important;
-  background: #ffffff !important;
   color: #333333 !important;
-  border-color: #ddd !important;
-  
-  /* Override theme input variables */
-  --color-input: #ffffff !important;
-  --color-inputBorder: #ddd !important;
+  border: 2px solid #e0e0e0 !important;
+  border-radius: 8px;
+  padding: 12px;
 }
 
-.profile-container input[type="text"]:focus,
-.profile-container input[type="email"]:focus,
-.profile-container input[type="url"]:focus,
-.profile-container input[type="password"]:focus,
+.profile-container input:focus,
 .profile-container textarea:focus {
   background-color: #ffffff !important;
-  background: #ffffff !important;
   color: #333333 !important;
   border-color: #667eea !important;
+  outline: none;
 }
 
-/* Placeholder text */
 .profile-container input::placeholder,
 .profile-container textarea::placeholder {
   color: #999999 !important;
 }
 
-/* Keep status colors visible */
-.profile-container .status.active {
-  color: #00ff88 !important;
-}
-
-.profile-container .status.inactive {
-  color: #ff4757 !important;
-}
-
-.profile-container .error-message {
-  color: #ff4757 !important;
-}
-
-.profile-container .danger-zone h3 {
-  color: #d32f2f !important;
-}
-
-/* Keep button styling intact */
-.profile-container button:not(.modal-actions button:first-child),
-.profile-container .avatar-upload-btn {
-  color: #ffffff !important;
-}
-
-.profile-container .modal-actions button:first-child {
-  background: #f5f5f5 !important;
-  color: #666666 !important;
-}
-
-/* DARK MODE OVERRIDES - PROPERLY SCOPED FOR PROFILE ONLY */
+/* Dark Mode Overrides */
 [data-theme="dark"] .profile-container .profile-main,
 [data-theme="dark"] .profile-container .form-section,
 [data-theme="dark"] .profile-container .settings-section,
@@ -17241,154 +17167,56 @@ body {
 [data-theme="dark"] .profile-container .danger-zone,
 [data-theme="dark"] .profile-container .modal-content {
   background-color: #1a1a1a !important;
-  background: #1a1a1a !important;
-  
-  /* Override dark theme variables locally */
-  --color-background: #1a1a1a !important;
-  --color-backgroundSecondary: #2d2d2d !important;
-  --color-card: #1a1a1a !important;
-  --color-text: #ffffff !important;
-  --color-textSecondary: #adb5bd !important;
-  --color-textMuted: #6c757d !important;
-  --color-input: #2d2d2d !important;
-  --color-inputBorder: #404040 !important;
+  color: #ffffff !important;
 }
 
-/* Dark mode: All text should be white - PROPERLY SCOPED */
-[data-theme="dark"] .profile-container .profile-main *,
-[data-theme="dark"] .profile-container .form-section *,
-[data-theme="dark"] .profile-container .settings-section *,
-[data-theme="dark"] .profile-container .avatar-section *,
-[data-theme="dark"] .profile-container .settings-group *,
-[data-theme="dark"] .profile-container .account-info *,
-[data-theme="dark"] .profile-container .security-actions *,
-[data-theme="dark"] .profile-container .danger-zone *,
-[data-theme="dark"] .profile-container .modal-content * {
-  color: #f0e9e9 !important;
-}
-
-/* Dark mode: Specific text elements - PROPERLY SCOPED */
 [data-theme="dark"] .profile-container h1,
 [data-theme="dark"] .profile-container h2,
 [data-theme="dark"] .profile-container h3,
 [data-theme="dark"] .profile-container h4,
-[data-theme="dark"] .profile-container h5,
-[data-theme="dark"] .profile-container h6,
 [data-theme="dark"] .profile-container p,
 [data-theme="dark"] .profile-container span,
-[data-theme="dark"] .profile-container div:not(.avatar-overlay):not(.error-message):not(.status),
 [data-theme="dark"] .profile-container label,
 [data-theme="dark"] .profile-container .form-label,
 [data-theme="dark"] .profile-container .info-item .label,
 [data-theme="dark"] .profile-container .info-item .value,
-[data-theme="dark"] .profile-container .setting-item span,
-[data-theme="dark"] .profile-container .character-count,
-[data-theme="dark"] .profile-container .help-text {
+[data-theme="dark"] .profile-container .setting-item span {
   color: #ffffff !important;
 }
 
-/* Dark mode: Input fields - PROPERLY SCOPED - FIXED BIO TEXTAREA */
 [data-theme="dark"] .profile-container input[type="text"],
 [data-theme="dark"] .profile-container input[type="email"],
 [data-theme="dark"] .profile-container input[type="url"],
 [data-theme="dark"] .profile-container input[type="password"],
 [data-theme="dark"] .profile-container textarea {
   background-color: #2d2d2d !important;
-  background: #2d2d2d !important;
   color: #ffffff !important;
   border-color: #404040 !important;
 }
 
-[data-theme="dark"] .profile-container input[type="text"]:focus,
-[data-theme="dark"] .profile-container input[type="email"]:focus,
-[data-theme="dark"] .profile-container input[type="url"]:focus,
-[data-theme="dark"] .profile-container input[type="password"]:focus,
+[data-theme="dark"] .profile-container input:focus,
 [data-theme="dark"] .profile-container textarea:focus {
   background-color: #2d2d2d !important;
-  background: #2d2d2d !important;
   color: #ffffff !important;
   border-color: #667eea !important;
 }
 
-/* Dark mode: Placeholder text */
 [data-theme="dark"] .profile-container input::placeholder,
 [data-theme="dark"] .profile-container textarea::placeholder {
   color: #6c757d !important;
 }
 
-/* Dark mode: Secondary backgrounds */
-[data-theme="dark"] .profile-container .settings-group,
-[data-theme="dark"] .profile-container .account-info,
-[data-theme="dark"] .profile-container .security-actions {
-  background-color: #2d2d2d !important;
-  border-color: #404040 !important;
-}
-
-/* Dark mode: Navigation */
-[data-theme="dark"] .profile-container .profile-nav {
-  background: rgba(45, 45, 45, 0.9) !important;
-  border-color: rgba(64, 64, 64, 0.5) !important;
-}
-
-[data-theme="dark"] .profile-container .nav-item {
-  color: rgba(255, 255, 255, 0.7) !important;
-}
-
-[data-theme="dark"] .profile-container .nav-item:hover {
-  background: rgba(64, 64, 64, 0.5) !important;
-  color: #ffffff !important;
-}
-
-[data-theme="dark"] .profile-container .nav-item.active {
-  background: rgba(102, 126, 234, 0.3) !important;
-  color: #ffffff !important;
-}
-
-/* Dark mode: Modal fixes */
-[data-theme="dark"] .profile-container .modal-actions button:first-child {
-  background: #404040 !important;
-  color: #ffffff !important;
-  border-color: #404040 !important;
-}
-
-/* High contrast mode overrides - PROPERLY SCOPED */
-.high-contrast .profile-container .profile-main,
-.high-contrast .profile-container .form-section,
-.high-contrast .profile-container .settings-section,
-.high-contrast .profile-container .avatar-section,
-.high-contrast .profile-container .settings-group,
-.high-contrast .profile-container .account-info,
-.high-contrast .profile-container .security-actions,
-.high-contrast .profile-container .danger-zone,
-.high-contrast .profile-container .modal-content {
-  background-color: #ffffff !important;
-  background: #ffffff !important;
-}
-
-.high-contrast .profile-container .profile-main *,
-.high-contrast .profile-container .form-section *,
-.high-contrast .profile-container .settings-section *,
-.high-contrast .profile-container .avatar-section *,
-.high-contrast .profile-container .settings-group *,
-.high-contrast .profile-container .account-info *,
-.high-contrast .profile-container .security-actions *,
-.high-contrast .profile-container .danger-zone *,
-.high-contrast .profile-container .modal-content * {
-  color: #000000 !important;
-}
-
 /* ============================================================================
-   MAIN PROFILE STYLES - OPTIMIZED FOR SPEED AND RESPONSIVENESS
+   MAIN PROFILE STYLES - OPTIMIZED FOR PERFORMANCE
    ============================================================================ */
 
 .profile-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   position: relative;
-  will-change: transform; /* Optimize for animations */
 }
 
-/* Removed heavy background animations for performance */
+/* Simplified background - no heavy animations */
 .profile-container::before {
   content: '';
   position: absolute;
@@ -17396,13 +17224,11 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%);
+  background: radial-gradient(circle at 30% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
   pointer-events: none;
 }
 
-/* Header - Optimized */
+/* Header */
 .profile-container .profile-header {
   padding: 2rem 1rem 1.5rem;
   text-align: center;
@@ -17413,19 +17239,14 @@ body {
 .profile-container .profile-header h1 {
   font-size: 2.5rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: white;
   margin: 0 auto 0.5rem auto;
-  text-align: center;
-  display: block;
-  width: 100%;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-/* Success message - Simplified */
+/* Success message */
 .profile-container .success-message {
-  background: linear-gradient(135deg, #00ff88 0%, #00cc70 100%);
+  background: #00ff88;
   color: white;
   padding: 1rem 1.5rem;
   border-radius: 12px;
@@ -17433,11 +17254,9 @@ body {
   text-align: center;
   font-weight: 600;
   box-shadow: 0 4px 12px rgba(0, 255, 136, 0.2);
-  position: relative;
-  z-index: 3;
 }
 
-/* Main content layout - Mobile-first approach - FIXED WIDTH ISSUE */
+/* Main content layout */
 .profile-container .profile-content {
   display: flex;
   flex-direction: column;
@@ -17447,10 +17266,9 @@ body {
   padding: 0 1rem 2rem;
   position: relative;
   z-index: 2;
-  width: 100%; /* Ensure full width */
 }
 
-/* Navigation - Vertical stacked tabs at top */
+/* Navigation */
 .profile-container .profile-sidebar {
   width: 100%;
   order: -1;
@@ -17463,7 +17281,6 @@ body {
   border-radius: 15px;
   padding: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -17483,7 +17300,6 @@ body {
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s ease;
-  position: relative;
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -17491,37 +17307,25 @@ body {
   background: rgba(255, 255, 255, 0.15);
   color: white;
   transform: translateX(4px);
-  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .profile-container .nav-item.active {
   background: rgba(255, 255, 255, 0.25);
   color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
   transform: translateX(6px);
 }
 
-/* Main content area - FIXED TRANSPARENCY AND WIDTH */
+/* Main content area */
 .profile-container .profile-main {
   flex: 1 1;
-  background: rgba(255, 255, 255, 0.95) !important; /* Semi-transparent white */
+  background: rgba(255, 255, 255, 0.95) !important;
   -webkit-backdrop-filter: blur(10px);
-          backdrop-filter: blur(10px); /* Add blur effect */
+          backdrop-filter: blur(10px);
   border-radius: 20px;
   padding: 2rem 1.5rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  width: 100%; /* Ensure full width */
-  min-width: 0; /* Prevent shrinking */
-}
-
-/* Dark mode main content fix */
-[data-theme="dark"] .profile-container .profile-main {
-  background: rgba(26, 26, 26, 0.95) !important;
-  -webkit-backdrop-filter: blur(10px);
-          backdrop-filter: blur(10px);
-  border: 1px solid rgba(64, 64, 64, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 /* Section headers */
@@ -17549,7 +17353,7 @@ body {
   border-radius: 2px;
 }
 
-/* Avatar section - Responsive */
+/* Avatar section */
 .profile-container .avatar-section {
   display: flex;
   align-items: center;
@@ -17557,17 +17361,8 @@ body {
   margin-bottom: 2rem;
   padding: 1.5rem;
   background: rgba(255, 255, 255, 0.9) !important;
-  -webkit-backdrop-filter: blur(5px);
-          backdrop-filter: blur(5px);
   border-radius: 15px;
   border: 1px solid rgba(102, 126, 234, 0.1);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-/* Dark mode avatar section */
-[data-theme="dark"] .profile-container .avatar-section {
-  background: rgba(45, 45, 45, 0.9) !important;
-  border-color: rgba(64, 64, 64, 0.3);
 }
 
 .profile-container .avatar-container {
@@ -17583,7 +17378,6 @@ body {
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid rgba(102, 126, 234, 0.2);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
 }
 
@@ -17607,10 +17401,6 @@ body {
   font-size: 0.9rem;
 }
 
-.profile-container .avatar-actions {
-  flex: 1 1;
-}
-
 .profile-container .avatar-upload-btn {
   display: inline-block;
   padding: 0.75rem 1.5rem;
@@ -17630,19 +17420,17 @@ body {
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
-/* Form layout - Responsive grid - FIXED WIDTH */
+/* Form layout */
 .profile-container .form-row {
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 1.5rem;
   gap: 1.5rem;
   margin-bottom: 1.5rem;
-  width: 100%;
 }
 
 .profile-container .form-group {
   margin-bottom: 1.5rem;
-  width: 100%;
 }
 
 .profile-container .form-label {
@@ -17653,49 +17441,30 @@ body {
   font-size: 0.95rem;
 }
 
-/* Form inputs - Optimized - FIXED WIDTH */
-/* Form inputs - Optimized - FIXED WIDTH */
+/* Form inputs - OPTIMIZED AND FIXED */
 .profile-container .form-group input,
 .profile-container .form-group textarea {
   width: 100%;
   padding: 0.875rem 1.25rem;
-  border: 2px solid rgba(102, 126, 234, 0.1);
+  border: 2px solid #e0e0e0;
   border-radius: 10px;
   font-size: 0.95rem;
-  background: rgba(253, 253, 253, 0.95);
-  transition: all 0.2s ease;
-  color: #333;
+  background: #ffffff;
+  color: #333333;
+  transition: border-color 0.2s ease;
   box-sizing: border-box;
-  min-width: 0; /* Prevent overflow */
-}
-
-/* Dark mode override for form inputs */
-[data-theme="dark"] .profile-container .form-group input,
-[data-theme="dark"] .profile-container .form-group textarea {
-  background: #2d2d2d !important;
-  color: #ffffff !important;
-  border-color: #404040 !important;
-}
-
-[data-theme="dark"] .profile-container .form-group input:focus,
-[data-theme="dark"] .profile-container .form-group textarea:focus {
-  background: #2d2d2d !important;
-  color: #ffffff !important;
-  border-color: #667eea !important;
 }
 
 .profile-container .form-group input:focus,
 .profile-container .form-group textarea:focus {
   outline: none;
   border-color: #667eea;
-  background: rgba(255, 255, 255, 0.98) !important;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .profile-container .form-group input.error,
 .profile-container .form-group textarea.error {
   border-color: #ff4757;
-  box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.1);
 }
 
 .profile-container .character-count {
@@ -17712,7 +17481,7 @@ body {
   font-weight: 500;
 }
 
-/* Buttons - Simplified */
+/* Buttons */
 .profile-container button[type="submit"],
 .profile-container .profile-main button {
   padding: 0.875rem 2rem;
@@ -17741,26 +17510,13 @@ body {
   transform: none;
 }
 
-/* Settings sections - IMPROVED STYLING */
+/* Settings sections */
 .profile-container .settings-group {
   margin-bottom: 2rem;
   padding: 1.5rem;
   background: rgba(255, 255, 255, 0.9) !important;
-  -webkit-backdrop-filter: blur(5px);
-          backdrop-filter: blur(5px);
   border-radius: 12px;
   border: 1px solid rgba(102, 126, 234, 0.1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-/* Dark mode settings group */
-[data-theme="dark"] .profile-container .settings-group {
-  background: rgba(45, 45, 45, 0.9) !important;
-  border-color: rgba(64, 64, 64, 0.3);
-}
-
-.profile-container .settings-group:last-of-type {
-  margin-bottom: 3rem;
 }
 
 .profile-container .settings-group h3 {
@@ -17768,18 +17524,6 @@ body {
   font-weight: 700;
   color: #333;
   margin: 0 0 1.25rem;
-  position: relative;
-}
-
-.profile-container .settings-group h3::after {
-  content: '';
-  position: absolute;
-  bottom: -6px;
-  left: 0;
-  width: 40px;
-  height: 2px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 1px;
 }
 
 .profile-container .setting-item {
@@ -17793,52 +17537,10 @@ body {
   margin: 0 -0.75rem;
   padding-left: 0.75rem;
   padding-right: 0.75rem;
-  min-height: 50px;
 }
 
 .profile-container .setting-item:hover {
   background: rgba(102, 126, 234, 0.05);
-}
-
-/* Settings actions */
-.profile-container .settings-section button {
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-}
-
-/* Privacy settings specific */
-.profile-container .settings-section .settings-group:last-child {
-  margin-bottom: 2rem;
-}
-
-/* Security actions alignment */
-.profile-container .security-actions {
-  margin: 2rem 0;
-  padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.9) !important;
-  -webkit-backdrop-filter: blur(5px);
-          backdrop-filter: blur(5px);
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(255, 193, 7, 0.2);
-}
-
-/* Dark mode security actions */
-[data-theme="dark"] .profile-container .security-actions {
-  background: rgba(45, 45, 45, 0.9) !important;
-  border-color: rgba(255, 193, 7, 0.3);
-}
-
-.profile-container .security-actions h3 {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin: 0 0 1rem;
-  color: #333;
-}
-
-.profile-container .security-actions button {
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
 }
 
 .profile-container .setting-item input[type="checkbox"] {
@@ -17852,12 +17554,10 @@ body {
   position: relative;
   transition: all 0.2s ease;
   flex-shrink: 0;
-  margin-right: 0.25rem;
 }
 
 .profile-container .setting-item input[type="checkbox"]:checked {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-color: #667eea;
+  background: #667eea;
 }
 
 .profile-container .setting-item input[type="checkbox"]:checked::after {
@@ -17869,7 +17569,6 @@ body {
   color: white;
   font-weight: bold;
   font-size: 14px;
-  line-height: 1;
 }
 
 .profile-container .setting-item span {
@@ -17878,25 +17577,15 @@ body {
   font-weight: 500;
   line-height: 1.4;
   flex: 1 1;
-  margin-left: 0.5rem;
 }
 
-/* Account info - IMPROVED STYLING */
+/* Account info */
 .profile-container .account-info {
   background: rgba(255, 255, 255, 0.9) !important;
-  -webkit-backdrop-filter: blur(5px);
-          backdrop-filter: blur(5px);
   padding: 1.5rem;
   border-radius: 12px;
   margin-bottom: 2rem;
   border: 1px solid rgba(102, 126, 234, 0.1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-/* Dark mode account info */
-[data-theme="dark"] .profile-container .account-info {
-  background: rgba(45, 45, 45, 0.9) !important;
-  border-color: rgba(64, 64, 64, 0.3);
 }
 
 .profile-container .info-item {
@@ -17914,13 +17603,11 @@ body {
 .profile-container .info-item .label {
   font-weight: 600;
   color: #333;
-  font-size: 0.95rem;
 }
 
 .profile-container .info-item .value {
   color: #666;
   font-weight: 500;
-  font-size: 0.95rem;
 }
 
 .profile-container .status.active {
@@ -17933,16 +17620,13 @@ body {
   font-weight: 700;
 }
 
-/* Security and danger zones - IMPROVED STYLING */
+/* Security and danger zones */
 .profile-container .security-actions,
 .profile-container .danger-zone {
   margin: 2rem 0;
   padding: 1.5rem;
   background: rgba(255, 255, 255, 0.9) !important;
-  -webkit-backdrop-filter: blur(5px);
-          backdrop-filter: blur(5px);
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .profile-container .security-actions {
@@ -17951,27 +17635,6 @@ body {
 
 .profile-container .danger-zone {
   border: 1px solid rgba(244, 67, 54, 0.2);
-}
-
-/* Dark mode security and danger zones */
-[data-theme="dark"] .profile-container .security-actions,
-[data-theme="dark"] .profile-container .danger-zone {
-  background: rgba(45, 45, 45, 0.9) !important;
-}
-
-[data-theme="dark"] .profile-container .security-actions {
-  border-color: rgba(255, 193, 7, 0.3);
-}
-
-[data-theme="dark"] .profile-container .danger-zone {
-  border-color: rgba(244, 67, 54, 0.3);
-}
-
-.profile-container .security-actions h3,
-.profile-container .danger-zone h3 {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin: 0 0 0.75rem;
 }
 
 .profile-container .danger-zone h3 {
@@ -17985,18 +17648,11 @@ body {
   line-height: 1.4;
 }
 
-.profile-container .danger-zone p {
-  color: #666;
-  margin: 0 0 1rem;
-  line-height: 1.5;
-  font-size: 0.95rem;
-}
-
 .profile-container .danger-zone button {
   background: linear-gradient(135deg, #ff4757 0%, #d32f2f 100%);
 }
 
-/* Modal styles - Simplified */
+/* Modal styles */
 .profile-container .modal-overlay {
   position: fixed;
   top: 0;
@@ -18015,21 +17671,13 @@ body {
 
 .profile-container .modal-content {
   background: rgba(255, 255, 255, 0.98);
-  -webkit-backdrop-filter: blur(10px);
-          backdrop-filter: blur(10px);
   padding: 2rem;
   border-radius: 20px;
   max-width: 450px;
   width: 100%;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-  position: relative;
   max-height: 90vh;
   overflow-y: auto;
-}
-
-/* Dark mode modal */
-[data-theme="dark"] .profile-container .modal-content {
-  background: rgba(26, 26, 26, 0.98) !important;
 }
 
 .profile-container .modal-content h2 {
@@ -18067,75 +17715,24 @@ body {
   background: #eee;
 }
 
-.profile-container .delete-confirmation p {
-  color: #666;
-  line-height: 1.5;
-  margin-bottom: 1.5rem;
-  font-size: 0.95rem;
-}
-
-/* Dark mode specific optimizations */
-[data-theme="dark"] .profile-container .setting-item input[type="checkbox"] {
-  background: #404040 !important;
-  border-color: #667eea !important;
-}
-
-[data-theme="dark"] .profile-container .setting-item input[type="checkbox"]:checked {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-}
-
-[data-theme="dark"] .profile-container .info-item {
-  border-bottom-color: #404040 !important;
-}
-
-[data-theme="dark"] .profile-container .setting-item:hover {
-  background: rgba(102, 126, 234, 0.1) !important;
-}
-
 /* ============================================================================
-   RESPONSIVE DESIGN - MOBILE-FIRST APPROACH
+   RESPONSIVE DESIGN - OPTIMIZED
    ============================================================================ */
 
-/* Small mobile (up to 480px) */
-@media (max-width: 480px) {
-  .profile-container .profile-header {
-    padding: 1.5rem 0.75rem 1rem;
-  }
-  
+/* Mobile (up to 768px) */
+@media (max-width: 768px) {
   .profile-container .profile-header h1 {
-    font-size: 1.8rem;
-  }
-  
-  .profile-container .profile-header p {
-    font-size: 0.9rem;
+    font-size: 2rem;
   }
   
   .profile-container .profile-content {
-    padding: 0 0.75rem 1.5rem;
+    padding: 0 1rem 2rem;
     gap: 1rem;
   }
   
   .profile-container .profile-main {
-    padding: 1.25rem 1rem;
+    padding: 1.5rem 1rem;
     border-radius: 15px;
-  }
-  
-  .profile-container .profile-nav {
-    padding: 0.75rem;
-    border-radius: 12px;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  .profile-container .nav-item {
-    padding: 0.8rem 1rem;
-    font-size: 0.85rem;
-    border-radius: 8px;
-  }
-  
-  .profile-container .form-section h2,
-  .profile-container .settings-section h2 {
-    font-size: 1.4rem;
   }
   
   .profile-container .avatar-section {
@@ -18150,45 +17747,23 @@ body {
     height: 80px;
   }
   
+  .profile-container .form-section h2,
+  .profile-container .settings-section h2 {
+    font-size: 1.5rem;
+  }
+  
   .profile-container .settings-group,
   .profile-container .account-info,
   .profile-container .security-actions,
   .profile-container .danger-zone {
     padding: 1rem;
-    border-radius: 10px;
     margin-bottom: 1.5rem;
-  }
-  
-  .profile-container .settings-group h3 {
-    font-size: 1.1rem;
-  }
-  
-  .profile-container .setting-item {
-    padding: 0.875rem 0.5rem;
-    margin: 0 -0.5rem;
-    min-height: 48px;
-    align-items: flex-start;
-  }
-  
-  .profile-container .setting-item input[type="checkbox"] {
-    margin-top: 2px;
-  }
-  
-  .profile-container .info-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.25rem;
-    padding: 0.6rem 0;
   }
   
   .profile-container .modal-content {
     padding: 1.5rem 1rem;
     margin: 0.5rem;
     border-radius: 15px;
-  }
-  
-  .profile-container .modal-content h2 {
-    font-size: 1.3rem;
   }
   
   .profile-container .modal-actions {
@@ -18198,79 +17773,12 @@ body {
   
   .profile-container .modal-actions button {
     width: 100%;
-    padding: 0.875rem;
-  }
-  
-  .profile-container .form-group input,
-  .profile-container .form-group textarea {
-    padding: 0.75rem 1rem;
-    font-size: 0.9rem;
-    border-radius: 8px;
   }
   
   .profile-container button[type="submit"],
   .profile-container .profile-main button,
   .profile-container .avatar-upload-btn {
     width: 100%;
-    padding: 0.875rem 1.5rem;
-    font-size: 0.9rem;
-  }
-  
-  .profile-container .success-message {
-    margin: 0 0.75rem 1rem;
-    padding: 0.75rem 1.25rem;
-    border-radius: 10px;
-    font-size: 0.9rem;
-  }
-}
-
-/* Medium mobile (481px to 768px) */
-@media (min-width: 481px) and (max-width: 768px) {
-  .profile-container .profile-header h1 {
-    font-size: 2.2rem;
-  }
-  
-  .profile-container .profile-content {
-    padding: 0 1rem 2rem;
-  }
-  
-  .profile-container .profile-main {
-    padding: 1.75rem 1.25rem;
-  }
-  
-  .profile-container .profile-nav {
-    margin-bottom: 1.25rem;
-  }
-  
-  .profile-container .nav-item {
-    padding: 0.9rem 1.1rem;
-    font-size: 0.9rem;
-  }
-  
-  .profile-container .form-section h2,
-  .profile-container .settings-section h2 {
-    font-size: 1.6rem;
-  }
-  
-  .profile-container .avatar-section {
-    flex-direction: row;
-    gap: 1.25rem;
-  }
-  
-  .profile-container .avatar-container {
-    width: 90px;
-    height: 90px;
-  }
-  
-  .profile-container .form-row {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
-  }
-  
-  .profile-container .setting-item {
-    padding: 0.875rem 0.75rem;
-    margin: 0 -0.75rem;
-    align-items: flex-start;
   }
 }
 
@@ -18279,7 +17787,6 @@ body {
   .profile-container .profile-content {
     flex-direction: row;
     gap: 1.5rem;
-    padding: 0 1.5rem 3rem;
   }
   
   .profile-container .profile-sidebar {
@@ -18288,31 +17795,13 @@ body {
   }
   
   .profile-container .profile-nav {
-    flex-direction: column;
-    gap: 0.5rem;
     position: sticky;
     top: 2rem;
     margin-bottom: 0;
   }
   
-  .profile-container .nav-item {
-    padding: 0.875rem 1.25rem;
-    font-size: 0.9rem;
-  }
-  
   .profile-container .form-row {
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-  }
-  
-  .profile-container .avatar-section {
-    flex-direction: row;
-    gap: 1.5rem;
-  }
-  
-  .profile-container .avatar-container {
-    width: 100px;
-    height: 100px;
   }
 }
 
@@ -18330,35 +17819,18 @@ body {
   }
   
   .profile-container .profile-nav {
-    flex-direction: column;
-    gap: 0.75rem;
     position: sticky;
     top: 2rem;
     margin-bottom: 0;
-  }
-  
-  .profile-container .nav-item {
-    padding: 1.125rem 1.5rem;
-    font-size: 1rem;
   }
   
   .profile-container .profile-main {
     padding: 2.5rem;
   }
   
-  .profile-container .form-section h2,
-  .profile-container .settings-section h2 {
-    font-size: 2rem;
-  }
-  
   .profile-container .form-row {
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
-  }
-  
-  .profile-container .avatar-section {
-    gap: 2rem;
-    padding: 2rem;
   }
   
   .profile-container .avatar-container {
@@ -18371,73 +17843,19 @@ body {
     width: auto;
     max-width: 200px;
   }
-  
-  .profile-container .modal-actions {
-    flex-direction: row;
-  }
-  
-  .profile-container .modal-actions button {
-    width: auto;
-    min-width: 120px;
-  }
 }
 
-/* Landscape mobile optimization */
-@media (max-width: 768px) and (orientation: landscape) {
-  .profile-container .profile-header {
-    padding: 1rem 1rem 0.75rem;
-  }
-  
-  .profile-container .profile-header h1 {
-    font-size: 1.8rem;
-  }
-  
-  .profile-container .profile-content {
-    padding: 0 1rem 1.5rem;
-  }
-  
-  .profile-container .modal-content {
-    max-height: 85vh;
-    overflow-y: auto;
-  }
+/* Performance optimizations */
+.profile-container * {
+  box-sizing: border-box;
 }
 
-/* High contrast mode mobile adjustments */
-@media (max-width: 768px) {
-  .high-contrast .profile-container .profile-main,
-  .high-contrast .profile-container .settings-group,
-  .high-contrast .profile-container .account-info {
-    border: 2px solid #000000;
-  }
-  
-  .high-contrast .profile-container .nav-item.active {
-    border: 2px solid #000000;
-  }
+.profile-container {
+  contain: layout style;
 }
 
-/* Dark mode mobile specific fixes */
-@media (max-width: 768px) {
-  [data-theme="dark"] .profile-container .profile-nav {
-    background: rgba(26, 26, 26, 0.95) !important;
-    border: 1px solid #404040 !important;
-  }
-  
-  [data-theme="dark"] .profile-container .nav-item:hover {
-    background: rgba(64, 64, 64, 0.7) !important;
-  }
-  
-  [data-theme="dark"] .profile-container .modal-content {
-    background: rgba(26, 26, 26, 0.98) !important;
-  }
-  
-  [data-theme="dark"] .profile-container .modal-content h2 {
-    color: #ffffff !important;
-  }
-}
-
-/* Accessibility improvements */
+/* Accessibility */
 .profile-container .nav-item:focus,
-.profile-container .setting-item:focus,
 .profile-container button:focus,
 .profile-container input:focus,
 .profile-container textarea:focus {
@@ -18447,97 +17865,10 @@ body {
 
 /* Touch targets for mobile */
 @media (max-width: 768px) {
-  .profile-container .nav-item {
-    min-height: 44px;
-  }
-  
-  .profile-container .setting-item {
-    min-height: 48px;
-  }
-  
-  .profile-container button[type="submit"],
-  .profile-container .profile-main button,
-  .profile-container .avatar-upload-btn {
-    min-height: 48px;
-  }
-}
-
-/* Performance optimizations - SCOPED TO PROFILE CONTAINER ONLY */
-.profile-container *,
-.profile-container *::before,
-.profile-container *::after {
-  box-sizing: border-box;
-}
-
-/* Reduce repaints and reflows */
-.profile-container {
-  contain: layout style paint;
-}
-
-.profile-container .profile-nav,
-.profile-container .profile-main,
-.profile-container .modal-content {
-  contain: layout style;
-}
-
-/* GPU acceleration for smooth scrolling */
-.profile-container .profile-nav {
-  transform: translateZ(0);
-}
-
-.profile-container .modal-overlay {
-  transform: translateZ(0);
-}
-
-/* Loading optimization */
-.profile-container img {
-  will-change: transform;
-}
-
-/* Smooth scrolling for navigation on mobile */
-@media (max-width: 768px) {
-  .profile-container .profile-nav {
-    scroll-behavior: smooth;
-  }
-}
-
-/* Fix for iOS Safari rounded corners */
-@supports (-webkit-touch-callout: none) {
-  .profile-container .profile-main,
-  .profile-container .settings-group,
-  .profile-container .modal-content {
-    -webkit-mask-image: -webkit-radial-gradient(white, black);
-  }
-}
-
-/* Print styles */
-@media print {
-  .profile-container::before,
-  .profile-container .profile-nav,
-  .profile-container .modal-overlay,
-  .profile-container .success-message,
+  .profile-container .nav-item,
+  .profile-container .setting-item,
   .profile-container button {
-    display: none !important;
-  }
-  
-  .profile-container {
-    background: white !important;
-  }
-  
-  .profile-container .profile-main {
-    box-shadow: none !important;
-    border: 1px solid #ccc !important;
-  }
-}
-
-/* Prefers reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .profile-container *,
-  .profile-container *::before,
-  .profile-container *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    min-height: 44px;
   }
 }
 /* About.css - Properly Scoped with Correct Class Names */
