@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.css": "/E-Learning/static/css/main.28e26b5e.css",
-    "main.js": "/E-Learning/static/js/main.6c01e7ae.js",
+    "main.css": "/E-Learning/static/css/main.f869b206.css",
+    "main.js": "/E-Learning/static/js/main.dc3353d2.js",
     "static/js/206.1430d834.chunk.js": "/E-Learning/static/js/206.1430d834.chunk.js",
     "index.html": "/E-Learning/index.html"
   },
   "entrypoints": [
-    "static/css/main.28e26b5e.css",
-    "static/js/main.6c01e7ae.js"
+    "static/css/main.f869b206.css",
+    "static/js/main.dc3353d2.js"
   ]
 }
