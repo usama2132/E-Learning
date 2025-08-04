@@ -13202,38 +13202,33 @@ html {
     text-align: center;
   }
 }
-/* SystemSettings.css - Fixed Dark/Light Theme with Proper Scoping */
+/* SystemSettings.css - Optimized Mobile-First Responsive Design */
 
 /* Base container with scoped theme variables */
 .system-settings {
-  /* Shared Variables */
+  /* Essential Variables Only */
   --primary-color: #3b82f6;
   --primary-dark: #2563eb;
   --primary-light: #dbeafe;
-  --primary-lighter: #eff6ff;
   --success-color: #10b981;
-  --success-light: #d1fae5;
   --danger-color: #ef4444;
-  --danger-light: #fee2e2;
   --warning-color: #f59e0b;
-  --warning-light: #fef3c7;
   
-  /* Responsive Spacing */
+  /* Responsive Spacing - Reduced */
   --spacing-xs: 0.25rem;
   --spacing-sm: 0.5rem;
   --spacing-md: 1rem;
   --spacing-lg: 1.5rem;
   --spacing-xl: 2rem;
-  --spacing-2xl: 3rem;
   
-  /* Responsive Typography */
-  --font-size-xs: clamp(0.7rem, 2vw, 0.75rem);
-  --font-size-sm: clamp(0.8rem, 2.5vw, 0.875rem);
-  --font-size-base: clamp(0.9rem, 3vw, 1rem);
-  --font-size-lg: clamp(1rem, 3.5vw, 1.125rem);
-  --font-size-xl: clamp(1.1rem, 4vw, 1.25rem);
-  --font-size-2xl: clamp(1.3rem, 5vw, 1.5rem);
-  --font-size-3xl: clamp(1.5rem, 6vw, 1.875rem);
+  /* Responsive Typography - Optimized */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
   
   /* Border Radius */
   --radius-sm: 0.375rem;
@@ -13241,13 +13236,12 @@ html {
   --radius-lg: 0.75rem;
   --radius-xl: 1rem;
   
-  /* Transitions */
-  --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-normal: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Fast Transitions Only */
+  --transition-fast: all 0.15s ease;
+  --transition-normal: all 0.2s ease;
   
   /* Typography */
-  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
   
   /* Light Theme Colors (Default) */
   --bg-primary: #ffffff;
@@ -13263,10 +13257,8 @@ html {
   --border-focus: var(--primary-color);
   --input-bg: #ffffff;
   --card-bg: #ffffff;
-  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   
   /* Base Styles */
   font-family: var(--font-family);
@@ -13274,13 +13266,11 @@ html {
   color: var(--text-primary);
   background: var(--bg-primary);
   min-height: 100vh;
-  transition: var(--transition-normal);
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  isolation: isolate; /* Create new stacking context to prevent affecting other pages */
+  isolation: isolate;
 }
 
-/* Dark Theme Override - Only affects .system-settings container */
+/* Dark Theme Override */
 .system-settings.dark-theme {
   --bg-primary: #0f172a;
   --bg-secondary: #1e293b;
@@ -13294,21 +13284,18 @@ html {
   --border-hover: #475569;
   --input-bg: #1e293b;
   --card-bg: #1e293b;
-  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
 }
 
-/* Container - Scoped to prevent affecting other pages */
+/* Container - Mobile First */
 .system-settings .system-settings-container {
-  max-width: min(1400px, 100vw);
+  max-width: 100%;
   margin: 0 auto;
-  padding: var(--spacing-lg);
-  transition: var(--transition-normal);
+  padding: var(--spacing-sm);
 }
 
-/* Loading States */
+/* Loading States - Simplified */
 .system-settings .loading-container {
   display: flex;
   flex-direction: column;
@@ -13324,49 +13311,45 @@ html {
   border: 3px solid var(--border-color);
   border-top: 3px solid var(--primary-color);
   border-radius: 50%;
-  animation: systemSettingsSpin 1s linear infinite;
+  animation: spin 1s linear infinite;
 }
 
-@keyframes systemSettingsSpin {
+@keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
-/* Header */
+/* Header - Mobile Optimized */
 .system-settings .system-settings-header {
   background: var(--card-bg);
-  border-radius: var(--radius-xl);
-  padding: var(--spacing-xl);
-  margin-bottom: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--border-color);
-  transition: var(--transition-normal);
+  text-align: center;
 }
 
 .system-settings .header-content {
   display: flex;
-  justify-content: center; /* Center the content */
+  flex-direction: column;
   align-items: center;
-  gap: var(--spacing-md);
-  flex-wrap: wrap;
+  gap: var(--spacing-sm);
 }
 
 .system-settings .title-section {
-  flex: none; /* Remove flex: 1 to prevent stretching */
-  min-width: auto; /* Remove fixed min-width */
-  text-align: center; /* Center align text */
+  text-align: center;
 }
 
 .system-settings .system-settings-title {
-  font-size: var(--font-size-3xl);
+  font-size: var(--font-size-2xl);
   font-weight: 700;
   color: var(--text-primary);
-  margin: 0 0 var(--spacing-sm) 0;
+  margin: 0 0 var(--spacing-xs) 0;
   display: flex;
   align-items: center;
-  justify-content: center; /* Center the title elements */
+  justify-content: center;
   gap: var(--spacing-sm);
-  flex-wrap: wrap;
 }
 
 .system-settings .system-settings-title span {
@@ -13377,60 +13360,29 @@ html {
 }
 
 .system-settings .system-settings-subtitle {
-  font-size: 1.5rem;
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
   margin: 0;
-  text-align: center; /* Center the subtitle */
 }
 
-.system-settings .theme-toggle {
-  background: var(--bg-tertiary);
-  border: 2px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-sm);
-  cursor: pointer;
-  transition: var(--transition-fast);
-  color: var(--text-secondary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 48px;
-  min-height: 48px;
-}
-
-.system-settings .theme-toggle:hover {
-  background: var(--primary-light);
-  border-color: var(--primary-color);
-  color: var(--primary-color);
-  transform: translateY(-1px);
-}
-
-.system-settings .theme-toggle:focus {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
-}
-
-/* Main Layout */
+/* Main Layout - Mobile First (Vertical Stack) */
 .system-settings .settings-container {
-  display: grid;
-  grid-template-columns: minmax(250px, 280px) 1fr;
-  grid-gap: var(--spacing-xl);
-  gap: var(--spacing-xl);
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
 }
 
-/* Sidebar */
+/* Sidebar - Mobile: Horizontal Scroll, Desktop: Vertical */
 .system-settings .settings-sidebar {
   background: var(--card-bg);
-  border-radius: var(--radius-xl);
-  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-sm);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--border-color);
-  position: sticky;
-  top: var(--spacing-xl);
-  transition: var(--transition-normal);
+  order: -1; /* Show first on mobile */
 }
 
+/* Navigation - Mobile: Vertical List */
 .system-settings .settings-navigation {
   display: flex;
   flex-direction: column;
@@ -13441,41 +13393,23 @@ html {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
   border: none;
   background: transparent;
   color: var(--text-secondary);
   font-size: var(--font-size-sm);
   font-weight: 500;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: var(--transition-fast);
   text-align: left;
   width: 100%;
-  position: relative;
-  overflow: hidden;
-  min-height: 48px;
-}
-
-.system-settings .nav-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  transition: var(--transition-slow);
+  min-height: 44px; /* Touch friendly */
 }
 
 .system-settings .nav-item:hover {
   background: var(--bg-hover);
   color: var(--text-primary);
-  transform: translateX(4px);
-}
-
-.system-settings .nav-item:hover::before {
-  left: 100%;
 }
 
 .system-settings .nav-item:focus {
@@ -13484,81 +13418,67 @@ html {
 }
 
 .system-settings .nav-item.active {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  background: var(--primary-color);
   color: white;
-  box-shadow: var(--shadow-md);
-}
-
-.system-settings .nav-item.active::before {
-  display: none;
+  box-shadow: var(--shadow-sm);
 }
 
 .system-settings .nav-text {
   flex: 1 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 /* Content Area */
 .system-settings .settings-content {
   background: var(--card-bg);
-  border-radius: var(--radius-xl);
-  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--border-color);
-  min-height: 600px;
-  transition: var(--transition-normal);
+  min-height: 400px;
 }
 
-/* Section Styles */
+/* Section Styles - Simple Animation */
 .system-settings .settings-section {
-  animation: systemSettingsFadeInUp 0.3s ease-out;
+  animation: fadeIn 0.3s ease-out;
 }
 
-@keyframes systemSettingsFadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .system-settings .section-header {
-  margin-bottom: var(--spacing-xl);
-  padding-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-sm);
   border-bottom: 2px solid var(--border-color);
+  text-align: center;
 }
 
 .system-settings .section-title {
-  font-size: var(--font-size-2xl);
+  font-size: var(--font-size-xl);
   font-weight: 600;
   color: var(--text-primary);
   margin: 0 0 var(--spacing-xs) 0;
 }
 
 .system-settings .section-description {
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   color: var(--text-secondary);
   margin: 0;
 }
 
-/* Form Styles */
+/* Form Styles - Mobile Optimized */
 .system-settings .form-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
-  grid-gap: var(--spacing-lg);
-  gap: var(--spacing-lg);
-  margin-bottom: var(--spacing-xl);
+  grid-template-columns: 1fr; /* Single column on mobile */
+  grid-gap: var(--spacing-md);
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
 }
 
 .system-settings .form-group {
   display: flex;
   flex-direction: column;
-  min-width: 0;
 }
 
 .system-settings .form-group.full-width {
@@ -13570,7 +13490,6 @@ html {
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: var(--spacing-xs);
-  display: block;
 }
 
 .system-settings .form-input,
@@ -13580,12 +13499,12 @@ html {
   padding: var(--spacing-sm) var(--spacing-md);
   border: 2px solid var(--border-color);
   border-radius: var(--radius-md);
-  font-size: var(--font-size-sm);
+  font-size: 16px; /* Prevents zoom on iOS */
   background: var(--input-bg);
   color: var(--text-primary);
   transition: var(--transition-fast);
   font-family: inherit;
-  box-sizing: border-box;
+  min-height: 44px; /* Touch friendly */
 }
 
 .system-settings .form-input:focus,
@@ -13594,17 +13513,10 @@ html {
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px var(--primary-light);
-  transform: translateY(-1px);
-}
-
-.system-settings .form-input:hover,
-.system-settings .form-select:hover,
-.system-settings .form-textarea:hover {
-  border-color: var(--border-hover);
 }
 
 .system-settings .form-textarea {
-  min-height: 120px;
+  min-height: 100px;
   resize: vertical;
   line-height: 1.5;
 }
@@ -13615,7 +13527,7 @@ html {
   margin-top: var(--spacing-xs);
 }
 
-/* Checkbox Styles */
+/* Checkbox Styles - Touch Optimized */
 .system-settings .checkbox-group {
   display: flex;
   flex-direction: column;
@@ -13628,7 +13540,7 @@ html {
   gap: var(--spacing-sm);
   cursor: pointer;
   transition: var(--transition-fast);
-  padding: var(--spacing-xs);
+  padding: var(--spacing-sm);
   border-radius: var(--radius-md);
 }
 
@@ -13640,7 +13552,6 @@ html {
   width: 1.25rem;
   height: 1.25rem;
   margin: 0;
-  margin-top: 0.125rem;
   accent-color: var(--primary-color);
   cursor: pointer;
   flex-shrink: 0;
@@ -13665,7 +13576,7 @@ html {
   display: block;
 }
 
-/* Toggle Switch */
+/* Toggle Switch - Touch Optimized */
 .system-settings .toggle-switch {
   position: relative;
   display: inline-block;
@@ -13713,24 +13624,19 @@ html {
   transform: translateX(24px);
 }
 
-.system-settings .toggle-switch input:focus + .toggle-slider {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
-}
-
-/* Notification Grid */
+/* Notification Grid - Mobile Optimized */
 .system-settings .notification-grid {
   display: grid;
   grid-gap: var(--spacing-md);
   gap: var(--spacing-md);
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
 }
 
 .system-settings .notification-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--spacing-lg);
+  padding: var(--spacing-md);
   background: var(--bg-secondary);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-color);
@@ -13738,15 +13644,8 @@ html {
   gap: var(--spacing-md);
 }
 
-.system-settings .notification-item:hover {
-  border-color: var(--primary-light);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
-}
-
 .system-settings .notification-info {
   flex: 1 1;
-  min-width: 0;
 }
 
 .system-settings .notification-info h4 {
@@ -13762,49 +13661,31 @@ html {
   margin: 0;
 }
 
-/* Buttons */
+/* Buttons - Mobile Optimized */
 .system-settings .form-actions {
   display: flex;
-  gap: var(--spacing-md);
-  justify-content: flex-end;
-  padding-top: var(--spacing-xl);
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding-top: var(--spacing-lg);
   border-top: 2px solid var(--border-color);
-  margin-top: var(--spacing-xl);
-  flex-wrap: wrap;
+  margin-top: var(--spacing-lg);
 }
 
 .system-settings .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: var(--spacing-xs);
-  padding: var(--spacing-sm) var(--spacing-lg);
+  padding: var(--spacing-md) var(--spacing-lg);
   border: none;
   border-radius: var(--radius-md);
   font-size: var(--font-size-sm);
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition-fast);
-  text-decoration: none;
   font-family: inherit;
-  position: relative;
-  overflow: hidden;
-  min-height: 44px;
-  white-space: nowrap;
-}
-
-.system-settings .btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
+  min-height: 48px; /* Touch friendly */
   width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: var(--transition-slow);
-}
-
-.system-settings .btn:hover::before {
-  left: 100%;
 }
 
 .system-settings .btn:focus {
@@ -13813,20 +13694,18 @@ html {
 }
 
 .system-settings .btn-primary {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  background: var(--primary-color);
   color: white;
   box-shadow: var(--shadow-sm);
 }
 
 .system-settings .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  background: var(--primary-dark);
 }
 
 .system-settings .btn-primary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-  transform: none;
 }
 
 .system-settings .btn-secondary {
@@ -13837,308 +13716,131 @@ html {
 
 .system-settings .btn-secondary:hover {
   border-color: var(--primary-color);
-  background: var(--primary-light);
   color: var(--primary-color);
-  transform: translateY(-2px);
 }
 
-@media (max-width: 768px) {
-  .system-settings .header-content {
-    flex-direction: column;
-    text-align: center;
-    gap: var(--spacing-md);
-    justify-content: center;
-  }
-  
-  .system-settings .title-section {
-    width: 100%;
-    text-align: center;
-  }
-  
-  .system-settings .system-settings-title {
-    justify-content: center;
-    text-align: center;
-  }
-}
-
-/* Tablet Styles */
-@media (max-width: 1024px) {
+/* Tablet Responsive (768px and up) */
+@media (min-width: 768px) {
   .system-settings .system-settings-container {
-    padding: var(--spacing-md);
-  }
-  
-  .system-settings .settings-container {
-    grid-template-columns: 240px 1fr;
-    gap: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    max-width: 1200px;
   }
   
   .system-settings .system-settings-header {
     padding: var(--spacing-lg);
   }
   
-  .system-settings .settings-content {
-    padding: var(--spacing-lg);
-  }
-  
-  .system-settings .nav-item {
-    padding: var(--spacing-sm);
-    font-size: var(--font-size-xs);
-  }
-  
-  .system-settings .form-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Mobile Styles */
-@media (max-width: 768px) {
-  .system-settings .settings-navigation {
-    flex-direction: column; /* Changed from row to column */
-    overflow-x: visible; /* Remove horizontal scroll */
-    gap: var(--spacing-xs);
-    padding-bottom: 0; /* Remove bottom padding */
-    -webkit-overflow-scrolling: auto;
-    scrollbar-width: auto;
-  }
-  
-  .system-settings .settings-container {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-md);
-  }
-  
-  .system-settings .settings-sidebar {
-    position: static;
-    order: -1;
-    padding: var(--spacing-md);
-  }
-  
-  .system-settings .settings-navigation {
-    flex-direction: row;
-    overflow-x: auto;
-    gap: var(--spacing-xs);
-    padding-bottom: var(--spacing-xs);
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-  }
-  
-  .system-settings .settings-navigation::-webkit-scrollbar {
-    display: none;
-  }
-  
-  .system-settings .settings-navigation::-webkit-scrollbar-track {
-    background: var(--bg-secondary);
-    border-radius: 2px;
-  }
-  
-  .system-settings .settings-navigation::-webkit-scrollbar-thumb {
-    background: var(--border-color);
-    border-radius: 2px;
-  }
-  
-   .system-settings .nav-item {
-    flex-shrink: 1; /* Allow shrinking */
-    min-width: auto; /* Remove fixed min-width */
-    width: 100%; /* Full width */
-    justify-content: flex-start; /* Align to start */
-    padding: var(--spacing-md) var(--spacing-sm); /* Better padding */
-    font-size: var(--font-size-sm); /* Larger font */
-    flex-direction: row; /* Row layout for icon + text */
-    gap: var(--spacing-sm); /* Better gap */
-    text-align: left; /* Left align text */
-  }
-  
-  .system-settings .nav-text {
-    font-size: var(--font-size-xs);
-    white-space: nowrap;
-  }
-  
   .system-settings .header-content {
-    flex-direction: column;
-    text-align: center;
-    gap: var(--spacing-md);
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
   }
   
   .system-settings .title-section {
-    min-width: auto;
+    text-align: left;
   }
   
   .system-settings .system-settings-title {
-    justify-content: center;
-    text-align: center;
+    justify-content: flex-start;
+    font-size: var(--font-size-3xl);
+  }
+  
+  .system-settings .system-settings-subtitle {
+    font-size: var(--font-size-base);
+  }
+  
+  .system-settings .settings-container {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    grid-gap: var(--spacing-xl);
+    gap: var(--spacing-xl);
+    align-items: start;
+  }
+  
+  .system-settings .settings-sidebar {
+    order: 0;
+    position: sticky;
+    top: var(--spacing-xl);
+    padding: var(--spacing-lg);
+  }
+  
+  .system-settings .settings-content {
+    padding: var(--spacing-xl);
   }
   
   .system-settings .form-grid {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-md);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   }
   
   .system-settings .form-actions {
-    flex-direction: column;
-    gap: var(--spacing-sm);
+    flex-direction: row;
+    justify-content: flex-end;
   }
   
   .system-settings .btn {
-    width: 100%;
-    justify-content: center;
-    padding: var(--spacing-md);
-  }
-  
-  .system-settings .notification-item {
-    flex-direction: column;
-    align-items: stretch;
-    gap: var(--spacing-md);
-    text-align: center;
-  }
-  
-  .system-settings .settings-content {
-    padding: var(--spacing-md);
+    width: auto;
   }
   
   .system-settings .section-header {
-    text-align: center;
+    text-align: left;
   }
 }
 
-@media (max-width: 768px) {
+/* Desktop Responsive (1024px and up) */
+@media (min-width: 1024px) {
   .system-settings .system-settings-container {
-    padding: var(--spacing-xs); /* Reduced padding */
+    max-width: 1400px;
   }
   
   .system-settings .settings-container {
-    grid-template-columns: 1fr; /* Single column */
-    gap: var(--spacing-sm); /* Smaller gap */
+    grid-template-columns: 320px 1fr;
   }
   
-  .system-settings .settings-sidebar {
-    position: static;
-    order: -1;
-    padding: var(--spacing-sm); /* Reduced padding */
-    margin-bottom: var(--spacing-sm);
+  .system-settings .nav-item:hover {
+    transform: translateX(2px);
   }
   
-  .system-settings .settings-content {
-    padding: var(--spacing-sm); /* Reduced padding */
-    min-height: auto; /* Remove fixed height */
-  }
-  
-  .system-settings .system-settings-header {
-    padding: var(--spacing-sm); /* Reduced padding */
-    margin-bottom: var(--spacing-sm);
-  }
-  
-  .system-settings .form-grid {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-sm); /* Smaller gap */
-  }
-  
-  .system-settings .section-header {
-    margin-bottom: var(--spacing-md); /* Reduced margin */
-    padding-bottom: var(--spacing-sm);
+  .system-settings .notification-item:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
   }
 }
 
-/* Small Mobile Styles */
-@media (max-width: 480px) {
-  .system-settings .nav-item {
-    padding: var(--spacing-sm); /* Consistent padding */
-    min-height: 48px; /* Touch-friendly height */
-  }
-  
-  .system-settings .system-settings-header {
-    padding: var(--spacing-md);
-    margin-bottom: var(--spacing-md);
-  }
-  
-  .system-settings .settings-sidebar {
-    padding: var(--spacing-sm);
-  }
-  
-  .system-settings .settings-content {
-    padding: var(--spacing-sm);
-  }
-  
-  .system-settings .nav-item {
-    min-width: 100px;
-    padding: var(--spacing-xs);
-  }
-  
-  .system-settings .nav-text {
-    display: none;
-  }
-  
-  .system-settings .form-input,
-  .system-settings .form-select,
-  .system-settings .form-textarea {
-    padding: var(--spacing-md) var(--spacing-sm); /* Better touch targets */
-    font-size: 16px; /* Prevents zoom on iOS */
-    min-height: 48px; /* Touch-friendly */
-  }
-  
-  .system-settings .checkbox-label {
-    padding: var(--spacing-sm);
-  }
-  
-  .system-settings .notification-item {
-    padding: var(--spacing-md);
-  }
-  
-  .system-settings .btn {
-    padding: var(--spacing-sm) var(--spacing-md);
-    font-size: var(--font-size-sm);
-  }
+/* Performance Optimizations */
+.system-settings * {
+  box-sizing: border-box;
 }
 
-/* Extra Small Mobile */
-@media (max-width: 360px) {
-  .system-settings .nav-item {
-    min-width: 80px;
-    padding: var(--spacing-xs);
-  }
-  
-  .system-settings .form-grid {
-    gap: var(--spacing-sm);
-  }
-  
-  .system-settings .settings-content {
-    padding: var(--spacing-xs);
-  }
-  
-  .system-settings .system-settings-header {
-    padding: var(--spacing-sm);
-  }
+/* Smooth theme transitions */
+.system-settings,
+.system-settings *,
+.system-settings *::before,
+.system-settings *::after {
+  transition: 
+    background-color var(--transition-normal),
+    border-color var(--transition-normal),
+    color var(--transition-normal);
 }
 
-/* Landscape Mobile */
-@media (max-height: 500px) and (orientation: landscape) {
-  .system-settings .settings-sidebar {
-    position: static;
-  }
-  
-  .system-settings .settings-navigation {
-    flex-direction: row;
-    overflow-x: auto;
-  }
-  
-  .system-settings .nav-item {
-    flex-shrink: 0;
-    min-width: 100px;
-  }
+/* Dark theme form optimizations */
+.system-settings.dark-theme .form-input::placeholder,
+.system-settings.dark-theme .form-textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
 }
 
-/* High Contrast Mode */
+.system-settings.dark-theme .toggle-slider:before {
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Accessibility - High Contrast */
 @media (prefers-contrast: high) {
   .system-settings {
     --border-color: currentColor;
-    --shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
-    --shadow-md: 0 4px 8px 0 rgba(0, 0, 0, 0.5);
   }
   
   .system-settings .nav-item.active {
-    background: var(--text-primary);
-    color: var(--bg-primary);
-  }
-  
-  .system-settings .btn-primary {
     background: var(--text-primary);
     color: var(--bg-primary);
   }
@@ -14148,7 +13850,6 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .system-settings * {
     animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
   
@@ -14165,190 +13866,14 @@ html {
     color: black !important;
   }
   
-  .system-settings .theme-toggle,
-  .system-settings .form-actions {
+  .system-settings .form-actions,
+  .system-settings .settings-sidebar {
     display: none !important;
   }
   
   .system-settings .settings-container {
     grid-template-columns: 1fr !important;
   }
-  
-  .system-settings .settings-sidebar {
-    display: none !important;
-  }
-  
-  .system-settings .settings-content {
-    box-shadow: none !important;
-    border: 1px solid #ccc !important;
-  }
-}
-
-/* Performance Optimizations */
-.system-settings * {
-  box-sizing: border-box;
-}
-
-/* GPU acceleration for smooth animations */
-.system-settings .nav-item,
-.system-settings .btn,
-.system-settings .theme-toggle,
-.system-settings .toggle-slider,
-.system-settings .form-input,
-.system-settings .form-select,
-.system-settings .form-textarea {
-  will-change: transform;
-  transform: translateZ(0);
-}
-
-/* Optimize repaints */
-.system-settings .settings-sidebar,
-.system-settings .settings-content,
-.system-settings .system-settings-header {
-  contain: layout style paint;
-}
-
-/* Smooth theme transitions with proper inheritance */
-.system-settings,
-.system-settings *,
-.system-settings *::before,
-.system-settings *::after {
-  transition: 
-    background-color var(--transition-normal),
-    border-color var(--transition-normal),
-    color var(--transition-normal),
-    box-shadow var(--transition-normal);
-}
-
-/* Override transitions for performance-critical elements */
-.system-settings .loading-spinner,
-.system-settings .nav-item::before,
-.system-settings .btn::before {
-  transition: transform var(--transition-normal);
-}
-
-/* Ensure proper stacking context and prevent z-index issues */
-.system-settings {
-  position: relative;
-  z-index: 0;
-}
-
-.system-settings .settings-sidebar {
-  z-index: 1;
-}
-
-.system-settings .settings-content {
-  z-index: 1;
-}
-
-.system-settings .system-settings-header {
-  z-index: 2;
-}
-
-/* Focus management for accessibility */
-.system-settings :focus-visible {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
-}
-
-/* Prevent layout shift during loading */
-.system-settings .settings-section {
-  min-height: 400px;
-}
-
-/* Optimize background gradients for better performance */
-.system-settings .nav-item.active,
-.system-settings .btn-primary {
-  background-image: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-  background-attachment: fixed;
-}
-
-/* Dark theme specific optimizations */
-.system-settings.dark-theme .toggle-slider:before {
-  background: #f1f5f9;
-}
-
-/* Ensure text remains readable during theme transitions */
-.system-settings .checkbox-text,
-.system-settings .form-label,
-.system-settings .section-title,
-.system-settings .notification-info h4 {
-  color: var(--text-primary);
-  transition: color var(--transition-normal);
-}
-
-.system-settings .section-description,
-.system-settings .notification-info p,
-.system-settings .form-help {
-  color: var(--text-secondary);
-  transition: color var(--transition-normal);
-}
-
-/* Improve form element theming in dark mode */
-.system-settings.dark-theme .form-input::placeholder,
-.system-settings.dark-theme .form-textarea::placeholder {
-  color: var(--text-muted);
-  opacity: 0.7;
-}
-
-.system-settings.dark-theme .form-input,
-.system-settings.dark-theme .form-select,
-.system-settings.dark-theme .form-textarea {
-  color: var(--text-primary);
-  background-color: var(--input-bg);
-}
-
-/* Enhanced checkbox styling for dark theme */
-.system-settings.dark-theme .checkbox-label input[type="checkbox"] {
-  filter: brightness(1.2);
-}
-
-/* Optimize scroll performance */
-.system-settings .settings-navigation {
-  overscroll-behavior: contain;
-}
-
-/* Ensure proper contrast in all themes */
-.system-settings .nav-item.active {
-  color: white !important;
-}
-
-.system-settings .btn-primary {
-  color: white !important;
-}
-
-/* Fix potential issues with form elements in dark theme */
-.system-settings.dark-theme select option {
-  background-color: var(--input-bg);
-  color: var(--text-primary);
-}
-
-/* Ensure toggle switch visibility in dark theme */
-.system-settings.dark-theme .toggle-slider:before {
-  background: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-/* Memory optimization - limit animation scope */
-@media (max-width: 768px) {
-  .system-settings .nav-item::before,
-  .system-settings .btn::before {
-    display: none;
-  }
-  
-  .system-settings .nav-item:hover {
-    transform: none;
-  }
-}
-
-/* Critical loading optimization */
-.system-settings .loading-container {
-  will-change: opacity;
-}
-
-.system-settings .loading-spinner {
-  will-change: transform;
 }
 /* Course Analytics Styles */
 .course-analytics {
