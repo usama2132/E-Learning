@@ -28582,39 +28582,135 @@ body {
   background: var(--ip-accent-secondary);
 }
 
+/* Updated Profile Stats Section - Replace existing .profile-stats styles */
+
 .instructor-profile .profile-stats {
   display: flex;
-  gap: 2rem;
+  flex-direction: column; /* Mobile-first: vertical layout */
+  gap: 1rem;
   justify-content: center;
+  width: 100%;
+  max-width: 100%; /* Prevent overflow */
+  box-sizing: border-box; /* Include padding in width calculation */
 }
-
 .instructor-profile .stat {
   text-align: center;
-  padding: 1rem;
+  padding: 1rem 0.75rem;
   background: var(--ip-bg-tertiary);
   border-radius: var(--ip-radius-md);
-  min-width: 5rem;
+  flex: 1 1;
+  min-width: 0;
+  box-sizing: border-box;
   transition: var(--ip-transition-fast);
   will-change: transform;
 }
-
 .instructor-profile .stat:hover {
   transform: translateY(-2px);
   box-shadow: var(--ip-shadow-lg);
 }
-
 .instructor-profile .stat-value {
   display: block;
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--ip-accent-primary);
+  line-height: 1.2;
 }
-
 .instructor-profile .stat-label {
   display: block;
   font-size: 0.875rem;
   color: var(--ip-text-secondary);
   margin-top: 0.25rem;
+}
+/* Tablet and small desktop - horizontal layout */
+@media (min-width: 640px) {
+  .instructor-profile .profile-stats {
+    flex-direction: row;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  
+  .instructor-profile .stat {
+    flex: 1 1;
+    min-width: 0;
+    padding: 1rem 0.75rem;
+    display: block;
+    text-align: center;
+  }
+  
+  .instructor-profile .stat-value {
+    display: block;
+  }
+  
+  .instructor-profile .stat-label {
+    display: block;
+  }
+}
+/* Medium desktop - slightly more spacing */
+@media (min-width: 768px) {
+  .instructor-profile .profile-stats {
+    gap: 1.25rem;
+  }
+  
+  .instructor-profile .stat {
+    padding: 1.25rem 1rem;
+  }
+  
+  .instructor-profile .stat-value {
+    font-size: 1.65rem;
+  }
+}
+/* Large desktop - more spacing */
+@media (min-width: 1024px) {
+  .instructor-profile .profile-stats {
+    gap: 1.5rem;
+  }
+  
+  .instructor-profile .stat {
+    padding: 1.5rem 1rem;
+  }
+  
+  .instructor-profile .stat-value {
+    font-size: 1.75rem;
+  }
+  
+  .instructor-profile .stat-label {
+    font-size: 1rem;
+  }
+}
+/* Extra large desktop - maximum spacing */
+@media (min-width: 1200px) {
+  .instructor-profile .profile-stats {
+    gap: 2rem;
+  }
+  
+  .instructor-profile .stat {
+    padding: 1.5rem;
+  }
+}
+/* Mobile optimization - maintain center alignment */
+@media (max-width: 639px) {
+  .instructor-profile .profile-stats {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .instructor-profile .stat {
+    width: 100%;
+    padding: 1rem;
+    text-align: center; /* Keep center alignment */
+    display: block; /* Remove flex to maintain vertical stacking */
+  }
+  
+  .instructor-profile .stat-value {
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  
+  .instructor-profile .stat-label {
+    font-size: 0.875rem;
+    display: block;
+  }
 }
 
 .instructor-profile .profile-info {
