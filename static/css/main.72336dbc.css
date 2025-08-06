@@ -28429,7 +28429,7 @@ body {
     border: 1px solid #000 !important;
   }
 }
-/* Lightning-Fast InstructorProfile CSS with Dark/Light Mode - PROPERLY SCOPED */
+/* Lightning-Fast InstructorProfile CSS with Dark/Light Mode & WhatsApp-style Image Upload */
 
 /* Scoped CSS Custom Properties - Only for Instructor Profile */
 .instructor-profile {
@@ -28530,6 +28530,7 @@ body {
   margin-bottom: 2rem;
   will-change: transform;
   background: var(--ip-bg-secondary);
+  overflow: visible; /* Ensure nothing gets clipped */
 }
 
 .instructor-profile .profile-image-section {
@@ -28537,62 +28538,92 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
+  min-height: 140px; /* Ensure enough space for the image */
+  justify-content: center;
 }
 
 .instructor-profile .profile-image-container {
   position: relative;
   display: inline-block;
+  overflow: hidden;
+  border-radius: 50%;
+  /* Perfect WhatsApp-style circular profile image */
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
 .instructor-profile .profile-image {
-  width: 8rem;
-  height: 8rem;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  border: 4px solid var(--ip-accent-primary);
+  object-position: center;
+  border: 3px solid var(--ip-accent-primary);
   transition: var(--ip-transition-normal);
   will-change: transform;
+  transform: scale(1);
+  cursor: pointer;
+  background: var(--ip-bg-tertiary);
+  display: block; /* Remove any inline styling issues */
+}
+
+/* Default placeholder for no image */
+.instructor-profile .profile-image.no-image {
+  background: var(--ip-bg-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: var(--ip-text-muted);
+}
+
+.instructor-profile .profile-image.no-image::before {
+  content: "👤";
 }
 
 .instructor-profile .profile-image:hover {
   transform: scale(1.05);
+  border-color: var(--ip-accent-secondary);
 }
 
 .instructor-profile .image-edit-btn {
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: 5px;
+  right: 5px;
   background: var(--ip-accent-primary);
   color: white;
   border: none;
   border-radius: 50%;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 14px;
   transition: var(--ip-transition-fast);
   will-change: transform;
+  box-shadow: var(--ip-shadow-sm);
 }
 
 .instructor-profile .image-edit-btn:hover {
   transform: scale(1.1);
   background: var(--ip-accent-secondary);
+  box-shadow: var(--ip-shadow-md);
 }
 
 /* Updated Profile Stats Section - Replace existing .profile-stats styles */
-
 .instructor-profile .profile-stats {
   display: flex;
-  flex-direction: column; /* Mobile-first: vertical layout */
+  flex-direction: column;
   gap: 1rem;
   justify-content: center;
   width: 100%;
-  max-width: 100%; /* Prevent overflow */
-  box-sizing: border-box; /* Include padding in width calculation */
+  max-width: 100%;
+  box-sizing: border-box;
 }
+
 .instructor-profile .stat {
   text-align: center;
   padding: 1rem 0.75rem;
@@ -28604,10 +28635,12 @@ body {
   transition: var(--ip-transition-fast);
   will-change: transform;
 }
+
 .instructor-profile .stat:hover {
   transform: translateY(-2px);
   box-shadow: var(--ip-shadow-lg);
 }
+
 .instructor-profile .stat-value {
   display: block;
   font-size: 1.5rem;
@@ -28615,12 +28648,14 @@ body {
   color: var(--ip-accent-primary);
   line-height: 1.2;
 }
+
 .instructor-profile .stat-label {
   display: block;
   font-size: 0.875rem;
   color: var(--ip-text-secondary);
   margin-top: 0.25rem;
 }
+
 /* Tablet and small desktop - horizontal layout */
 @media (min-width: 640px) {
   .instructor-profile .profile-stats {
@@ -28645,6 +28680,7 @@ body {
     display: block;
   }
 }
+
 /* Medium desktop - slightly more spacing */
 @media (min-width: 768px) {
   .instructor-profile .profile-stats {
@@ -28659,6 +28695,7 @@ body {
     font-size: 1.65rem;
   }
 }
+
 /* Large desktop - more spacing */
 @media (min-width: 1024px) {
   .instructor-profile .profile-stats {
@@ -28677,6 +28714,7 @@ body {
     font-size: 1rem;
   }
 }
+
 /* Extra large desktop - maximum spacing */
 @media (min-width: 1200px) {
   .instructor-profile .profile-stats {
@@ -28687,6 +28725,48 @@ body {
     padding: 1.5rem;
   }
 }
+
+@media (max-width: 639px) {
+  .instructor-profile .crop-selection {
+    min-width: 100px;
+    min-height: 100px;
+  }
+  
+  .instructor-profile .crop-handle {
+    width: 20px;
+    height: 20px;
+    bottom: -10px;
+    right: -10px;
+    border: 2px solid white;
+  }
+  
+  .instructor-profile .preview-avatar {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .instructor-profile .crop-result-preview {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+/* SECTION 9: Touch device optimizations for crop */
+@media (hover: none) and (pointer: coarse) {
+  .instructor-profile .crop-selection {
+    min-width: 120px;
+    min-height: 120px;
+  }
+  
+  .instructor-profile .crop-handle {
+    width: 20px;
+    height: 20px;
+    bottom: -10px;
+    right: -10px;
+    touch-action: none;
+  }
+}
+
 /* Mobile optimization - maintain center alignment */
 @media (max-width: 639px) {
   .instructor-profile .profile-stats {
@@ -28697,8 +28777,8 @@ body {
   .instructor-profile .stat {
     width: 100%;
     padding: 1rem;
-    text-align: center; /* Keep center alignment */
-    display: block; /* Remove flex to maintain vertical stacking */
+    text-align: center;
+    display: block;
   }
   
   .instructor-profile .stat-value {
@@ -28710,6 +28790,18 @@ body {
   .instructor-profile .stat-label {
     font-size: 0.875rem;
     display: block;
+  }
+  
+  /* Perfect circle on mobile */
+  .instructor-profile .profile-image-container {
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+  }
+  
+  .instructor-profile .profile-image {
+    width: 100px;
+    height: 100px;
   }
 }
 
@@ -29037,14 +29129,14 @@ body {
   box-shadow: var(--ip-shadow-sm);
 }
 
-/* Image Modal - Scoped with specific class names */
+/* WhatsApp-style Image Upload Modal - Enhanced */
 .instructor-profile-image-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -29052,7 +29144,7 @@ body {
   padding: 1rem;
   -webkit-backdrop-filter: blur(4px);
           backdrop-filter: blur(4px);
-  animation: instructor-fadeIn 0.2s ease-out;
+  animation: instructor-fadeIn 0.3s ease-out;
 }
 
 @keyframes instructor-fadeIn {
@@ -29069,33 +29161,36 @@ body {
   border-radius: var(--ip-radius-lg);
   box-shadow: var(--ip-shadow-lg);
   width: 100%;
-  max-width: 28rem;
-  animation: instructor-slideUp 0.3s ease-out;
+  max-width: 500px;
+  max-height: 95vh; /* Increased from 90vh */
+  overflow-y: auto; /* Allow scrolling if needed */
+  animation: instructor-slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 @keyframes instructor-slideUp {
   from {
-    transform: translateY(20px);
+    transform: translateY(50px) scale(0.9);
     opacity: 0;
   }
   to {
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
     opacity: 1;
   }
 }
 
+/* Image Modal Header */
 .instructor-profile .image-modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 1.5rem 0 1.5rem;
+  padding: 1.5rem;
   border-bottom: 1px solid var(--ip-border-color);
-  margin-bottom: 1.5rem;
+  background: var(--ip-bg-secondary);
 }
 
 .instructor-profile .image-modal-header h3 {
   margin: 0;
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: var(--ip-text-primary);
 }
@@ -29106,12 +29201,7 @@ body {
   font-size: 1.5rem;
   color: var(--ip-text-secondary);
   cursor: pointer;
-  padding: 0;
-  width: 2rem;
-  height: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 0.5rem;
   border-radius: 50%;
   transition: var(--ip-transition-fast);
   will-change: transform;
@@ -29123,14 +29213,15 @@ body {
   transform: scale(1.1);
 }
 
+/* Image Upload Section */
 .instructor-profile .image-upload-modal {
-  padding: 0 1.5rem 1.5rem 1.5rem;
+  padding: 1.5rem;
   text-align: center;
 }
 
 .instructor-profile .image-input {
   width: 100%;
-  padding: 0.75rem;
+  padding: 1rem;
   border: 2px dashed var(--ip-border-color);
   border-radius: var(--ip-radius-md);
   background: var(--ip-bg-secondary);
@@ -29139,17 +29230,287 @@ body {
   transition: var(--ip-transition-fast);
   color: var(--ip-text-primary);
   font-family: inherit;
+  font-size: 0.875rem;
 }
 
 .instructor-profile .image-input:hover {
   border-color: var(--ip-accent-primary);
   background: var(--ip-bg-tertiary);
+  transform: translateY(-2px);
+}
+
+/* WhatsApp-style Image Preview & Crop Section */
+.instructor-profile .image-preview-section {
+  display: none;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.instructor-profile .image-preview-section.active {
+  display: block;
+}
+
+.instructor-profile .image-preview-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: 400px;
+  overflow: hidden;
+  background: #000;
+  border-radius: var(--ip-radius-md);
+  margin: 0 auto;
+}
+
+.instructor-profile .preview-image {
+  max-width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  display: block;
+  -webkit-user-select: none;
+          user-select: none;
+  pointer-events: none;
+}
+
+.instructor-profile .crop-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none; /* Allow clicks to pass through */
+}
+
+.instructor-profile .crop-overlay:active {
+  cursor: grabbing;
+}
+
+.instructor-profile .crop-preview-container {
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem 1.5rem;
+  background: var(--ip-bg-tertiary);
+  border-radius: var(--ip-radius-md);
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.instructor-profile canvas {
+  object-fit: cover !important;
+  background-color: var(--ip-bg-primary) !important;
+}
+
+.instructor-profile .crop-preview-container > div {
+  text-align: center;
+}
+
+.instructor-profile .crop-preview-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ip-text-secondary);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+/* Target the main preview canvas specifically */
+.instructor-profile .crop-preview-container canvas {
+  width: 180px !important; /* Much larger main preview */
+  height: 180px !important;
+  border-radius: 50% !important; /* Fix border radius syntax */
+  border: 4px solid var(--ip-accent-primary) !important;
+  background: var(--ip-bg-primary) !important;
+  display: block !important;
+  box-shadow: var(--ip-shadow-md);
+}
+
+.instructor-profile .crop-preview-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ip-text-secondary);
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.instructor-profile .crop-result-preview {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--ip-accent-primary);
+  background: var(--ip-bg-primary);
+  aspect-ratio: 1 / 1;
+}
+
+
+.instructor-profile .crop-selection {
+  position: absolute;
+  border: 3px solid #00ff00; /* Bright green for visibility */
+  background: transparent;
+  cursor: move;
+  pointer-events: auto;
+  /* Remove any default border radius */
+  border-radius: 0;
+  /* Dark overlay outside crop area */
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7);
+  /* Minimum size */
+  min-width: 60px;
+  min-height: 60px;
+}
+
+
+
+.instructor-profile .crop-selection::before,
+.instructor-profile .crop-selection::after {
+  display: none !important;
+  content: none !important;
+}
+
+.instructor-profile .crop-selection:hover {
+  border-color: #00cc00;
+}
+
+/* Crop Handle */
+.instructor-profile .crop-handle {
+  position: absolute;
+  bottom: -8px;
+  right: -8px;
+  width: 20px;
+  height: 20px;
+  background: #00ff00;
+  border: 3px solid white;
+  border-radius: 50%;
+  cursor: se-resize;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  pointer-events: auto;
+}
+
+.instructor-profile .crop-handle:hover {
+  background: #00cc00;
+  transform: scale(1.1);
+}
+
+.instructor-profile .crop-selection * {
+  pointer-events: none;
+}
+
+.instructor-profile .crop-handle {
+  pointer-events: auto !important;
+}
+
+/* Remove any blue dot from browser default styles */
+.instructor-profile .crop-selection {
+  outline: none !important;
+  list-style: none !important;
+}
+
+.instructor-profile .crop-selection:focus {
+  outline: none !important;
+}
+
+/* Profile Preview */
+.instructor-profile .profile-preview {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: var(--ip-bg-secondary);
+  border-radius: var(--ip-radius-md);
+  border: 1px solid var(--ip-border-color);
+  margin: 1.5rem 0;
+}
+
+/* Target the smaller preview canvas specifically */
+.instructor-profile .profile-preview canvas {
+  width: 80px !important; /* Smaller but still visible */
+  height: 80px !important;
+  border-radius: 50% !important; /* Fix border radius syntax */
+  border: 3px solid var(--ip-accent-primary) !important;
+  flex-shrink: 0 !important; /* Prevent shrinking */
+  display: block !important;
+}
+
+.instructor-profile .preview-info {
+  flex: 1 1;
+  text-align: left;
+}
+
+.instructor-profile .preview-name {
+  fontWeight: '600';
+  color: var(--ip-text-primary);
+  marginBottom: '0.5rem';
+  fontSize: '1.1rem'; /* Slightly larger text */
+}
+
+.instructor-profile .preview-desc {
+  fontSize: '0.95rem'; /* Slightly larger text */
+  color: var(--ip-text-secondary);
+}
+
+
+/* Modal Action Buttons */
+.instructor-profile .modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  padding: 1.5rem; /* More padding */
+  background: var(--ip-bg-secondary);
+  border-top: 1px solid var(--ip-border-color);
+  position: sticky; /* Make it stick to bottom */
+  bottom: 0;
+  z-index: 10;
+}
+
+
+.instructor-profile .confirm-btn,
+.instructor-profile .cancel-upload-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--ip-radius-md);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--ip-transition-fast);
+  border: none;
+  font-size: 0.875rem;
+  font-family: inherit;
+  min-width: 100px;
+}
+
+.instructor-profile .confirm-btn {
+  background: var(--ip-accent-primary);
+  color: white;
+}
+
+.instructor-profile .confirm-btn:hover {
+  background: var(--ip-accent-secondary);
+  transform: translateY(-1px);
+}
+
+.instructor-profile .cancel-upload-btn {
+  background: var(--ip-bg-tertiary);
+  color: var(--ip-text-primary);
+  border: 1px solid var(--ip-border-color);
+}
+
+.instructor-profile .cancel-upload-btn:hover {
+  background: var(--ip-border-color);
+  transform: translateY(-1px);
 }
 
 .instructor-profile .image-upload-modal p {
   color: var(--ip-text-secondary);
   margin: 0 0 1.5rem 0;
   font-size: 0.875rem;
+}
+
+.instructor-profile .upload-tip {
+  font-size: 0.75rem;
+  color: var(--ip-text-muted);
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: var(--ip-bg-tertiary);
+  border-radius: var(--ip-radius-sm);
+  border-left: 3px solid var(--ip-accent-primary);
 }
 
 /* Responsive Design - Scoped */
@@ -29177,9 +29538,15 @@ body {
     justify-content: flex-start;
   }
   
+  .instructor-profile .profile-image-container {
+    width: 140px;
+    height: 140px;
+    flex-shrink: 0;
+  }
+  
   .instructor-profile .profile-image {
-    width: 10rem;
-    height: 10rem;
+    width: 140px;
+    height: 140px;
   }
   
   .instructor-profile .profile-stats {
@@ -29217,6 +29584,17 @@ body {
   .instructor-profile .profile-title {
     font-size: 1.25rem;
   }
+  
+  .instructor-profile .profile-image-container {
+    width: 160px;
+    height: 160px;
+    flex-shrink: 0;
+  }
+  
+  .instructor-profile .profile-image {
+    width: 160px;
+    height: 160px;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -29248,6 +29626,40 @@ body {
 @media (min-width: 1280px) {
   .instructor-profile .form-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 639px) {
+  .instructor-profile-image-modal {
+    max-width: 95vw;
+    margin: 0.5rem;
+    max-height: 90vh;
+  }
+  
+  .instructor-profile .crop-preview-container {
+    gap: 1rem;
+    padding: 1.5rem 1rem;
+    flex-direction: column;
+  }
+  
+ .instructor-profile .profile-preview canvas {
+    width: 70px !important;
+    height: 70px !important;
+  }
+  
+  .instructor-profile .profile-preview {
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .instructor-profile .modal-actions {
+    flex-direction: column;
+    padding: 1rem;
+  }
+  
+  .instructor-profile .confirm-btn,
+  .instructor-profile .cancel-upload-btn {
+    width: 100%;
   }
 }
 
@@ -29324,6 +29736,25 @@ body {
   .instructor-profile .achievement-input {
     width: 100%;
   }
+  
+  /* Mobile modal adjustments */
+  .instructor-profile-image-modal {
+    max-width: 90vw;
+    margin: 1rem;
+  }
+  
+  .instructor-profile .image-preview-container {
+    max-height: 300px;
+  }
+  
+  .instructor-profile .modal-actions {
+    flex-direction: column;
+  }
+  
+  .instructor-profile .confirm-btn,
+  .instructor-profile .cancel-upload-btn {
+    width: 100%;
+  }
 }
 
 /* High Performance Animations - Scoped */
@@ -29360,6 +29791,22 @@ body {
       transform: scale(1);
     }
   }
+  
+  /* Crop selection animation */
+  .instructor-profile .crop-selection {
+    animation: instructor-cropPulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes instructor-cropPulse {
+    0%, 100% {
+      border-color: var(--ip-accent-primary);
+      box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+    }
+    50% {
+      border-color: var(--ip-accent-secondary);
+      box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
+    }
+  }
 }
 
 /* Reduced Motion Support - Scoped */
@@ -29379,12 +29826,15 @@ body {
 .instructor-profile .cancel-btn:focus-visible,
 .instructor-profile .add-btn:focus-visible,
 .instructor-profile .done-btn:focus-visible,
+.instructor-profile .confirm-btn:focus-visible,
+.instructor-profile .cancel-upload-btn:focus-visible,
 .instructor-profile .form-group input:focus-visible,
 .instructor-profile .form-group textarea:focus-visible,
 .instructor-profile .skill-input:focus-visible,
 .instructor-profile .achievement-input:focus-visible,
 .instructor-profile .close-btn:focus-visible,
-.instructor-profile .image-edit-btn:focus-visible {
+.instructor-profile .image-edit-btn:focus-visible,
+.instructor-profile .image-input:focus-visible {
   outline: 2px solid var(--ip-accent-primary);
   outline-offset: 2px;
 }
@@ -29426,6 +29876,75 @@ body {
 .instructor-profile-image-modal-overlay {
   contain: layout style paint;
 }
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .instructor-profile .profile-image:hover,
+  .instructor-profile .stat:hover,
+  .instructor-profile .achievement-item:hover {
+    transform: none;
+  }
+  
+  .instructor-profile .image-edit-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+  
+  .instructor-profile .crop-selection {
+    min-width: 100px;
+    min-height: 100px;
+  }
+  
+  .instructor-profile .crop-handle {
+    width: 16px;
+    height: 16px;
+    bottom: -8px;
+    right: -8px;
+  }
+}
+
+/* Enhanced Accessibility */
+.instructor-profile .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Loading States */
+.instructor-profile .loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.instructor-profile .loading::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid var(--ip-text-muted);
+  border-top: 2px solid var(--ip-accent-primary);
+  border-radius: 50%;
+  animation: instructor-spin 1s linear infinite;
+  z-index: 1;
+}
+
+@keyframes instructor-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
 /* Scoped Pending Courses Dashboard Styles */
 /* Wrap all styles under a main container class to prevent conflicts */
 
