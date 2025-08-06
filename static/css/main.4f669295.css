@@ -29447,16 +29447,22 @@ body {
 
 @media (max-width: 639px) {
   .instructor-profile .crop-selection {
-    min-width: 100px;
-    min-height: 100px;
+    min-width: 80px; /* Larger minimum size for mobile */
+    min-height: 80px;
+    border-width: 4px; /* Thicker border for better visibility */
+    /* Ensure proper touch handling */
+    -webkit-user-drag: none; /* Force hardware acceleration */
+    transform: translateZ(0);
   }
   
   .instructor-profile .crop-handle {
-    width: 20px;
-    height: 20px;
-    bottom: -10px;
-    right: -10px;
-    border: 2px solid white;
+    width: 28px; /* Even larger on mobile */
+    height: 28px;
+    bottom: -14px;
+    right: -14px;
+    border-width: 4px;
+    /* Better touch target */
+    -webkit-tap-highlight-color: transparent;
   }
   
   .instructor-profile .preview-avatar {
@@ -29473,16 +29479,26 @@ body {
 /* SECTION 9: Touch device optimizations for crop */
 @media (hover: none) and (pointer: coarse) {
   .instructor-profile .crop-selection {
-    min-width: 120px;
-    min-height: 120px;
+    min-width: 100px; /* Larger for touch devices */
+    min-height: 100px;
+    border-width: 4px;
+    /* Improve touch responsiveness */
+    will-change: transform;
   }
   
   .instructor-profile .crop-handle {
-    width: 20px;
-    height: 20px;
-    bottom: -10px;
-    right: -10px;
-    touch-action: none;
+    width: 32px; /* Large touch target */
+    height: 32px;
+    bottom: -16px;
+    right: -16px;
+    border-width: 4px;
+    /* Remove hover effects that interfere with touch */
+    transition: none;
+  }
+  
+  .instructor-profile .crop-handle:hover {
+    background: #00ff00; /* Keep same color */
+    transform: none; /* Remove scale transform */
   }
 }
 
@@ -29979,16 +29995,23 @@ body {
   background: #000;
   border-radius: var(--ip-radius-md);
   margin: 0 auto;
+  /* Ensure proper touch handling */
+  touch-action: manipulation;
+  -webkit-overflow-scrolling: touch;
 }
+
 
 .instructor-profile .preview-image {
   max-width: 100%;
   max-height: 400px;
   object-fit: contain;
   display: block;
-  -webkit-user-select: none;
-          user-select: none;
+  user-select: none;
   pointer-events: none;
+  /* Prevent image dragging on mobile */
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 
 .instructor-profile .crop-overlay {
@@ -30065,17 +30088,21 @@ body {
 
 .instructor-profile .crop-selection {
   position: absolute;
-  border: 3px solid #00ff00; /* Bright green for visibility */
+  border: 3px solid #00ff00;
   background: transparent;
   cursor: move;
   pointer-events: auto;
-  /* Remove any default border radius */
   border-radius: 0;
-  /* Dark overlay outside crop area */
   box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7);
-  /* Minimum size */
   min-width: 60px;
   min-height: 60px;
+  /* Add touch-action for better mobile handling */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  /* Ensure it's above other elements */
+  z-index: 100;
 }
 
 
@@ -30095,14 +30122,18 @@ body {
   position: absolute;
   bottom: -8px;
   right: -8px;
-  width: 20px;
-  height: 20px;
+  width: 24px; /* Larger for mobile */
+  height: 24px; /* Larger for mobile */
   background: #00ff00;
   border: 3px solid white;
   border-radius: 50%;
   cursor: se-resize;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
   pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  z-index: 101; /* Above crop selection */
 }
 
 .instructor-profile .crop-handle:hover {
