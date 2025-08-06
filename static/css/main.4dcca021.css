@@ -22051,6 +22051,39 @@ body {
   --overlay-dark: rgba(0, 0, 0, 0.1);
 }
 
+/* Add this at the top of your CSS file to ensure light theme is default */
+.my-learning {
+  /* Explicitly set light theme as default */
+  --bg-primary: #f7fafc;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #edf2f7;
+  --text-primary: #1a202c;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+  --border-color: #e2e8f0;
+  --border-hover: #cbd5e0;
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04), 0 8px 16px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08), 0 16px 32px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.08), 0 24px 48px rgba(0, 0, 0, 0.12);
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-hover: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  --overlay-light: rgba(255, 255, 255, 0.1);
+  --overlay-dark: rgba(0, 0, 0, 0.1);
+}
+
+/* Ensure light theme takes precedence */
+.my-learning.light-theme,
+.light-theme .my-learning {
+  --bg-primary: #f7fafc;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #edf2f7;
+  --text-primary: #1a202c;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+  --border-color: #e2e8f0;
+  --border-hover: #cbd5e0;
+}
+
 /* Dark Mode Colors */
 .dark-theme {
   --bg-primary: #0d1117;
