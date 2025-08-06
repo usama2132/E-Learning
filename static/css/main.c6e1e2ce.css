@@ -18399,8 +18399,7 @@ body {
 .student-dashboard .course-image {
   display: block;
 }
-/* PROFILE PAGE THEME OVERRIDE - Add this to the END of your Profile.css file */
-/* IMPORTANT: Only add this CSS to pages that actually contain .profile-container */
+/* FLASH SPEED PROFILE.CSS - ZERO LAG OPTIMIZED */
 
 /* ============================================================================
    THEME OVERRIDES - PROPERLY SCOPED FOR PROFILE ONLY
@@ -18512,7 +18511,7 @@ body {
 }
 
 /* ============================================================================
-   MAIN PROFILE STYLES - OPTIMIZED FOR PERFORMANCE
+   MAIN PROFILE STYLES - FLASH SPEED OPTIMIZED
    ============================================================================ */
 
 .profile-container {
@@ -18521,41 +18520,30 @@ body {
   position: relative;
 }
 
-/* Simplified background - no heavy animations */
-.profile-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at 30% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
-  pointer-events: none;
-}
+/* REMOVED heavy ::before pseudo element - was causing major lag */
 
 /* Header */
 .profile-container .profile-header {
-  padding: 2rem 1rem 1.5rem;
+  padding: 32px 16px 24px;
   text-align: center;
   position: relative;
   z-index: 2;
 }
 
 .profile-container .profile-header h1 {
-  font-size: 2.5rem;
+  font-size: 40px;
   font-weight: 700;
   color: white;
-  margin: 0 auto 0.5rem auto;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin: 0 auto 8px auto;
 }
 
 /* Success message */
 .profile-container .success-message {
   background: #00ff88;
   color: white;
-  padding: 1rem 1.5rem;
+  padding: 16px 24px;
   border-radius: 12px;
-  margin: 0 1rem 1.5rem;
+  margin: 0 16px 24px;
   text-align: center;
   font-weight: 600;
   box-shadow: 0 4px 12px rgba(0, 255, 136, 0.2);
@@ -18565,15 +18553,15 @@ body {
 .profile-container .profile-content {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 24px;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem 2rem;
+  padding: 0 16px 32px;
   position: relative;
   z-index: 2;
 }
 
-/* Navigation */
+/* Navigation - REMOVED backdrop-filter */
 .profile-container .profile-sidebar {
   width: 100%;
   order: -1;
@@ -18581,25 +18569,23 @@ body {
 
 .profile-container .profile-nav {
   background: rgba(255, 255, 255, 0.15);
-  -webkit-backdrop-filter: blur(10px);
-          backdrop-filter: blur(10px);
   border-radius: 15px;
-  padding: 1rem;
+  padding: 16px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
 .profile-container .nav-item {
   display: block;
   width: 100%;
-  padding: 1rem 1.25rem;
+  padding: 16px 20px;
   background: none;
   border: none;
   color: rgba(255, 255, 255, 0.8);
-  font-size: 0.95rem;
+  font-size: 15px;
   font-weight: 500;
   text-align: left;
   border-radius: 10px;
@@ -18611,60 +18597,41 @@ body {
 .profile-container .nav-item:hover {
   background: rgba(255, 255, 255, 0.15);
   color: white;
-  transform: translateX(4px);
 }
 
 .profile-container .nav-item.active {
   background: rgba(255, 255, 255, 0.25);
   color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  transform: translateX(6px);
 }
 
-/* Main content area */
+/* Main content area - REMOVED backdrop-filter */
 .profile-container .profile-main {
   flex: 1 1;
   background: rgba(255, 255, 255, 0.95) !important;
-  -webkit-backdrop-filter: blur(10px);
-          backdrop-filter: blur(10px);
   border-radius: 20px;
-  padding: 2rem 1.5rem;
+  padding: 32px 24px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-/* Section headers */
+/* Section headers - REMOVED text gradients and pseudo elements */
 .profile-container .form-section h2,
 .profile-container .settings-section h2 {
-  font-size: 1.8rem;
+  font-size: 28px;
   font-weight: 700;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin: 0 0 1.5rem;
+  color: #667eea;
+  margin: 0 0 24px;
   position: relative;
-}
-
-.profile-container .form-section h2::after,
-.profile-container .settings-section h2::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  left: 0;
-  width: 60px;
-  height: 3px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 2px;
 }
 
 /* Avatar section */
 .profile-container .avatar-section {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-  padding: 1.5rem;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 24px;
   background: rgba(255, 255, 255, 0.9) !important;
   border-radius: 15px;
   border: 1px solid rgba(102, 126, 234, 0.1);
@@ -18683,11 +18650,11 @@ body {
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid rgba(102, 126, 234, 0.2);
-  transition: transform 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 
 .profile-container .avatar:hover {
-  transform: scale(1.02);
+  opacity: 0.9;
 }
 
 .profile-container .avatar-overlay {
@@ -18703,57 +18670,56 @@ body {
   justify-content: center;
   color: white;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: 14px;
 }
 
 .profile-container .avatar-upload-btn {
   display: inline-block;
-  padding: 0.75rem 1.5rem;
+  padding: 12px 24px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
   border-radius: 10px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: opacity 0.2s ease;
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 14px;
 }
 
 .profile-container .avatar-upload-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  opacity: 0.9;
 }
 
 /* Form layout */
 .profile-container .form-row {
   display: grid;
   grid-template-columns: 1fr;
-  grid-gap: 1.5rem;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
+  grid-gap: 24px;
+  gap: 24px;
+  margin-bottom: 24px;
 }
 
 .profile-container .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 24px;
 }
 
 .profile-container .form-label {
   display: block;
   font-weight: 600;
   color: #333;
-  margin-bottom: 0.5rem;
-  font-size: 0.95rem;
+  margin-bottom: 8px;
+  font-size: 15px;
 }
 
-/* Form inputs - OPTIMIZED AND FIXED */
+/* Form inputs - OPTIMIZED */
 .profile-container .form-group input,
 .profile-container .form-group textarea {
   width: 100%;
-  padding: 0.875rem 1.25rem;
+  padding: 14px 20px;
   border: 2px solid #e0e0e0;
   border-radius: 10px;
-  font-size: 0.95rem;
+  font-size: 15px;
   background: #ffffff;
   color: #333333;
   transition: border-color 0.2s ease;
@@ -18764,7 +18730,6 @@ body {
 .profile-container .form-group textarea:focus {
   outline: none;
   border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .profile-container .form-group input.error,
@@ -18774,74 +18739,72 @@ body {
 
 .profile-container .character-count {
   text-align: right;
-  font-size: 0.8rem;
+  font-size: 12px;
   color: #666;
-  margin-top: 0.25rem;
+  margin-top: 4px;
 }
 
 .profile-container .error-message {
   color: #ff4757;
-  font-size: 0.8rem;
-  margin-top: 0.25rem;
+  font-size: 12px;
+  margin-top: 4px;
   font-weight: 500;
 }
 
-/* Buttons */
+/* Buttons - SIMPLIFIED */
 .profile-container button[type="submit"],
 .profile-container .profile-main button {
-  padding: 0.875rem 2rem;
+  padding: 14px 32px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
   border-radius: 10px;
-  font-size: 0.95rem;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: opacity 0.2s ease;
   width: 100%;
   max-width: 250px;
 }
 
 .profile-container button[type="submit"]:hover,
 .profile-container .profile-main button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  opacity: 0.9;
 }
 
 .profile-container button[type="submit"]:disabled,
 .profile-container .profile-main button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-  transform: none;
 }
 
 /* Settings sections */
 .profile-container .settings-group {
-  margin-bottom: 2rem;
-  padding: 1.5rem;
+  margin-bottom: 32px;
+  padding: 24px;
   background: rgba(255, 255, 255, 0.9) !important;
   border-radius: 12px;
   border: 1px solid rgba(102, 126, 234, 0.1);
 }
 
 .profile-container .settings-group h3 {
-  font-size: 1.25rem;
+  font-size: 20px;
   font-weight: 700;
   color: #333;
-  margin: 0 0 1.25rem;
+  margin: 0 0 20px;
 }
 
 .profile-container .setting-item {
   display: flex;
   align-items: flex-start;
-  gap: 0.75rem;
-  padding: 1rem 0;
+  gap: 12px;
+  padding: 16px 0;
   cursor: pointer;
   transition: background-color 0.2s ease;
   border-radius: 8px;
-  margin: 0 -0.75rem;
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
+  margin: 0 -12px;
+  padding-left: 12px;
+  padding-right: 12px;
 }
 
 .profile-container .setting-item:hover {
@@ -18877,7 +18840,7 @@ body {
 }
 
 .profile-container .setting-item span {
-  font-size: 0.95rem;
+  font-size: 15px;
   color: #333;
   font-weight: 500;
   line-height: 1.4;
@@ -18887,9 +18850,9 @@ body {
 /* Account info */
 .profile-container .account-info {
   background: rgba(255, 255, 255, 0.9) !important;
-  padding: 1.5rem;
+  padding: 24px;
   border-radius: 12px;
-  margin-bottom: 2rem;
+  margin-bottom: 32px;
   border: 1px solid rgba(102, 126, 234, 0.1);
 }
 
@@ -18897,7 +18860,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 0;
+  padding: 12px 0;
   border-bottom: 1px solid rgba(102, 126, 234, 0.1);
 }
 
@@ -18928,8 +18891,8 @@ body {
 /* Security and danger zones */
 .profile-container .security-actions,
 .profile-container .danger-zone {
-  margin: 2rem 0;
-  padding: 1.5rem;
+  margin: 32px 0;
+  padding: 24px;
   background: rgba(255, 255, 255, 0.9) !important;
   border-radius: 12px;
 }
@@ -18948,8 +18911,8 @@ body {
 
 .profile-container .help-text {
   color: #666;
-  font-size: 0.85rem;
-  margin: 0.75rem 0 0;
+  font-size: 14px;
+  margin: 12px 0 0;
   line-height: 1.4;
 }
 
@@ -18957,7 +18920,7 @@ body {
   background: linear-gradient(135deg, #ff4757 0%, #d32f2f 100%);
 }
 
-/* Modal styles */
+/* Modal styles - REMOVED backdrop-filter */
 .profile-container .modal-overlay {
   position: fixed;
   top: 0;
@@ -18965,18 +18928,16 @@ body {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.6);
-  -webkit-backdrop-filter: blur(5px);
-          backdrop-filter: blur(5px);
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: 16px;
 }
 
 .profile-container .modal-content {
   background: rgba(255, 255, 255, 0.98);
-  padding: 2rem;
+  padding: 32px;
   border-radius: 20px;
   max-width: 450px;
   width: 100%;
@@ -18986,27 +18947,27 @@ body {
 }
 
 .profile-container .modal-content h2 {
-  font-size: 1.5rem;
+  font-size: 24px;
   font-weight: 700;
   color: #333;
-  margin: 0 0 1.5rem;
+  margin: 0 0 24px;
   text-align: center;
 }
 
 .profile-container .modal-actions {
   display: flex;
-  gap: 0.75rem;
+  gap: 12px;
   justify-content: flex-end;
-  margin-top: 1.5rem;
+  margin-top: 24px;
 }
 
 .profile-container .modal-actions button {
-  padding: 0.75rem 1.5rem;
+  padding: 12px 24px;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.9rem;
+  transition: opacity 0.2s ease;
+  font-size: 14px;
   min-width: 100px;
 }
 
@@ -19017,34 +18978,34 @@ body {
 }
 
 .profile-container .modal-actions button:first-child:hover {
-  background: #eee;
+  opacity: 0.9;
 }
 
 /* ============================================================================
-   RESPONSIVE DESIGN - OPTIMIZED
+   RESPONSIVE DESIGN - FLASH OPTIMIZED
    ============================================================================ */
 
 /* Mobile (up to 768px) */
 @media (max-width: 768px) {
   .profile-container .profile-header h1 {
-    font-size: 2rem;
+    font-size: 32px;
   }
   
   .profile-container .profile-content {
-    padding: 0 1rem 2rem;
-    gap: 1rem;
+    padding: 0 16px 32px;
+    gap: 16px;
   }
   
   .profile-container .profile-main {
-    padding: 1.5rem 1rem;
+    padding: 24px 16px;
     border-radius: 15px;
   }
   
   .profile-container .avatar-section {
     flex-direction: column;
     text-align: center;
-    gap: 1rem;
-    padding: 1rem;
+    gap: 16px;
+    padding: 16px;
   }
   
   .profile-container .avatar-container {
@@ -19054,26 +19015,26 @@ body {
   
   .profile-container .form-section h2,
   .profile-container .settings-section h2 {
-    font-size: 1.5rem;
+    font-size: 24px;
   }
   
   .profile-container .settings-group,
   .profile-container .account-info,
   .profile-container .security-actions,
   .profile-container .danger-zone {
-    padding: 1rem;
-    margin-bottom: 1.5rem;
+    padding: 16px;
+    margin-bottom: 24px;
   }
   
   .profile-container .modal-content {
-    padding: 1.5rem 1rem;
-    margin: 0.5rem;
+    padding: 24px 16px;
+    margin: 8px;
     border-radius: 15px;
   }
   
   .profile-container .modal-actions {
     flex-direction: column-reverse;
-    gap: 0.5rem;
+    gap: 8px;
   }
   
   .profile-container .modal-actions button {
@@ -19091,7 +19052,7 @@ body {
 @media (min-width: 769px) and (max-width: 1024px) {
   .profile-container .profile-content {
     flex-direction: row;
-    gap: 1.5rem;
+    gap: 24px;
   }
   
   .profile-container .profile-sidebar {
@@ -19101,7 +19062,7 @@ body {
   
   .profile-container .profile-nav {
     position: sticky;
-    top: 2rem;
+    top: 32px;
     margin-bottom: 0;
   }
   
@@ -19114,8 +19075,8 @@ body {
 @media (min-width: 1025px) {
   .profile-container .profile-content {
     flex-direction: row;
-    gap: 2rem;
-    padding: 0 2rem 4rem;
+    gap: 32px;
+    padding: 0 32px 64px;
   }
   
   .profile-container .profile-sidebar {
@@ -19125,17 +19086,17 @@ body {
   
   .profile-container .profile-nav {
     position: sticky;
-    top: 2rem;
+    top: 32px;
     margin-bottom: 0;
   }
   
   .profile-container .profile-main {
-    padding: 2.5rem;
+    padding: 40px;
   }
   
   .profile-container .form-row {
     grid-template-columns: 1fr 1fr;
-    gap: 2rem;
+    gap: 32px;
   }
   
   .profile-container .avatar-container {
@@ -19153,10 +19114,6 @@ body {
 /* Performance optimizations */
 .profile-container * {
   box-sizing: border-box;
-}
-
-.profile-container {
-  contain: layout style;
 }
 
 /* Accessibility */
