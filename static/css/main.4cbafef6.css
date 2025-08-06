@@ -19527,6 +19527,8 @@ body {
 @media (max-width: 768px) {
   .about-page .about-container {
     padding: 40px 16px;
+            margin-bottom: 2rem;
+        margin-top: 1rem;
   }
   
   .about-page .about-content {
