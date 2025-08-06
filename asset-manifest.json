@@ -1,12 +1,12 @@
 {
   "files": {
     "main.css": "/E-Learning/static/css/main.0490cec3.css",
-    "main.js": "/E-Learning/static/js/main.b60781c2.js",
+    "main.js": "/E-Learning/static/js/main.e2d2007b.js",
     "static/js/206.1430d834.chunk.js": "/E-Learning/static/js/206.1430d834.chunk.js",
     "index.html": "/E-Learning/index.html"
   },
   "entrypoints": [
     "static/css/main.0490cec3.css",
-    "static/js/main.b60781c2.js"
+    "static/js/main.e2d2007b.js"
   ]
 }
