@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useApi } from '../../hooks/useApi';
+import { useTheme } from '../../context/ThemeContext';
 import Loading from '../common/Loading';
 import Pagination from '../common/Pagination';
 
@@ -19,70 +20,107 @@ const TransactionList = () => {
   const [sortOrder, setSortOrder] = useState('desc');
 
   const { get } = useApi();
+  const { theme } = useTheme();
 
-  // Styles object
-  const styles = {
+  // Dynamic styles based on theme
+  const styles = useMemo(() => ({
     container: {
-      padding: '24px',
-      backgroundColor: '#f8fafc',
+      padding: '16px',
+      backgroundColor: theme === 'dark' ? '#0f172a' : '#f8fafc',
       minHeight: '100vh',
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      transition: 'all 0.3s ease',
+      '@media (min-width: 768px)': {
+        padding: '24px'
+      }
     },
     header: {
       display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      marginBottom: '24px',
-      backgroundColor: 'white',
-      padding: '20px',
+      flexDirection: 'column',
+      gap: '12px',
+      marginBottom: '20px',
+      backgroundColor: theme === 'dark' ? '#1e293b' : 'white',
+      padding: '16px',
       borderRadius: '12px',
-      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
+      boxShadow: theme === 'dark' 
+        ? '0 1px 3px rgba(0, 0, 0, 0.3)' 
+        : '0 1px 3px rgba(0, 0, 0, 0.1)',
+      border: theme === 'dark' ? '1px solid #334155' : 'none',
+      '@media (min-width: 768px)': {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '20px',
+        marginBottom: '24px'
+      }
     },
     title: {
-      fontSize: '24px',
+      fontSize: '20px',
       fontWeight: '600',
-      color: '#1f2937',
-      margin: 0
+      color: theme === 'dark' ? '#f1f5f9' : '#1f2937',
+      margin: 0,
+      '@media (min-width: 768px)': {
+        fontSize: '24px'
+      }
     },
     button: {
-      padding: '10px 16px',
+      padding: '8px 14px',
       borderRadius: '8px',
       border: 'none',
       cursor: 'pointer',
       fontSize: '14px',
       fontWeight: '500',
-      transition: 'all 0.2s ease'
+      transition: 'all 0.2s ease',
+      outline: 'none',
+      '@media (min-width: 768px)': {
+        padding: '10px 16px'
+      }
     },
     btnPrimary: {
-      backgroundColor: '#3b82f6',
+      backgroundColor: theme === 'dark' ? '#3b82f6' : '#3b82f6',
       color: 'white'
     },
     btnSecondary: {
-      backgroundColor: '#6b7280',
+      backgroundColor: theme === 'dark' ? '#64748b' : '#6b7280',
       color: 'white'
     },
     btnWarning: {
-      backgroundColor: '#f59e0b',
+      backgroundColor: theme === 'dark' ? '#f59e0b' : '#f59e0b',
       color: 'white'
     },
     btnOutline: {
       backgroundColor: 'transparent',
-      color: '#6b7280',
-      border: '1px solid #d1d5db'
+      color: theme === 'dark' ? '#94a3b8' : '#6b7280',
+      border: `1px solid ${theme === 'dark' ? '#475569' : '#d1d5db'}`
     },
     btnSm: {
-      padding: '6px 12px',
-      fontSize: '12px'
+      padding: '4px 8px',
+      fontSize: '12px',
+      '@media (min-width: 768px)': {
+        padding: '6px 12px'
+      }
     },
     filters: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-      gap: '16px',
-      marginBottom: '24px',
-      backgroundColor: 'white',
-      padding: '20px',
+      gridTemplateColumns: '1fr',
+      gap: '12px',
+      marginBottom: '20px',
+      backgroundColor: theme === 'dark' ? '#1e293b' : 'white',
+      padding: '16px',
       borderRadius: '12px',
-      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
+      boxShadow: theme === 'dark' 
+        ? '0 1px 3px rgba(0, 0, 0, 0.3)' 
+        : '0 1px 3px rgba(0, 0, 0, 0.1)',
+      border: theme === 'dark' ? '1px solid #334155' : 'none',
+      '@media (min-width: 640px)': {
+        gridTemplateColumns: 'repeat(2, 1fr)'
+      },
+      '@media (min-width: 768px)': {
+        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+        gap: '16px',
+        padding: '20px',
+        marginBottom: '24px'
+      }
     },
     filterGroup: {
       display: 'flex',
@@ -92,222 +130,336 @@ const TransactionList = () => {
     label: {
       fontSize: '14px',
       fontWeight: '500',
-      color: '#374151'
+      color: theme === 'dark' ? '#e2e8f0' : '#374151'
     },
     select: {
       padding: '8px 12px',
-      border: '1px solid #d1d5db',
+      border: `1px solid ${theme === 'dark' ? '#475569' : '#d1d5db'}`,
       borderRadius: '6px',
       fontSize: '14px',
-      backgroundColor: 'white',
-      color: '#374151'
+      backgroundColor: theme === 'dark' ? '#334155' : 'white',
+      color: theme === 'dark' ? '#e2e8f0' : '#374151',
+      transition: 'all 0.2s ease',
+      outline: 'none'
     },
     searchInput: {
       padding: '8px 12px',
-      border: '1px solid #d1d5db',
+      border: `1px solid ${theme === 'dark' ? '#475569' : '#d1d5db'}`,
       borderRadius: '6px',
       fontSize: '14px',
       width: '100%',
-      boxSizing: 'border-box'
+      boxSizing: 'border-box',
+      backgroundColor: theme === 'dark' ? '#334155' : 'white',
+      color: theme === 'dark' ? '#e2e8f0' : '#374151',
+      transition: 'all 0.2s ease',
+      outline: 'none'
     },
     errorMessage: {
-      backgroundColor: '#fef2f2',
-      border: '1px solid #fecaca',
+      backgroundColor: theme === 'dark' ? '#7f1d1d' : '#fef2f2',
+      border: `1px solid ${theme === 'dark' ? '#dc2626' : '#fecaca'}`,
       borderRadius: '8px',
-      padding: '16px',
-      marginBottom: '24px',
+      padding: '12px',
+      marginBottom: '20px',
       display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center'
+      flexDirection: 'column',
+      gap: '8px',
+      '@media (min-width: 768px)': {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '16px',
+        marginBottom: '24px'
+      }
     },
     errorText: {
-      color: '#dc2626',
-      margin: 0
+      color: theme === 'dark' ? '#fca5a5' : '#dc2626',
+      margin: 0,
+      fontSize: '14px'
     },
     tableContainer: {
-      backgroundColor: 'white',
+      backgroundColor: theme === 'dark' ? '#1e293b' : 'white',
       borderRadius: '12px',
       overflow: 'hidden',
-      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-      marginBottom: '24px'
+      boxShadow: theme === 'dark' 
+        ? '0 1px 3px rgba(0, 0, 0, 0.3)' 
+        : '0 1px 3px rgba(0, 0, 0, 0.1)',
+      border: theme === 'dark' ? '1px solid #334155' : 'none',
+      marginBottom: '20px',
+      overflowX: 'auto',
+      '@media (min-width: 768px)': {
+        marginBottom: '24px'
+      }
     },
     table: {
       width: '100%',
-      borderCollapse: 'collapse'
+      borderCollapse: 'collapse',
+      minWidth: '800px'
     },
     th: {
-      backgroundColor: '#f9fafb',
-      padding: '12px 16px',
+      backgroundColor: theme === 'dark' ? '#0f172a' : '#f9fafb',
+      padding: '8px 12px',
       textAlign: 'left',
-      fontSize: '12px',
+      fontSize: '11px',
       fontWeight: '600',
-      color: '#374151',
+      color: theme === 'dark' ? '#cbd5e1' : '#374151',
       textTransform: 'uppercase',
       letterSpacing: '0.05em',
-      borderBottom: '1px solid #e5e7eb',
+      borderBottom: `1px solid ${theme === 'dark' ? '#334155' : '#e5e7eb'}`,
       cursor: 'pointer',
-      userSelect: 'none'
+      userSelect: 'none',
+      position: 'sticky',
+      top: 0,
+      zIndex: 10,
+      '@media (min-width: 768px)': {
+        padding: '12px 16px',
+        fontSize: '12px'
+      }
     },
     td: {
-      padding: '16px',
-      borderBottom: '1px solid #f3f4f6',
-      fontSize: '14px',
-      color: '#374151'
+      padding: '12px',
+      borderBottom: `1px solid ${theme === 'dark' ? '#334155' : '#f3f4f6'}`,
+      fontSize: '13px',
+      color: theme === 'dark' ? '#e2e8f0' : '#374151',
+      '@media (min-width: 768px)': {
+        padding: '16px',
+        fontSize: '14px'
+      }
     },
     transactionId: {
       fontFamily: 'Monaco, Consolas, monospace',
-      fontSize: '12px',
-      backgroundColor: '#f3f4f6',
-      padding: '4px 8px',
+      fontSize: '11px',
+      backgroundColor: theme === 'dark' ? '#334155' : '#f3f4f6',
+      padding: '4px 6px',
       borderRadius: '4px',
-      color: '#6b7280'
+      color: theme === 'dark' ? '#94a3b8' : '#6b7280',
+      '@media (min-width: 768px)': {
+        fontSize: '12px',
+        padding: '4px 8px'
+      }
     },
     userInfo: {
       display: 'flex',
       alignItems: 'center',
-      gap: '12px'
+      gap: '8px',
+      '@media (min-width: 768px)': {
+        gap: '12px'
+      }
     },
     userAvatar: {
-      width: '32px',
-      height: '32px',
+      width: '28px',
+      height: '28px',
       borderRadius: '50%',
-      objectFit: 'cover'
+      objectFit: 'cover',
+      '@media (min-width: 768px)': {
+        width: '32px',
+        height: '32px'
+      }
     },
     userName: {
       fontWeight: '500',
-      color: '#1f2937'
+      color: theme === 'dark' ? '#f1f5f9' : '#1f2937',
+      fontSize: '13px',
+      '@media (min-width: 768px)': {
+        fontSize: '14px'
+      }
     },
     userEmail: {
-      fontSize: '12px',
-      color: '#6b7280'
+      fontSize: '11px',
+      color: theme === 'dark' ? '#94a3b8' : '#6b7280',
+      '@media (min-width: 768px)': {
+        fontSize: '12px'
+      }
     },
     courseInfo: {
-      maxWidth: '200px'
+      maxWidth: '150px',
+      '@media (min-width: 768px)': {
+        maxWidth: '200px'
+      }
     },
     courseTitle: {
       fontWeight: '500',
-      color: '#1f2937',
-      marginBottom: '2px'
+      color: theme === 'dark' ? '#f1f5f9' : '#1f2937',
+      marginBottom: '2px',
+      fontSize: '13px',
+      lineHeight: '1.3',
+      '@media (min-width: 768px)': {
+        fontSize: '14px'
+      }
     },
     courseInstructor: {
-      fontSize: '12px',
-      color: '#6b7280'
+      fontSize: '11px',
+      color: theme === 'dark' ? '#94a3b8' : '#6b7280',
+      '@media (min-width: 768px)': {
+        fontSize: '12px'
+      }
     },
     amount: {
       fontWeight: '600',
-      fontSize: '16px'
+      fontSize: '14px',
+      '@media (min-width: 768px)': {
+        fontSize: '16px'
+      }
     },
     positive: {
-      color: '#059669'
+      color: theme === 'dark' ? '#34d399' : '#059669'
     },
     negative: {
-      color: '#dc2626'
+      color: theme === 'dark' ? '#f87171' : '#dc2626'
     },
     statusBadge: {
-      padding: '4px 8px',
+      padding: '3px 6px',
       borderRadius: '12px',
-      fontSize: '12px',
+      fontSize: '11px',
       fontWeight: '500',
-      textTransform: 'capitalize'
+      textTransform: 'capitalize',
+      '@media (min-width: 768px)': {
+        padding: '4px 8px',
+        fontSize: '12px'
+      }
     },
     badgeSuccess: {
-      backgroundColor: '#d1fae5',
-      color: '#065f46'
+      backgroundColor: theme === 'dark' ? '#065f46' : '#d1fae5',
+      color: theme === 'dark' ? '#34d399' : '#065f46'
     },
     badgeWarning: {
-      backgroundColor: '#fef3c7',
-      color: '#92400e'
+      backgroundColor: theme === 'dark' ? '#92400e' : '#fef3c7',
+      color: theme === 'dark' ? '#fbbf24' : '#92400e'
     },
     badgeError: {
-      backgroundColor: '#fee2e2',
-      color: '#991b1b'
+      backgroundColor: theme === 'dark' ? '#991b1b' : '#fee2e2',
+      color: theme === 'dark' ? '#f87171' : '#991b1b'
     },
     badgeInfo: {
-      backgroundColor: '#dbeafe',
-      color: '#1e40af'
+      backgroundColor: theme === 'dark' ? '#1e40af' : '#dbeafe',
+      color: theme === 'dark' ? '#60a5fa' : '#1e40af'
     },
     badgeSecondary: {
-      backgroundColor: '#f3f4f6',
-      color: '#6b7280'
+      backgroundColor: theme === 'dark' ? '#374151' : '#f3f4f6',
+      color: theme === 'dark' ? '#9ca3af' : '#6b7280'
     },
     typeBadge: {
-      padding: '4px 8px',
+      padding: '3px 6px',
       borderRadius: '6px',
-      fontSize: '12px',
+      fontSize: '11px',
       fontWeight: '500',
-      textTransform: 'capitalize'
+      textTransform: 'capitalize',
+      '@media (min-width: 768px)': {
+        padding: '4px 8px',
+        fontSize: '12px'
+      }
     },
     typePurchase: {
-      backgroundColor: '#ecfdf5',
-      color: '#047857'
+      backgroundColor: theme === 'dark' ? '#065f46' : '#ecfdf5',
+      color: theme === 'dark' ? '#34d399' : '#047857'
     },
     typeRefund: {
-      backgroundColor: '#fef2f2',
-      color: '#dc2626'
+      backgroundColor: theme === 'dark' ? '#7f1d1d' : '#fef2f2',
+      color: theme === 'dark' ? '#f87171' : '#dc2626'
     },
     typePayout: {
-      backgroundColor: '#eff6ff',
-      color: '#2563eb'
+      backgroundColor: theme === 'dark' ? '#1e3a8a' : '#eff6ff',
+      color: theme === 'dark' ? '#60a5fa' : '#2563eb'
     },
     typeWithdrawal: {
-      backgroundColor: '#fefce8',
-      color: '#ca8a04'
+      backgroundColor: theme === 'dark' ? '#a16207' : '#fefce8',
+      color: theme === 'dark' ? '#fbbf24' : '#ca8a04'
     },
     typeOther: {
-      backgroundColor: '#f3f4f6',
-      color: '#6b7280'
+      backgroundColor: theme === 'dark' ? '#374151' : '#f3f4f6',
+      color: theme === 'dark' ? '#9ca3af' : '#6b7280'
     },
     actionButtons: {
       display: 'flex',
-      gap: '8px'
+      gap: '4px',
+      '@media (min-width: 768px)': {
+        gap: '8px'
+      }
     },
     noTransactions: {
       textAlign: 'center',
-      padding: '48px 24px',
-      backgroundColor: 'white',
+      padding: '32px 16px',
+      backgroundColor: theme === 'dark' ? '#1e293b' : 'white',
       borderRadius: '12px',
-      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)'
+      boxShadow: theme === 'dark' 
+        ? '0 1px 3px rgba(0, 0, 0, 0.3)' 
+        : '0 1px 3px rgba(0, 0, 0, 0.1)',
+      border: theme === 'dark' ? '1px solid #334155' : 'none',
+      '@media (min-width: 768px)': {
+        padding: '48px 24px'
+      }
     },
     noTransactionsIcon: {
-      fontSize: '48px',
-      color: '#d1d5db',
-      marginBottom: '16px'
+      fontSize: '40px',
+      color: theme === 'dark' ? '#475569' : '#d1d5db',
+      marginBottom: '12px',
+      '@media (min-width: 768px)': {
+        fontSize: '48px',
+        marginBottom: '16px'
+      }
     },
     noTransactionsTitle: {
-      fontSize: '18px',
+      fontSize: '16px',
       fontWeight: '600',
-      color: '#374151',
-      marginBottom: '8px'
+      color: theme === 'dark' ? '#e2e8f0' : '#374151',
+      marginBottom: '6px',
+      '@media (min-width: 768px)': {
+        fontSize: '18px',
+        marginBottom: '8px'
+      }
     },
     noTransactionsText: {
-      color: '#6b7280',
-      fontSize: '14px'
+      color: theme === 'dark' ? '#94a3b8' : '#6b7280',
+      fontSize: '13px',
+      '@media (min-width: 768px)': {
+        fontSize: '14px'
+      }
     },
     summary: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-      gap: '16px',
-      marginTop: '24px'
+      gridTemplateColumns: '1fr',
+      gap: '12px',
+      marginTop: '20px',
+      '@media (min-width: 640px)': {
+        gridTemplateColumns: 'repeat(2, 1fr)'
+      },
+      '@media (min-width: 768px)': {
+        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+        gap: '16px',
+        marginTop: '24px'
+      }
     },
     summaryCard: {
-      backgroundColor: 'white',
-      padding: '20px',
+      backgroundColor: theme === 'dark' ? '#1e293b' : 'white',
+      padding: '16px',
       borderRadius: '12px',
-      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-      textAlign: 'center'
+      boxShadow: theme === 'dark' 
+        ? '0 1px 3px rgba(0, 0, 0, 0.3)' 
+        : '0 1px 3px rgba(0, 0, 0, 0.1)',
+      border: theme === 'dark' ? '1px solid #334155' : 'none',
+      textAlign: 'center',
+      '@media (min-width: 768px)': {
+        padding: '20px'
+      }
     },
     summaryTitle: {
-      fontSize: '14px',
+      fontSize: '13px',
       fontWeight: '500',
-      color: '#6b7280',
-      marginBottom: '8px',
-      margin: 0
+      color: theme === 'dark' ? '#94a3b8' : '#6b7280',
+      marginBottom: '6px',
+      margin: 0,
+      '@media (min-width: 768px)': {
+        fontSize: '14px',
+        marginBottom: '8px'
+      }
     },
     summaryValue: {
-      fontSize: '24px',
+      fontSize: '20px',
       fontWeight: '700',
-      color: '#1f2937',
-      margin: 0
+      color: theme === 'dark' ? '#f1f5f9' : '#1f2937',
+      margin: 0,
+      '@media (min-width: 768px)': {
+        fontSize: '24px'
+      }
     },
     sortAsc: {
       position: 'relative'
@@ -315,7 +467,7 @@ const TransactionList = () => {
     sortDesc: {
       position: 'relative'
     }
-  };
+  }), [theme]);
 
   useEffect(() => {
     fetchTransactions();
@@ -535,7 +687,8 @@ const TransactionList = () => {
     transactionsCount: transactions.length,
     currentPage,
     totalPages,
-    filters
+    filters,
+    theme
   });
 
   if (loading) return <Loading />;
@@ -617,7 +770,9 @@ const TransactionList = () => {
         <div style={styles.errorMessage}>
           <div>
             <p style={styles.errorText}>{error}</p>
-            <small>Check the browser console for more details.</small>
+            <small style={{ color: theme === 'dark' ? '#94a3b8' : '#6b7280' }}>
+              Check the browser console for more details.
+            </small>
           </div>
           <button 
             onClick={retryFetch} 

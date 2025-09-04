@@ -1,6 +1,6 @@
-/* EarningsChart.css */
+/* EarningsChart.css - Scoped to prevent affecting other pages */
 
-.earnings-chart {
+.earnings-chart-page .earnings-chart {
   background: #2d3748;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
@@ -11,13 +11,13 @@
   color: #ffffff;
 }
 
-.earnings-chart:hover {
+.earnings-chart-page .earnings-chart:hover {
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
   transform: translateY(-2px);
 }
 
 /* Header Section */
-.earnings-header {
+.earnings-chart-page .earnings-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -26,13 +26,13 @@
   gap: 20px;
 }
 
-.earnings-stats {
+.earnings-chart-page .earnings-stats {
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
 }
 
-.stat-card {
+.earnings-chart-page .stat-card {
   background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
   padding: 20px;
   border-radius: 12px;
@@ -43,7 +43,7 @@
   overflow: hidden;
 }
 
-.stat-card::before {
+.earnings-chart-page .stat-card::before {
   content: '';
   position: absolute;
   top: 0;
@@ -53,12 +53,12 @@
   background: linear-gradient(90deg, #3b82f6, #1d4ed8);
 }
 
-.stat-card:hover {
+.earnings-chart-page .stat-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
 }
 
-.stat-card h3 {
+.earnings-chart-page .stat-card h3 {
   margin: 0 0 8px 0;
   font-size: 14px;
   font-weight: 600;
@@ -67,7 +67,7 @@
   letter-spacing: 0.5px;
 }
 
-.stat-value {
+.earnings-chart-page .stat-value {
   margin: 0;
   font-size: 28px;
   font-weight: 700;
@@ -75,22 +75,22 @@
   line-height: 1.2;
 }
 
-.stat-value.positive {
+.earnings-chart-page .stat-value.positive {
   color: #10b981;
 }
 
-.stat-value.negative {
+.earnings-chart-page .stat-value.negative {
   color: #ef4444;
 }
 
 /* Chart Controls */
-.chart-controls {
+.earnings-chart-page .chart-controls {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.chart-type-select {
+.earnings-chart-page .chart-type-select {
   padding: 10px 16px;
   border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
@@ -104,17 +104,17 @@
   min-width: 150px;
 }
 
-.chart-type-select:hover {
+.earnings-chart-page .chart-type-select:hover {
   border-color: #3b82f6;
 }
 
-.chart-type-select:focus {
+.earnings-chart-page .chart-type-select:focus {
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 /* Chart Container */
-.chart-container {
+.earnings-chart-page .chart-container {
   height: 400px;
   margin-bottom: 32px;
   padding: 20px;
@@ -126,21 +126,21 @@
 }
 
 /* Force Chart.js text to be white */
-.chart-container canvas {
+.earnings-chart-page .chart-container canvas {
   color: #ffffff !important;
 }
 
 /* Override Chart.js default colors */
-.chart-container .chartjs-tooltip {
+.earnings-chart-page .chart-container .chartjs-tooltip {
   background-color: rgba(0, 0, 0, 0.8) !important;
   color: #ffffff !important;
 }
 
-.chart-container .chartjs-tooltip-key {
+.earnings-chart-page .chart-container .chartjs-tooltip-key {
   border-color: #ffffff !important;
 }
 
-.chart-container::before {
+.earnings-chart-page .chart-container::before {
   content: '';
   position: absolute;
   top: 0;
@@ -152,7 +152,7 @@
 }
 
 /* Loading Spinner */
-.loading-spinner {
+.earnings-chart-page .loading-spinner {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -161,16 +161,16 @@
   gap: 16px;
 }
 
-.spinner {
+.earnings-chart-page .spinner {
   width: 40px;
   height: 40px;
   border: 4px solid #f3f4f6;
   border-top: 4px solid #3b82f6;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: earnings-chart-spin 1s linear infinite;
 }
 
-@keyframes spin {
+@keyframes earnings-chart-spin {
   0% {
     transform: rotate(0deg);
   }
@@ -179,7 +179,7 @@
   }
 }
 
-.loading-spinner p {
+.earnings-chart-page .loading-spinner p {
   color: #ffffff;
   font-size: 14px;
   font-weight: 500;
@@ -187,11 +187,11 @@
 }
 
 /* Insights Section */
-.earnings-insights {
+.earnings-chart-page .earnings-insights {
   margin-top: 32px;
 }
 
-.earnings-insights h4 {
+.earnings-chart-page .earnings-insights h4 {
   margin: 0 0 20px 0;
   font-size: 20px;
   font-weight: 700;
@@ -200,7 +200,7 @@
   padding-bottom: 8px;
 }
 
-.earnings-insights h4::after {
+.earnings-chart-page .earnings-insights h4::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -211,13 +211,13 @@
   border-radius: 2px;
 }
 
-.insights-grid {
+.earnings-chart-page .insights-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
 }
 
-.insight-card {
+.earnings-chart-page .insight-card {
   background: #4a5568;
   padding: 20px;
   border-radius: 12px;
@@ -227,7 +227,7 @@
   overflow: hidden;
 }
 
-.insight-card::before {
+.earnings-chart-page .insight-card::before {
   content: '';
   position: absolute;
   top: 0;
@@ -239,17 +239,17 @@
   transition: transform 0.3s ease;
 }
 
-.insight-card:hover::before {
+.earnings-chart-page .insight-card:hover::before {
   transform: scaleY(1);
 }
 
-.insight-card:hover {
+.earnings-chart-page .insight-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   border-color: #3b82f6;
 }
 
-.insight-card h5 {
+.earnings-chart-page .insight-card h5 {
   margin: 0 0 8px 0;
   font-size: 14px;
   font-weight: 600;
@@ -258,7 +258,7 @@
   letter-spacing: 0.5px;
 }
 
-.insight-card p {
+.earnings-chart-page .insight-card p {
   margin: 0;
   font-size: 16px;
   font-weight: 600;
@@ -268,64 +268,64 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .earnings-chart {
+  .earnings-chart-page .earnings-chart {
     padding: 16px;
     margin: 16px 0;
   }
   
-  .earnings-header {
+  .earnings-chart-page .earnings-header {
     flex-direction: column;
     align-items: stretch;
   }
   
-  .earnings-stats {
+  .earnings-chart-page .earnings-stats {
     justify-content: center;
   }
   
-  .stat-card {
+  .earnings-chart-page .stat-card {
     min-width: 140px;
     padding: 16px;
   }
   
-  .stat-value {
+  .earnings-chart-page .stat-value {
     font-size: 24px;
   }
   
-  .chart-container {
+  .earnings-chart-page .chart-container {
     height: 300px;
     padding: 16px;
   }
   
-  .insights-grid {
+  .earnings-chart-page .insights-grid {
     grid-template-columns: 1fr;
   }
   
-  .chart-type-select {
+  .earnings-chart-page .chart-type-select {
     width: 100%;
   }
 }
 
 @media (max-width: 480px) {
-  .earnings-stats {
+  .earnings-chart-page .earnings-stats {
     flex-direction: column;
   }
   
-  .stat-card {
+  .earnings-chart-page .stat-card {
     min-width: unset;
   }
   
-  .chart-container {
+  .earnings-chart-page .chart-container {
     height: 250px;
     padding: 12px;
   }
   
-  .earnings-insights h4 {
+  .earnings-chart-page .earnings-insights h4 {
     font-size: 18px;
   }
 }
 
 /* Animation for card entrance */
-@keyframes fadeInUp {
+@keyframes earnings-chart-fadeInUp {
   from {
     opacity: 0;
     transform: translateY(20px);
@@ -336,88 +336,88 @@
   }
 }
 
-.stat-card,
-.insight-card {
-  animation: fadeInUp 0.6s ease forwards;
+.earnings-chart-page .stat-card,
+.earnings-chart-page .insight-card {
+  animation: earnings-chart-fadeInUp 0.6s ease forwards;
 }
 
-.stat-card:nth-child(2) {
+.earnings-chart-page .stat-card:nth-child(2) {
   animation-delay: 0.1s;
 }
 
-.insight-card:nth-child(2) {
+.earnings-chart-page .insight-card:nth-child(2) {
   animation-delay: 0.1s;
 }
 
-.insight-card:nth-child(3) {
+.earnings-chart-page .insight-card:nth-child(3) {
   animation-delay: 0.2s;
 }
 
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
-  .earnings-chart {
+  .earnings-chart-page .earnings-chart {
     background: #1f2937;
     border-color: #374151;
     color: #f9fafb;
   }
   
-  .stat-card {
+  .earnings-chart-page .stat-card {
     background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
     border-color: #4b5563;
   }
   
-  .stat-card h3 {
+  .earnings-chart-page .stat-card h3 {
     color: #9ca3af;
   }
   
-  .stat-value {
+  .earnings-chart-page .stat-value {
     color: #f9fafb;
   }
   
-  .chart-container {
+  .earnings-chart-page .chart-container {
     background: #374151;
     border-color: #4b5563;
   }
   
-  .chart-type-select {
+  .earnings-chart-page .chart-type-select {
     background: #374151;
     border-color: #4b5563;
     color: #f9fafb;
   }
   
-  .insight-card {
+  .earnings-chart-page .insight-card {
     background: #374151;
     border-color: #4b5563;
   }
   
-  .insight-card h5 {
+  .earnings-chart-page .insight-card h5 {
     color: #9ca3af;
   }
   
-  .insight-card p {
+  .earnings-chart-page .insight-card p {
     color: #f9fafb;
   }
   
-  .earnings-insights h4 {
+  .earnings-chart-page .earnings-insights h4 {
     color: #f9fafb;
   }
   
-  .loading-spinner p {
+  .earnings-chart-page .loading-spinner p {
     color: #9ca3af;
   }
 }
 
 /* Global Chart.js Style Overrides for Dark Theme */
-.earnings-chart .chart-container * {
+.earnings-chart-page .earnings-chart .chart-container * {
   color: #ffffff !important;
 }
 
 /* Chart.js specific overrides */
-.earnings-chart canvas {
+.earnings-chart-page .earnings-chart canvas {
   filter: none !important;
 }
 
 /* Force all text in charts to be white */
-.earnings-chart .chartjs-render-monitor {
+.earnings-chart-page .earnings-chart .chartjs-render-monitor {
   color: #ffffff !important;
 }

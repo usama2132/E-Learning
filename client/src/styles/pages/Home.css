@@ -250,6 +250,18 @@
 }
 
 .primary-cta {
+  display: inline-flex;
+  align-items: center;          /* Vertically centers icon and text */
+  justify-content: center;      /* Horizontally centers content */
+  gap: 0.75rem;                /* Proper spacing between icon and text */
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+  min-width: 180px;
+  height: 56px;
   background: linear-gradient(135deg, #2563eb 0%, #10b981 100%);
   color: white;
   border: none;
@@ -261,6 +273,18 @@
 }
 
 .secondary-cta {
+  display: inline-flex;
+  align-items: center;          /* Vertically centers icon and text */
+  justify-content: center;      /* Horizontally centers content */
+  gap: 0.75rem;                /* Proper spacing between icon and text */
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+  min-width: 180px;
+  height: 56px;
   background: rgba(255, 255, 255, 0.1);
   color: white;
   border: 2px solid rgba(255, 255, 255, 0.3);
@@ -419,6 +443,7 @@
   margin-left: 2px;
   width: 24px;
   height: 24px;
+  
 }
 
 /* Stats Section - Simplified */
@@ -528,8 +553,9 @@
 
 .view-all-link {
   display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
+  align-items: center;          /* Vertically centers icon and text */
+  justify-content: center;      /* Centers content */
+  gap: 0.5rem;                 /* Spacing between icon and text */
   color: #3b82f6;
   text-decoration: none;
   font-weight: 600;
@@ -601,9 +627,9 @@
 .cta-buttons .cta-primary,
 .cta-buttons .cta-secondary {
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
+  align-items: center;          /* Vertically centers icon and text */
+  justify-content: center;      /* Horizontally centers content */
+  gap: 0.75rem;                /* Consistent spacing between icon and text */
   padding: 1rem 2.5rem;
   font-size: 1.1rem;
   font-weight: 600;
@@ -614,11 +640,44 @@
   height: 60px;
 }
 
+/* Updated CSS for proper icon and text alignment */
+.primary-cta svg,
+.secondary-cta svg,
+.cta-primary svg,
+.cta-secondary svg {
+  width: 18px;                  /* Consistent icon size */
+  height: 18px;
+  flex-shrink: 0;               /* Prevents icon from shrinking */
+  margin: 0;                    /* Remove any default margins */
+  transform: translateY(2px);   /* Fine-tune vertical alignment */
+}
+
+/* Remove the previous margin-top rule that was misaligning the icon */
+.primary-cta svg {
+  /* margin-top: 1rem; - REMOVED */
+  margin-right: 4px;            /* Add some space between icon and text */
+}
+
+/* Ensure button containers use flexbox for proper alignment */
+.primary-cta,
+.secondary-cta,
+.cta-primary,
+.cta-secondary {
+  display: flex;
+  align-items: center;          /* Vertically center icon and text */
+  justify-content: center;      /* Horizontally center content */
+  gap: 6px;                     /* Consistent spacing between icon and text */
+  line-height: 1;               /* Normalize line height for better alignment */
+}
+
+
 .cta-primary {
   background: linear-gradient(135deg, #2563eb 0%, #10b981 100%);
   color: white;
   border: none;
   box-shadow: 0 12px 30px rgba(37, 99, 235, 0.4);
+  
+  
 }
 
 .cta-primary:hover {
@@ -629,6 +688,7 @@
   background: rgba(255, 255, 255, 0.1);
   color: white;
   border: 2px solid rgba(255, 255, 255, 0.4);
+  
 }
 
 .cta-secondary:hover {

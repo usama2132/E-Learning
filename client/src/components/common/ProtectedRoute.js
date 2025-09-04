@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../context/AuthContext'; // Fixed import path
 import Loading from './Loading';
 import PropTypes from 'prop-types';
 
@@ -14,15 +14,9 @@ const ProtectedRoute = ({
   onAuthCheck,
   onRoleCheck
 }) => {
-  // Use consistent property names - adjust based on your useAuth implementation
-  const { user, loading, isAuthenticated } = useAuth();
+  const { user, loading, isAuthenticated } = useAuth(); // Use consistent naming
   const location = useLocation();
   const navigate = useNavigate();
-
-  // Use loading instead of isLoading for consistency
-  const isLoading = loading;
-  // If user exists, we're authenticated
-  const authenticated = isAuthenticated ?? !!user;
 
   // Additional permission check
   const hasRequiredPermissions = () => {
@@ -33,7 +27,7 @@ const ProtectedRoute = ({
 
   // Effect for additional auth checks
   useEffect(() => {
-    if (!isLoading && authenticated && user) {
+    if (!loading && isAuthenticated && user) {
       // Custom auth check callback
       if (onAuthCheck && !onAuthCheck(user)) {
         navigate(unauthorizedRedirect, { replace: true });
@@ -46,23 +40,27 @@ const ProtectedRoute = ({
         return;
       }
     }
-  }, [isLoading, authenticated, user, navigate, onAuthCheck, onRoleCheck, requiredRole, unauthorizedRedirect]);
+  }, [loading, isAuthenticated, user, navigate, onAuthCheck, onRoleCheck, requiredRole, unauthorizedRedirect]);
 
-  if (isLoading) {
+  // Show loading spinner while checking authentication
+  if (loading) {
     return loadingComponent;
   }
 
-  if (!authenticated || !user) {
+  // Redirect to login if not authenticated
+  if (!isAuthenticated || !user) {
     return <Navigate to={redirectTo} state={{ from: location }} replace />;
   }
 
-  // Add safety check for user.role
+  // Check role requirements
   if (requiredRole && (!user.role || user.role !== requiredRole)) {
     console.warn(`Access denied. Required role: ${requiredRole}, User role: ${user.role}`);
     return <Navigate to={unauthorizedRedirect} replace />;
   }
 
+  // Check permission requirements
   if (!hasRequiredPermissions()) {
+    console.warn(`Access denied. Required permissions: ${requiredPermissions.join(', ')}`);
     return <Navigate to={unauthorizedRedirect} replace />;
   }
 

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Eye, Check, X, Filter, Search, Calendar } from 'lucide-react';
-import '../../styles/dashboards/AdminDashboard.css';
 import '../../styles/dashboards/PendingCourses.css';
 
 const PendingCourses = () => {

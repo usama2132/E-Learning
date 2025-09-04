@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useApi } from '../../hooks/useApi';
-import SearchBar from '../common/SearchBar';
-import Pagination from '../common/Pagination';
-import Button from '../common/Button';
-import Loading from '../common/Loading';
-import Modal from '../common/Modal';
+import { useTheme } from '../../context/ThemeContext';
 import '../../styles/dashboards/StudentsList.css';
+
 
 const StudentsList = ({ courseId }) => {
   const { user } = useAuth();
   const { apiCall, loading } = useApi();
+  const { theme } = useTheme();
   const [students, setStudents] = useState([]);
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -20,32 +18,25 @@ const StudentsList = ({ courseId }) => {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [sortBy, setSortBy] = useState('enrollmentDate');
   const [sortOrder, setSortOrder] = useState('desc');
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if mobile on mount and resize
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     fetchStudents();
   }, [courseId]);
 
-  useEffect(() => {
-    filterAndSortStudents();
-  }, [students, searchTerm, sortBy, sortOrder]);
-
-  const fetchStudents = async () => {
-    try {
-      const endpoint = courseId 
-        ? `/instructor/${user.id}/courses/${courseId}/students`
-        : `/instructor/${user.id}/students`;
-      
-      const response = await apiCall(endpoint, 'GET');
-      
-      if (response.success) {
-        setStudents(response.data || []);
-      }
-    } catch (error) {
-      console.error('Error fetching students:', error);
-    }
-  };
-
-  const filterAndSortStudents = () => {
+  // Memoize filtered and sorted students for performance
+  const processedStudents = useMemo(() => {
     let filtered = students.filter(student =>
       student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -63,8 +54,8 @@ const StudentsList = ({ courseId }) => {
       }
 
       if (sortBy === 'progress') {
-        aValue = parseFloat(aValue);
-        bValue = parseFloat(bValue);
+        aValue = parseFloat(aValue) || 0;
+        bValue = parseFloat(bValue) || 0;
       }
 
       if (sortOrder === 'asc') {
@@ -74,7 +65,27 @@ const StudentsList = ({ courseId }) => {
       }
     });
 
-    setFilteredStudents(filtered);
+    return filtered;
+  }, [students, searchTerm, sortBy, sortOrder]);
+
+  useEffect(() => {
+    setFilteredStudents(processedStudents);
+  }, [processedStudents]);
+
+  const fetchStudents = async () => {
+    try {
+      const endpoint = courseId 
+        ? `/instructor/${user.id}/courses/${courseId}/students`
+        : `/instructor/${user.id}/students`;
+      
+      const response = await apiCall(endpoint, 'GET');
+      
+      if (response.success) {
+        setStudents(response.data || []);
+      }
+    } catch (error) {
+      console.error('Error fetching students:', error);
+    }
   };
 
   const handleSort = (field) => {
@@ -93,7 +104,6 @@ const StudentsList = ({ courseId }) => {
 
   const sendMessage = async (studentId) => {
     try {
-      // Navigate to messaging or open message modal
       console.log('Send message to student:', studentId);
       // Implement messaging functionality
     } catch (error) {
@@ -125,22 +135,213 @@ const StudentsList = ({ courseId }) => {
   };
 
   const getProgressColor = (progress) => {
-    if (progress >= 80) return 'text-green-600 bg-green-100';
-    if (progress >= 50) return 'text-yellow-600 bg-yellow-100';
-    return 'text-red-600 bg-red-100';
+    if (progress >= 80) return 'progress-high';
+    if (progress >= 50) return 'progress-medium';
+    return 'progress-low';
   };
 
   const getStatusBadge = (lastAccessed) => {
     const daysSinceAccess = Math.floor((Date.now() - new Date(lastAccessed)) / (1000 * 60 * 60 * 24));
     
     if (daysSinceAccess <= 1) {
-      return <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Active</span>;
+      return <span className="status-badge status-active">Active</span>;
     } else if (daysSinceAccess <= 7) {
-      return <span className="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800">Recent</span>;
+      return <span className="status-badge status-recent">Recent</span>;
     } else {
-      return <span className="px-2 py-1 text-xs rounded-full bg-red-100 text-red-800">Inactive</span>;
+      return <span className="status-badge status-inactive">Inactive</span>;
     }
   };
+
+  // Custom SearchBar component
+  const CustomSearchBar = ({ value, onChange, placeholder }) => (
+    <div className="search-container">
+      <div className="search-icon">
+        <svg className="search-svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="search-input"
+      />
+    </div>
+  );
+
+  // Custom Button component
+  const CustomButton = ({ children, variant = 'primary', onClick, className = '' }) => {
+    return (
+      <button
+        onClick={onClick}
+        className={`custom-btn custom-btn-${variant} ${className}`}
+      >
+        {children}
+      </button>
+    );
+  };
+
+  // Custom Loading component
+  const CustomLoading = () => (
+    <div className="loading-container">
+      <div className="loading-content">
+        <div className="loading-spinner"></div>
+        <span className="loading-text">Loading...</span>
+      </div>
+    </div>
+  );
+
+  // Custom Modal component
+  const CustomModal = ({ isOpen, onClose, title, children }) => {
+    if (!isOpen) return null;
+    
+    return (
+      <div className="modal-overlay">
+        <div className="modal-container">
+          <div className="modal-backdrop" onClick={onClose}></div>
+          <div className="modal-content">
+            <div className="modal-header">
+              <h3 className="modal-title">{title}</h3>
+              <button onClick={onClose} className="modal-close">
+                <svg className="modal-close-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            {children}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // Custom Pagination component
+  const CustomPagination = ({ currentPage, totalPages, onPageChange }) => {
+    const pages = [];
+    const maxVisiblePages = 5;
+    
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    return (
+      <div className="pagination-container">
+        <div className="pagination-mobile">
+          <button
+            onClick={() => onPageChange(Math.max(1, currentPage - 1))}
+            disabled={currentPage === 1}
+            className="pagination-btn"
+          >
+            Previous
+          </button>
+          <button
+            onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
+            disabled={currentPage === totalPages}
+            className="pagination-btn"
+          >
+            Next
+          </button>
+        </div>
+        <div className="pagination-desktop">
+          <nav className="pagination-nav">
+            <button
+              onClick={() => onPageChange(Math.max(1, currentPage - 1))}
+              disabled={currentPage === 1}
+              className="pagination-arrow"
+            >
+              &#8249;
+            </button>
+            {pages.map(page => (
+              <button
+                key={page}
+                onClick={() => onPageChange(page)}
+                className={`pagination-number ${page === currentPage ? 'active' : ''}`}
+              >
+                {page}
+              </button>
+            ))}
+            <button
+              onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
+              disabled={currentPage === totalPages}
+              className="pagination-arrow"
+            >
+              &#8250;
+            </button>
+          </nav>
+        </div>
+      </div>
+    );
+  };
+
+  // Mobile card component for better mobile experience
+  const MobileStudentCard = ({ student }) => (
+    <div className="mobile-card">
+      <div className="mobile-card-header">
+        <img
+          className="student-avatar"
+          src={student.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(student.name)}&background=3B82F6&color=fff`}
+          alt=""
+          loading="lazy"
+        />
+        <div className="student-info">
+          <h3 className="student-name">{student.name}</h3>
+          <p className="student-email">{student.email}</p>
+        </div>
+        {getStatusBadge(student.lastAccessed)}
+      </div>
+      
+      {!courseId && student.courseName && (
+        <p className="student-course">
+          <span className="course-label">Course:</span> {student.courseName}
+        </p>
+      )}
+      
+      <div className="progress-section">
+        <div className="progress-label">
+          <span className="progress-text">Progress:</span>
+          <div className="progress-container">
+            <div className="progress-bar">
+              <div
+                className="progress-fill"
+                style={{ width: `${student.progress}%` }}
+              ></div>
+            </div>
+            <span className={`progress-badge ${getProgressColor(student.progress)}`}>
+              {student.progress}%
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <div className="mobile-card-dates">
+        <span>Enrolled: {new Date(student.enrollmentDate).toLocaleDateString()}</span>
+        <span>Last active: {new Date(student.lastAccessed).toLocaleDateString()}</span>
+      </div>
+      
+      <div className="mobile-card-actions">
+        <button
+          onClick={() => handleStudentClick(student)}
+          className="action-btn action-btn-primary"
+        >
+          View Details
+        </button>
+        <button
+          onClick={() => sendMessage(student.id)}
+          className="action-btn action-btn-secondary"
+        >
+          Message
+        </button>
+      </div>
+    </div>
+  );
 
   // Pagination
   const indexOfLastStudent = currentPage * studentsPerPage;
@@ -148,37 +349,37 @@ const StudentsList = ({ courseId }) => {
   const currentStudents = filteredStudents.slice(indexOfFirstStudent, indexOfLastStudent);
   const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
 
-  if (loading) return <Loading />;
+  if (loading) return <CustomLoading />;
 
   return (
-    <div className="students-list">
-      <div className="mb-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold text-gray-900">
+    <div className={`students-list ${theme === 'dark' ? 'dark-theme' : 'light-theme'}`}>
+      <div className="students-header">
+        <div className="header-content">
+          <h2 className="page-title">
             {courseId ? 'Course Students' : 'All Students'}
-            <span className="ml-2 text-sm font-normal text-gray-500">
+            <span className="students-count">
               ({filteredStudents.length} total)
             </span>
           </h2>
           
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={exportStudentData}>
-              Export CSV
-            </Button>
+          <div className="header-actions">
+            <CustomButton variant="outline" onClick={exportStudentData}>
+              {isMobile ? 'Export' : 'Export CSV'}
+            </CustomButton>
           </div>
         </div>
 
         {/* Search and Filters */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-6">
-          <div className="flex-1">
-            <SearchBar
+        <div className="filters-container">
+          <div className="search-wrapper">
+            <CustomSearchBar
               value={searchTerm}
               onChange={setSearchTerm}
               placeholder="Search students by name, email, or course..."
             />
           </div>
           
-          <div className="sm:w-48">
+          <div className="sort-wrapper">
             <select
               value={`${sortBy}-${sortOrder}`}
               onChange={(e) => {
@@ -186,7 +387,7 @@ const StudentsList = ({ courseId }) => {
                 setSortBy(field);
                 setSortOrder(order);
               }}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="sort-select"
             >
               <option value="enrollmentDate-desc">Newest First</option>
               <option value="enrollmentDate-asc">Oldest First</option>
@@ -201,139 +402,149 @@ const StudentsList = ({ courseId }) => {
         </div>
       </div>
 
-      {/* Students Table */}
+      {/* Students Display */}
       {currentStudents.length === 0 ? (
-        <div className="text-center py-12">
-          <div className="text-gray-500 mb-4">
+        <div className="empty-state">
+          <div className="empty-message">
             {searchTerm ? 'No students match your search.' : 'No students enrolled yet.'}
           </div>
         </div>
       ) : (
         <>
-          <div className="bg-white shadow-md rounded-lg overflow-hidden mb-6">
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th 
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSort('name')}
-                  >
-                    Student Name
-                    {sortBy === 'name' && (
-                      <span className="ml-1">
-                        {sortOrder === 'asc' ? '↑' : '↓'}
-                      </span>
-                    )}
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Email
-                  </th>
-                  {!courseId && (
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Course
-                    </th>
-                  )}
-                  <th 
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSort('enrollmentDate')}
-                  >
-                    Enrolled
-                    {sortBy === 'enrollmentDate' && (
-                      <span className="ml-1">
-                        {sortOrder === 'asc' ? '↑' : '↓'}
-                      </span>
-                    )}
-                  </th>
-                  <th 
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
-                    onClick={() => handleSort('progress')}
-                  >
-                    Progress
-                    {sortBy === 'progress' && (
-                      <span className="ml-1">
-                        {sortOrder === 'asc' ? '↑' : '↓'}
-                      </span>
-                    )}
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {currentStudents.map((student) => (
-                  <tr key={`${student.id}-${student.courseId || 'all'}`} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 h-10 w-10">
-                          <img
-                            className="h-10 w-10 rounded-full object-cover"
-                            src={student.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(student.name)}&background=3B82F6&color=fff`}
-                            alt=""
-                          />
-                        </div>
-                        <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">
-                            {student.name}
+          {/* Mobile Card View */}
+          {isMobile ? (
+            <div className="mobile-cards-container">
+              {currentStudents.map((student) => (
+                <MobileStudentCard 
+                  key={`${student.id}-${student.courseId || 'all'}`} 
+                  student={student} 
+                />
+              ))}
+            </div>
+          ) : (
+            /* Desktop Table View */
+            <div className="table-container">
+              <div className="table-wrapper">
+                <table className="students-table">
+                  <thead className="table-header">
+                    <tr>
+                      <th 
+                        className={`table-th sortable ${sortBy === 'name' ? 'sorted' : ''}`}
+                        onClick={() => handleSort('name')}
+                      >
+                        Student Name
+                        {sortBy === 'name' && (
+                          <span className="sort-indicator">
+                            {sortOrder === 'asc' ? '↑' : '↓'}
+                          </span>
+                        )}
+                      </th>
+                      <th className="table-th">Email</th>
+                      {!courseId && (
+                        <th className="table-th">Course</th>
+                      )}
+                      <th 
+                        className={`table-th sortable ${sortBy === 'enrollmentDate' ? 'sorted' : ''}`}
+                        onClick={() => handleSort('enrollmentDate')}
+                      >
+                        Enrolled
+                        {sortBy === 'enrollmentDate' && (
+                          <span className="sort-indicator">
+                            {sortOrder === 'asc' ? '↑' : '↓'}
+                          </span>
+                        )}
+                      </th>
+                      <th 
+                        className={`table-th sortable ${sortBy === 'progress' ? 'sorted' : ''}`}
+                        onClick={() => handleSort('progress')}
+                      >
+                        Progress
+                        {sortBy === 'progress' && (
+                          <span className="sort-indicator">
+                            {sortOrder === 'asc' ? '↑' : '↓'}
+                          </span>
+                        )}
+                      </th>
+                      <th className="table-th">Status</th>
+                      <th className="table-th">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="table-body">
+                    {currentStudents.map((student) => (
+                      <tr key={`${student.id}-${student.courseId || 'all'}`} className="table-row">
+                        <td className="table-td">
+                          <div className="student-cell">
+                            <div className="avatar-container">
+                              <img
+                                className="table-avatar"
+                                src={student.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(student.name)}&background=3B82F6&color=fff`}
+                                alt=""
+                                loading="lazy"
+                              />
+                            </div>
+                            <div className="student-details">
+                              <div className="table-student-name">
+                                {student.name}
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {student.email}
-                    </td>
-                    {!courseId && (
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {student.courseName || 'Multiple Courses'}
-                      </td>
-                    )}
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(student.enrollmentDate).toLocaleDateString()}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="flex-1 bg-gray-200 rounded-full h-2 mr-2">
-                          <div
-                            className="bg-blue-600 h-2 rounded-full"
-                            style={{ width: `${student.progress}%` }}
-                          ></div>
-                        </div>
-                        <span className={`px-2 py-1 text-xs rounded-full ${getProgressColor(student.progress)}`}>
-                          {student.progress}%
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {getStatusBadge(student.lastAccessed)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => handleStudentClick(student)}
-                          className="text-blue-600 hover:text-blue-900"
-                        >
-                          View
-                        </button>
-                        <button
-                          onClick={() => sendMessage(student.id)}
-                          className="text-green-600 hover:text-green-900"
-                        >
-                          Message
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                        </td>
+                        <td className="table-td table-email">
+                          {student.email}
+                        </td>
+                        {!courseId && (
+                          <td className="table-td">
+                            {student.courseName || 'Multiple Courses'}
+                          </td>
+                        )}
+                        <td className="table-td table-date">
+                          {new Date(student.enrollmentDate).toLocaleDateString()}
+                        </td>
+                        <td className="table-td">
+                          <div className="table-progress">
+                            <div className="table-progress-bar">
+                              <div
+                                className="table-progress-fill"
+                                style={{ width: `${student.progress}%` }}
+                              ></div>
+                            </div>
+                            <span className={`table-progress-badge ${getProgressColor(student.progress)}`}>
+                              {student.progress}%
+                            </span>
+                          </div>
+                        </td>
+                        <td className="table-td">
+                          {getStatusBadge(student.lastAccessed)}
+                        </td>
+                        <td className="table-td">
+                          <div className="table-actions">
+                            <button
+                              onClick={() => handleStudentClick(student)}
+                              className="table-action-btn table-action-view"
+                              aria-label={`View details for ${student.name}`}
+                            >
+                              View
+                            </button>
+                            <button
+                              onClick={() => sendMessage(student.id)}
+                              className="table-action-btn table-action-message"
+                              aria-label={`Send message to ${student.name}`}
+                            >
+                              Message
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <Pagination
+            <CustomPagination
               currentPage={currentPage}
               totalPages={totalPages}
               onPageChange={setCurrentPage}
@@ -343,7 +554,7 @@ const StudentsList = ({ courseId }) => {
       )}
 
       {/* Student Details Modal */}
-      <Modal
+      <CustomModal
         isOpen={showDetailsModal}
         onClose={() => {
           setShowDetailsModal(false);
@@ -352,49 +563,62 @@ const StudentsList = ({ courseId }) => {
         title="Student Details"
       >
         {selectedStudent && (
-          <div className="p-6">
-            <div className="flex items-center mb-6">
+          <div className="modal-body">
+            <div className="modal-student-header">
               <img
-                className="h-16 w-16 rounded-full object-cover"
+                className="modal-avatar"
                 src={selectedStudent.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(selectedStudent.name)}&background=3B82F6&color=fff`}
                 alt=""
+                loading="lazy"
               />
-              <div className="ml-4">
-                <h3 className="text-lg font-medium text-gray-900">{selectedStudent.name}</h3>
-                <p className="text-sm text-gray-500">{selectedStudent.email}</p>
+              <div className="modal-student-info">
+                <h3 className="modal-student-name">{selectedStudent.name}</h3>
+                <p className="modal-student-email">{selectedStudent.email}</p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <h4 className="text-sm font-medium text-gray-700 mb-2">Enrollment Information</h4>
-                <div className="space-y-2 text-sm">
-                  <p><span className="font-medium">Enrolled:</span> {new Date(selectedStudent.enrollmentDate).toLocaleDateString()}</p>
-                  <p><span className="font-medium">Last Accessed:</span> {new Date(selectedStudent.lastAccessed).toLocaleDateString()}</p>
+            <div className="modal-details-grid">
+              <div className="modal-section">
+                <h4 className="modal-section-title">Enrollment Information</h4>
+                <div className="modal-section-content">
+                  <p className="modal-detail-item">
+                    <span className="detail-label">Enrolled:</span> {new Date(selectedStudent.enrollmentDate).toLocaleDateString()}
+                  </p>
+                  <p className="modal-detail-item">
+                    <span className="detail-label">Last Accessed:</span> {new Date(selectedStudent.lastAccessed).toLocaleDateString()}
+                  </p>
                   {selectedStudent.courseName && (
-                    <p><span className="font-medium">Course:</span> {selectedStudent.courseName}</p>
+                    <p className="modal-detail-item">
+                      <span className="detail-label">Course:</span> {selectedStudent.courseName}
+                    </p>
                   )}
                 </div>
               </div>
 
-              <div>
-                <h4 className="text-sm font-medium text-gray-700 mb-2">Progress Information</h4>
-                <div className="space-y-2 text-sm">
-                  <p><span className="font-medium">Overall Progress:</span> {selectedStudent.progress}%</p>
-                  <p><span className="font-medium">Lessons Completed:</span> {selectedStudent.completedLessons || 0} / {selectedStudent.totalLessons || 0}</p>
-                  <p><span className="font-medium">Time Spent:</span> {selectedStudent.timeSpent || '0h 0m'}</p>
+              <div className="modal-section">
+                <h4 className="modal-section-title">Progress Information</h4>
+                <div className="modal-section-content">
+                  <p className="modal-detail-item">
+                    <span className="detail-label">Overall Progress:</span> {selectedStudent.progress}%
+                  </p>
+                  <p className="modal-detail-item">
+                    <span className="detail-label">Lessons Completed:</span> {selectedStudent.completedLessons || 0} / {selectedStudent.totalLessons || 0}
+                  </p>
+                  <p className="modal-detail-item">
+                    <span className="detail-label">Time Spent:</span> {selectedStudent.timeSpent || '0h 0m'}
+                  </p>
                 </div>
               </div>
             </div>
 
-            <div className="mt-6 flex justify-end gap-2">
-              <Button
+            <div className="modal-actions">
+              <CustomButton
                 variant="outline"
                 onClick={() => sendMessage(selectedStudent.id)}
               >
                 Send Message
-              </Button>
-              <Button
+              </CustomButton>
+              <CustomButton
                 variant="primary"
                 onClick={() => {
                   setShowDetailsModal(false);
@@ -402,11 +626,11 @@ const StudentsList = ({ courseId }) => {
                 }}
               >
                 Close
-              </Button>
+              </CustomButton>
             </div>
           </div>
         )}
-      </Modal>
+      </CustomModal>
     </div>
   );
 };

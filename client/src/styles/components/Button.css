@@ -1,5 +1,17 @@
-/* ===== BUTTON COMPONENT (Button.css) ===== */
-.btn {
+/* ===== BUTTON COMPONENT (Button.css) - Scoped Version ===== */
+
+.button-component {
+  /* CSS Variables scoped to button component */
+  --btn-primary-gradient: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+  --btn-primary-color: #4a90e2;
+  --btn-secondary-color: #6c757d;
+  --btn-success-color: #10b981;
+  --btn-error-color: #ef4444;
+  --btn-white: #ffffff;
+  --btn-transparent: transparent;
+}
+
+.button-component .btn {
   padding: 12px 24px;
   border: none;
   border-radius: 8px;
@@ -16,87 +28,87 @@
   text-align: center;
 }
 
-.btn:disabled {
+.button-component .btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   pointer-events: none;
 }
 
-.btn-primary {
-  background: var(--primary-gradient);
-  color: white;
+.button-component .btn-primary {
+  background: var(--btn-primary-gradient);
+  color: var(--btn-white);
   box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
 }
 
-.btn-primary:hover {
+.button-component .btn-primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
 }
 
-.btn-secondary {
-  background: var(--secondary-color);
-  color: white;
-  border: 2px solid var(--secondary-color);
+.button-component .btn-secondary {
+  background: var(--btn-secondary-color);
+  color: var(--btn-white);
+  border: 2px solid var(--btn-secondary-color);
 }
 
-.btn-secondary:hover {
-  background: transparent;
-  color: var(--secondary-color);
+.button-component .btn-secondary:hover {
+  background: var(--btn-transparent);
+  color: var(--btn-secondary-color);
 }
 
-.btn-outline {
-  background: transparent;
-  color: var(--primary-color);
-  border: 2px solid var(--primary-color);
+.button-component .btn-outline {
+  background: var(--btn-transparent);
+  color: var(--btn-primary-color);
+  border: 2px solid var(--btn-primary-color);
 }
 
-.btn-outline:hover {
-  background: var(--primary-color);
-  color: white;
+.button-component .btn-outline:hover {
+  background: var(--btn-primary-color);
+  color: var(--btn-white);
 }
 
-.btn-danger {
-  background: var(--error-color);
-  color: white;
+.button-component .btn-danger {
+  background: var(--btn-error-color);
+  color: var(--btn-white);
 }
 
-.btn-danger:hover {
+.button-component .btn-danger:hover {
   background: #dc2626;
   transform: translateY(-1px);
 }
 
-.btn-success {
-  background: var(--success-color);
-  color: white;
+.button-component .btn-success {
+  background: var(--btn-success-color);
+  color: var(--btn-white);
 }
 
-.btn-success:hover {
+.button-component .btn-success:hover {
   background: #059669;
   transform: translateY(-1px);
 }
 
-.btn-small {
+.button-component .btn-small {
   padding: 8px 16px;
   font-size: 14px;
   min-height: 36px;
 }
 
-.btn-large {
+.button-component .btn-large {
   padding: 16px 32px;
   font-size: 18px;
   min-height: 52px;
 }
 
-.btn-full {
+.button-component .btn-full {
   width: 100%;
 }
 
-.btn-loading {
+.button-component .btn-loading {
   position: relative;
   color: transparent;
 }
 
-.btn-loading::after {
+.button-component .btn-loading::after {
   content: '';
   position: absolute;
   width: 20px;
@@ -104,5 +116,102 @@
   border: 2px solid transparent;
   border-top: 2px solid currentColor;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: btn-spin 1s linear infinite;
+}
+
+/* Scoped animation */
+@keyframes btn-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Additional button variants that might be useful */
+.button-component .btn-ghost {
+  background: var(--btn-transparent);
+  color: var(--btn-primary-color);
+  border: 1px solid transparent;
+}
+
+.button-component .btn-ghost:hover {
+  background: rgba(74, 144, 226, 0.1);
+  border-color: var(--btn-primary-color);
+}
+
+.button-component .btn-link {
+  background: var(--btn-transparent);
+  color: var(--btn-primary-color);
+  border: none;
+  text-decoration: underline;
+  padding: 8px 12px;
+}
+
+.button-component .btn-link:hover {
+  color: #357abd;
+  background: var(--btn-transparent);
+  transform: none;
+  box-shadow: none;
+}
+
+/* Button group styles */
+.button-component .btn-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.button-component .btn-group .btn {
+  margin: 0;
+}
+
+.button-component .btn-group.btn-group-vertical {
+  flex-direction: column;
+}
+
+.button-component .btn-group.btn-group-center {
+  justify-content: center;
+}
+
+.button-component .btn-group.btn-group-end {
+  justify-content: flex-end;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .button-component .btn {
+    min-height: 48px;
+    padding: 14px 20px;
+    font-size: 16px;
+  }
+  
+  .button-component .btn-small {
+    min-height: 40px;
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+  
+  .button-component .btn-large {
+    min-height: 56px;
+    padding: 18px 28px;
+    font-size: 18px;
+  }
+  
+  .button-component .btn-group {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .button-component .btn-group .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .button-component .btn {
+    font-size: 15px;
+    padding: 12px 18px;
+  }
+  
+  .button-component .btn-group {
+    gap: 8px;
+  }
 }

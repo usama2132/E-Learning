@@ -1,49 +1,32 @@
-/* Register.css */
+/* Register.css - Scoped to prevent conflicts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-* {
+/* Only apply box-sizing to register page elements */
+.register-page,
+.register-page * {
   box-sizing: border-box;
 }
 
 .register-page {
   min-height: 100vh;
+  padding-top: 60px; /* Reduced gap from navbar */
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 20px;
+  background: linear-gradient(135deg, #5c77f2 0%, #6f39a6 100%);
+  padding: 60px 20px 20px 20px;
   font-family: 'Inter', sans-serif;
-  position: relative;
-  overflow: hidden;
-}
-
-.register-page::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="10" cy="50" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="90" cy="30" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-  opacity: 0.3;
-  animation: float 20s ease-in-out infinite;
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(1deg); }
+  margin: 0;
 }
 
 .register-container {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 1); /* Completely solid white background */
   border-radius: 24px;
   padding: 48px 40px;
   box-shadow: 
-    0 32px 64px rgba(0, 0, 0, 0.1),
-    0 16px 32px rgba(0, 0, 0, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+    0 32px 64px rgba(0, 0, 0, 0.15),
+    0 16px 32px rgba(0, 0, 0, 0.08);
+  border: none; /* Remove border that was causing conflicts */
   width: 100%;
   max-width: 480px;
   position: relative;
@@ -127,23 +110,23 @@
   }
 }
 
-.form-group {
+.register-page .form-group {
   margin-bottom: 24px;
   position: relative;
 }
 
-.form-row {
+.register-page .form-row {
   display: flex;
   gap: 16px;
   margin-bottom: 24px;
 }
 
-.form-row .form-group {
+.register-page .form-row .form-group {
   flex: 1;
   margin-bottom: 0;
 }
 
-.form-label {
+.register-page .form-label {
   display: block;
   font-size: 14px;
   font-weight: 600;
@@ -151,56 +134,55 @@
   margin-bottom: 8px;
 }
 
-.form-label.role-label {
+.register-page .form-label.role-label {
   display: none; /* Hide the "WANT TO:" label */
 }
 
-.form-input {
+.register-page .form-input {
   width: 100%;
   padding: 16px 20px;
   border: 2px solid #e2e8f0;
   border-radius: 12px;
   font-size: 16px;
   font-weight: 500;
-  color: #ffffff !important; /* Force white text color */
-  background: transparent !important; /* Force transparent background */
+  color: #2d3748;
+  background: #ffffff;
   transition: all 0.2s ease;
   outline: none;
   font-family: 'Inter', sans-serif;
 }
 
 /* Fix placeholder text color */
-.form-input::placeholder {
-  color: #a0aec0 !important;
+.register-page .form-input::placeholder {
+  color: #a0aec0;
   opacity: 1;
 }
 
-.form-input:focus {
+.register-page .form-input:focus {
   border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.08);
-  color: #ffffff !important; /* Ensure text stays white on focus */
 }
 
-.form-input:hover:not(:focus):not(:disabled) {
+.register-page .form-input:hover:not(:focus):not(:disabled) {
   border-color: #cbd5e0;
 }
 
-.form-input.error {
+.register-page .form-input.error {
   border-color: #e53e3e;
   box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.08);
 }
 
-.form-input:disabled {
-  background-color: transparent !important;
+.register-page .form-input:disabled {
+  background-color: #f7fafc;
   cursor: not-allowed;
   opacity: 0.6;
 }
 
-.password-input-wrapper {
+.register-page .password-input-wrapper {
   position: relative;
 }
 
-.password-toggle {
+.register-page .password-toggle {
   position: absolute;
   right: 16px;
   top: 50%;
@@ -215,24 +197,24 @@
   border-radius: 6px;
 }
 
-.password-toggle:hover:not(:disabled) {
+.register-page .password-toggle:hover:not(:disabled) {
   color: #667eea;
   background: rgba(102, 126, 234, 0.08);
 }
 
-.password-toggle:disabled {
+.register-page .password-toggle:disabled {
   cursor: not-allowed;
   opacity: 0.5;
 }
 
-.role-selection {
+.register-page .role-selection {
   display: flex;
   flex-direction: column;
   gap: 12px;
   margin-top: 8px;
 }
 
-.role-option {
+.register-page .role-option {
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -243,12 +225,12 @@
   background: #ffffff;
 }
 
-.role-option:hover {
+.register-page .role-option:hover {
   border-color: #cbd5e0;
   background: #f8f9fa;
 }
 
-.role-option input[type="radio"] {
+.register-page .role-option input[type="radio"] {
   margin-right: 12px;
   width: 18px;
   height: 18px;
@@ -256,24 +238,24 @@
   cursor: pointer;
 }
 
-.role-option input[type="radio"]:checked + span {
+.register-page .role-option input[type="radio"]:checked + span {
   color: #667eea;
   font-weight: 600;
 }
 
-.role-option:has(input[type="radio"]:checked) {
+.register-page .role-option:has(input[type="radio"]:checked) {
   border-color: #667eea;
   background: rgba(102, 126, 234, 0.04);
 }
 
-.role-option span {
+.register-page .role-option span {
   font-size: 16px;
   color: #4a5568;
   font-weight: 500;
   transition: all 0.2s ease;
 }
 
-.terms-checkbox {
+.register-page .terms-checkbox {
   display: flex;
   align-items: flex-start;
   gap: 12px;
@@ -285,11 +267,11 @@
   margin-left: -8px;
 }
 
-.terms-checkbox:hover {
+.register-page .terms-checkbox:hover {
   background: rgba(102, 126, 234, 0.05);
 }
 
-.terms-checkbox input[type="checkbox"] {
+.register-page .terms-checkbox input[type="checkbox"] {
   width: 18px;
   height: 18px;
   accent-color: #667eea;
@@ -297,14 +279,14 @@
   margin-top: 2px;
 }
 
-.terms-checkbox span {
+.register-page .terms-checkbox span {
   font-size: 14px;
   color: #4a5568;
   font-weight: 500;
   line-height: 1.5;
 }
 
-.terms-link {
+.register-page .terms-link {
   color: #667eea;
   text-decoration: none;
   font-weight: 600;
@@ -312,7 +294,7 @@
   position: relative;
 }
 
-.terms-link::after {
+.register-page .terms-link::after {
   content: '';
   position: absolute;
   bottom: -1px;
@@ -323,15 +305,15 @@
   transition: width 0.25s ease;
 }
 
-.terms-link:hover {
+.register-page .terms-link:hover {
   color: #5a67d8;
 }
 
-.terms-link:hover::after {
+.register-page .terms-link:hover::after {
   width: 100%;
 }
 
-.field-error {
+.register-page .field-error {
   color: #e53e3e;
   font-size: 14px;
   font-weight: 500;
@@ -346,7 +328,7 @@
   75% { transform: translateX(4px); }
 }
 
-.error-message {
+.register-page .error-message {
   background: linear-gradient(135deg, #fed7e2, #fbb6ce);
   color: #c53030;
   padding: 12px 16px;
@@ -412,7 +394,7 @@
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
 }
 
-.loading-spinner {
+.register-page .loading-spinner {
   width: 20px;
   height: 20px;
   border: 2px solid rgba(255, 255, 255, 0.3);
@@ -454,13 +436,13 @@
   margin-left: 16px;
 }
 
-.social-register {
+.register-page .social-register {
   display: flex;
   gap: 12px;
   margin-bottom: 32px;
 }
 
-.social-button {
+.register-page .social-button {
   flex: 1;
   display: flex;
   align-items: center;
@@ -480,31 +462,31 @@
   text-decoration: none;
 }
 
-.social-button:hover:not(:disabled) {
+.register-page .social-button:hover:not(:disabled) {
   border-color: #cbd5e0;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   background: #f8f9fa;
 }
 
-.social-button.google:hover:not(:disabled) {
+.register-page .social-button.google:hover:not(:disabled) {
   border-color: #4285f4;
   color: #4285f4;
   background: rgba(66, 133, 244, 0.04);
 }
 
-.social-button.facebook:hover:not(:disabled) {
+.register-page .social-button.facebook:hover:not(:disabled) {
   border-color: #1877f2;
   color: #1877f2;
   background: rgba(24, 119, 242, 0.04);
 }
 
-.social-button:active:not(:disabled) {
+.register-page .social-button:active:not(:disabled) {
   transform: translateY(0);
   transition: transform 0.1s ease;
 }
 
-.social-button:disabled {
+.register-page .social-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none;
@@ -526,7 +508,7 @@
   margin: 0;
 }
 
-.login-link {
+.register-page .login-link {
   color: #667eea;
   text-decoration: none;
   font-weight: 600;
@@ -536,7 +518,7 @@
   margin-left: 8px;
 }
 
-.login-link:hover {
+.register-page .login-link:hover {
   color: #5a67d8;
   background: rgba(102, 126, 234, 0.05);
 }
@@ -544,7 +526,7 @@
 /* Responsive Design */
 @media (max-width: 640px) {
   .register-page {
-    padding: 16px;
+    padding: 50px 16px 16px 16px; /* Reduced top gap on mobile */
   }
   
   .register-container {
@@ -557,24 +539,24 @@
     font-size: 28px;
   }
   
-  .form-row {
+  .register-page .form-row {
     flex-direction: column;
     gap: 0;
   }
   
-  .form-row .form-group {
+  .register-page .form-row .form-group {
     margin-bottom: 24px;
   }
   
-  .social-register {
+  .register-page .social-register {
     flex-direction: column;
   }
   
-  .role-selection {
+  .register-page .role-selection {
     gap: 8px;
   }
   
-  .role-option {
+  .register-page .role-option {
     padding: 10px 12px;
   }
 }
@@ -593,7 +575,7 @@
   }
 }
 
-/* Dark mode support - removed conflicting styles */
+/* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .register-container {
     background: rgba(26, 32, 44, 0.95);
@@ -610,70 +592,68 @@
     color: #a0aec0;
   }
   
-  .form-label,
-  .terms-checkbox span {
+  .register-page .form-label,
+  .register-page .terms-checkbox span {
     color: #e2e8f0;
   }
   
-  .form-label.role-label {
+  .register-page .form-label.role-label {
     color: #ffffff;
     display: none; /* Keep it hidden in dark mode too */
   }
   
-  /* Override form input styles for dark mode */
-  .form-input {
-    background: transparent !important;
+  .register-page .form-input {
+    background: #2d3748;
     border-color: #4a5568;
-    color: #ffffff !important;
+    color: #f7fafc;
   }
   
-  .form-input::placeholder {
-    color: #718096 !important;
+  .register-page .form-input::placeholder {
+    color: #718096;
   }
   
-  .form-input:focus {
+  .register-page .form-input:focus {
     border-color: #667eea;
-    color: #ffffff !important;
   }
   
-  .form-input:hover:not(:focus):not(:disabled) {
+  .register-page .form-input:hover:not(:focus):not(:disabled) {
     border-color: #718096;
   }
   
-  .form-input:disabled {
-    background-color: transparent !important;
+  .register-page .form-input:disabled {
+    background-color: #1a202c;
   }
   
-  .role-option {
+  .register-page .role-option {
     background: #2d3748;
     border-color: #4a5568;
   }
   
-  .role-option:hover {
+  .register-page .role-option:hover {
     background: #374151;
     border-color: #6b7280;
   }
   
-  .role-option span {
+  .register-page .role-option span {
     color: #e2e8f0;
   }
   
-  .social-button {
+  .register-page .social-button {
     background: #2d3748;
     border-color: #4a5568;
     color: #e2e8f0;
   }
   
-  .social-button:hover:not(:disabled) {
+  .register-page .social-button:hover:not(:disabled) {
     background: #374151;
     border-color: #6b7280;
   }
   
-  .terms-checkbox:hover {
+  .register-page .terms-checkbox:hover {
     background: rgba(102, 126, 234, 0.1);
   }
   
-  .login-link:hover {
+  .register-page .login-link:hover {
     background: rgba(102, 126, 234, 0.1);
   }
   

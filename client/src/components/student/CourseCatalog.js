@@ -1,8 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { AuthContext } from '../../context/AuthContext';
-import { CourseContext } from '../../context/CourseContext';
-import { useCourses } from '../../hooks/useCourses';
-import { useDebounce } from '../../hooks/useDebounce';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useAuth } from '../../hooks/useAuth';
 import CourseCard from './CourseCard';
 import CourseFilters from '../common/CourseFilters';
 import SearchBar from '../common/SearchBar';
@@ -12,223 +9,348 @@ import Button from '../common/Button';
 import '../../styles/dashboards/CourseCatalog.css';
 
 const CourseCatalog = () => {
-  const { user } = useContext(AuthContext);
-  const { 
-    courses, 
-    loading, 
-    error,
-    enrollInCourse,
-    addToWishlist,
-    removeFromWishlist,
-    fetchCourses,
-    totalPages,
-    currentPage
-  } = useCourses();
+  const { user, getToken } = useAuth();
+  
+  const [courses, setCourses] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalCourses: 0,
+    limit: 12
+  });
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const [filters, setFilters] = useState({
-    search: '',
+    searchQuery: '',
     category: '',
     level: '',
-    price: '', // 'free', 'paid', 'all'
+    priceRange: '',
     rating: '',
-    duration: '', // 'short', 'medium', 'long'
-    sortBy: 'popularity' // 'popularity', 'rating', 'price-low', 'price-high', 'newest'
+    sortBy: 'newest'
   });
-
-  const [viewMode, setViewMode] = useState('grid'); // 'grid', 'list'
-  const [showFilters, setShowFilters] = useState(false);
-  const [featuredCourses, setFeaturedCourses] = useState([]);
+  
+  const [viewMode, setViewMode] = useState('grid');
   const [loadingAction, setLoadingAction] = useState(null);
 
-  const debouncedSearch = useDebounce(filters.search, 500);
+  // Control refs
+  const hasInitialized = useRef(false);
+  const lastFetchParams = useRef(null);
+  const requestInProgress = useRef(false);
+  const debounceTimeout = useRef(null);
+  const abortController = useRef(null);
 
-  useEffect(() => {
-    // Fetch courses when filters change
-    const params = {
-      page: currentPage,
-      limit: 12,
-      search: debouncedSearch,
-      category: filters.category,
-      level: filters.level,
-      price: filters.price,
-      rating: filters.rating,
-      duration: filters.duration,
-      sortBy: filters.sortBy
-    };
-
-    fetchCourses(params);
-  }, [debouncedSearch, filters, currentPage, fetchCourses]);
-
-  useEffect(() => {
-    // Fetch featured courses separately
-    fetchFeaturedCourses();
-  }, []);
-
-  const fetchFeaturedCourses = async () => {
-    try {
-      const response = await fetch('/api/courses?featured=true&limit=6');
-      const data = await response.json();
-      if (data.success) {
-        setFeaturedCourses(data.courses);
-      }
-    } catch (error) {
-      console.error('Error fetching featured courses:', error);
-    }
-  };
-
-  const handleFilterChange = (key, value) => {
-    setFilters(prev => ({
-      ...prev,
-      [key]: value
-    }));
-  };
-
-  const handleSearchChange = (value) => {
-    setFilters(prev => ({
-      ...prev,
-      search: value
-    }));
-  };
-
-  const clearFilters = () => {
-    setFilters({
-      search: '',
-      category: '',
-      level: '',
-      price: '',
-      rating: '',
-      duration: '',
-      sortBy: 'popularity'
-    });
-  };
-
-  const handleEnrollment = async (courseId) => {
-    if (!user) {
-      // Redirect to login
-      window.location.href = '/login?redirect=/courses';
+  // FIXED: Main fetch function with proper backend API call
+  const fetchCourses = useCallback(async (params = {}) => {
+    const paramsKey = JSON.stringify(params);
+    
+    // Prevent duplicate requests
+    if (requestInProgress.current && lastFetchParams.current === paramsKey) {
+      console.log('Preventing duplicate request');
       return;
     }
 
+    // Abort previous request
+    if (abortController.current) {
+      abortController.current.abort();
+    }
+
+    requestInProgress.current = true;
+    lastFetchParams.current = paramsKey;
+    abortController.current = new AbortController();
+
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      const queryParams = new URLSearchParams();
+      queryParams.append('page', params.page || 1);
+      queryParams.append('limit', params.limit || 12);
+      
+      // Only add non-empty filters
+      if (params.search?.trim()) queryParams.append('search', params.search.trim());
+      if (params.category) queryParams.append('category', params.category);
+      if (params.level) queryParams.append('level', params.level);
+      
+      // Handle price filters
+      if (params.priceRange === 'free') {
+        queryParams.append('minPrice', '0');
+        queryParams.append('maxPrice', '0');
+      } else {
+        queryParams.append('minPrice', '0');
+        queryParams.append('maxPrice', '1000');
+      }
+      
+      if (params.rating) queryParams.append('rating', params.rating);
+      queryParams.append('sortBy', params.sortBy || 'newest');
+
+      console.log('Fetching courses from backend API...');
+      const response = await fetch(`http://localhost:5000/api/courses?${queryParams}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        signal: abortController.current.signal
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setCourses(data.data.courses || []);
+          setPagination(data.data.pagination || {
+            currentPage: 1,
+            totalPages: 1,
+            totalCourses: 0,
+            limit: 12
+          });
+          
+          console.log(`Loaded ${data.data.courses?.length || 0} courses`);
+        } else {
+          throw new Error(data.message || 'Failed to fetch courses');
+        }
+      } else if (response.status === 429) {
+        setError('Too many requests. Please wait a moment.');
+        return;
+      } else {
+        throw new Error(`Failed to fetch courses: ${response.status}`);
+      }
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        console.error('Fetch error:', error);
+        setError(error.message || 'Failed to load courses');
+      }
+    } finally {
+      requestInProgress.current = false;
+      setIsLoading(false);
+      abortController.current = null;
+    }
+  }, []);
+
+  // Debounced fetch wrapper
+  const fetchCoursesDebounced = useCallback((params, delay = 800) => {
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
+    }
+
+    debounceTimeout.current = setTimeout(() => {
+      fetchCourses(params);
+    }, delay);
+  }, [fetchCourses]);
+
+  // FIXED: Fetch categories from backend
+  const fetchCategories = useCallback(async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/courses/categories', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          setCategories(data.data.categories || []);
+          console.log('Categories loaded:', data.data.categories?.length);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      // Set fallback categories
+      setCategories([
+        { _id: 'programming', name: 'Programming' },
+        { _id: 'design', name: 'Design' },
+        { _id: 'business', name: 'Business' },
+        { _id: 'marketing', name: 'Marketing' }
+      ]);
+    }
+  }, []);
+
+  // Initial load - one time only
+  useEffect(() => {
+    if (hasInitialized.current) {
+      return;
+    }
+
+    hasInitialized.current = true;
+    console.log('Initializing CourseCatalog');
+
+    const initialize = async () => {
+      await fetchCategories();
+      
+      // Delay initial course fetch to avoid rapid requests
+      setTimeout(() => {
+        fetchCourses({ 
+          page: 1, 
+          limit: 12, 
+          sortBy: 'newest' 
+        });
+      }, 200);
+    };
+
+    initialize();
+
+    return () => {
+      if (abortController.current) {
+        abortController.current.abort();
+      }
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+    };
+  }, []);
+
+  // Filter change handler with debouncing
+  const handleFilterChange = useCallback((key, value) => {
+    setFilters(prev => {
+      const newFilters = { ...prev, [key]: value };
+      
+      // Build params for fetch
+      const params = {
+        page: 1,
+        limit: 12,
+        sortBy: newFilters.sortBy
+      };
+
+      if (newFilters.searchQuery?.trim()) params.search = newFilters.searchQuery.trim();
+      if (newFilters.category) params.category = newFilters.category;
+      if (newFilters.level) params.level = newFilters.level;
+      if (newFilters.priceRange) params.priceRange = newFilters.priceRange;
+      if (newFilters.rating) params.rating = newFilters.rating;
+
+      // Use debounced fetch for filter changes
+      fetchCoursesDebounced(params, 800);
+      
+      return newFilters;
+    });
+  }, [fetchCoursesDebounced]);
+
+  const clearFilters = useCallback(() => {
+    const resetFilters = {
+      searchQuery: '',
+      category: '',
+      level: '',
+      priceRange: '',
+      rating: '',
+      sortBy: 'newest'
+    };
+    
+    setFilters(resetFilters);
+    
+    // Reset to initial state
+    fetchCourses({
+      page: 1,
+      limit: 12,
+      sortBy: 'newest'
+    });
+  }, [fetchCourses]);
+
+  const handlePageChange = useCallback((page) => {
+    if (requestInProgress.current || page === pagination.currentPage) return;
+
+    const params = {
+      page,
+      limit: 12,
+      sortBy: filters.sortBy
+    };
+
+    if (filters.searchQuery?.trim()) params.search = filters.searchQuery.trim();
+    if (filters.category) params.category = filters.category;
+    if (filters.level) params.level = filters.level;
+    if (filters.priceRange) params.priceRange = filters.priceRange;
+    if (filters.rating) params.rating = filters.rating;
+
+    fetchCourses(params);
+  }, [filters, pagination.currentPage, fetchCourses]);
+
+  // FIXED: Action handlers with proper backend API calls
+  const handleEnrollment = async (courseId) => {
+    if (!user || loadingAction === `enroll-${courseId}`) return;
+
     setLoadingAction(`enroll-${courseId}`);
     try {
-      await enrollInCourse(courseId);
+      const token = getToken();
+      const response = await fetch(`http://localhost:5000/api/courses/${courseId}/enroll`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          courseId,
+          paymentMethod: 'free'
+        })
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        console.log('Enrollment successful');
+        alert('Successfully enrolled in the course!');
+      } else {
+        throw new Error(result.message || 'Enrollment failed');
+      }
     } catch (error) {
       console.error('Enrollment error:', error);
+      alert(error.message || 'Failed to enroll. Please try again.');
     } finally {
       setLoadingAction(null);
     }
   };
 
   const handleWishlistAdd = async (courseId) => {
-    if (!user) {
-      window.location.href = '/login?redirect=/courses';
-      return;
-    }
-
+    if (!user || loadingAction === `wishlist-add-${courseId}`) return;
+    
     setLoadingAction(`wishlist-add-${courseId}`);
     try {
-      await addToWishlist(courseId);
+      const token = getToken();
+      await fetch(`http://localhost:5000/api/student/wishlist/${courseId}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      });
     } catch (error) {
-      console.error('Add to wishlist error:', error);
+      console.error('Wishlist error:', error);
     } finally {
       setLoadingAction(null);
     }
-  };
-
-  const handleWishlistRemove = async (courseId) => {
-    setLoadingAction(`wishlist-remove-${courseId}`);
-    try {
-      await removeFromWishlist(courseId);
-    } catch (error) {
-      console.error('Remove from wishlist error:', error);
-    } finally {
-      setLoadingAction(null);
-    }
-  };
-
-  const isEnrolled = (courseId) => {
-    return user?.enrolledCourses?.includes(courseId) || false;
-  };
-
-  const isInWishlist = (courseId) => {
-    return user?.wishlist?.includes(courseId) || false;
   };
 
   const getActiveFiltersCount = () => {
-    return Object.values(filters).filter(value => 
-      value !== '' && value !== 'popularity'
-    ).length;
+    return Object.entries(filters).filter(([key, value]) => {
+      if (key === 'sortBy') return value !== 'newest';
+      return value !== '' && value !== null && value !== undefined;
+    }).length;
   };
 
-  const renderFeaturedSection = () => {
-    if (featuredCourses.length === 0) return null;
+  const retryFetch = useCallback(() => {
+    setError(null);
+    lastFetchParams.current = null; // Reset to allow retry
+    fetchCourses({ 
+      page: pagination.currentPage || 1, 
+      limit: 12, 
+      sortBy: filters.sortBy 
+    });
+  }, [fetchCourses, pagination.currentPage, filters.sortBy]);
 
+  if (error && !isLoading) {
     return (
-      <section className="featured-section">
-        <div className="section-header">
-          <h2>Featured Courses</h2>
-          <p>Hand-picked courses by our experts</p>
-        </div>
-        <div className="featured-courses">
-          {featuredCourses.map(course => (
-            <CourseCard
-              key={course._id}
-              course={course}
-              variant="catalog"
-              onEnroll={handleEnrollment}
-              onAddToWishlist={handleWishlistAdd}
-              onRemoveFromWishlist={handleWishlistRemove}
-              isEnrolled={isEnrolled(course._id)}
-              isInWishlist={isInWishlist(course._id)}
-            />
-          ))}
-        </div>
-      </section>
-    );
-  };
-
-  const renderCourseGrid = () => {
-    if (courses.length === 0) {
-      return (
-        <div className="no-courses">
-          <div className="no-courses-content">
-            <span className="no-courses-icon">🔍</span>
-            <h3>No courses found</h3>
-            <p>Try adjusting your search criteria or browse our featured courses.</p>
-            <Button onClick={clearFilters} variant="outline">
-              Clear Filters
+      <div className="error-state">
+        <div className="error-content">
+          <i className="fas fa-exclamation-triangle error-icon"></i>
+          <h3>Error loading courses</h3>
+          <p>{error}</p>
+          <div className="error-actions">
+            <Button onClick={retryFetch}>
+              Try Again
             </Button>
           </div>
         </div>
-      );
-    }
-
-    return (
-      <div className={`courses-grid ${viewMode}`}>
-        {courses.map(course => (
-          <CourseCard
-            key={course._id}
-            course={course}
-            variant="catalog"
-            onEnroll={handleEnrollment}
-            onAddToWishlist={handleWishlistAdd}
-            onRemoveFromWishlist={handleWishlistRemove}
-            isEnrolled={isEnrolled(course._id)}
-            isInWishlist={isInWishlist(course._id)}
-          />
-        ))}
-      </div>
-    );
-  };
-
-  if (error) {
-    return (
-      <div className="error-state">
-        <h3>Unable to load courses</h3>
-        <p>{error}</p>
-        <Button onClick={() => window.location.reload()}>
-          Try Again
-        </Button>
       </div>
     );
   }
@@ -243,27 +365,20 @@ const CourseCatalog = () => {
         
         <div className="search-section">
           <SearchBar
-            value={filters.search}
-            onChange={handleSearchChange}
+            value={filters.searchQuery}
+            onChange={(value) => handleFilterChange('searchQuery', value)}
             placeholder="Search for courses, instructors, or topics..."
             className="main-search"
           />
         </div>
       </div>
 
-      {!filters.search && renderFeaturedSection()}
-
       <div className="catalog-main">
         <div className="filters-sidebar">
           <div className="filters-header">
             <h3>Filters</h3>
             {getActiveFiltersCount() > 0 && (
-              <Button 
-                variant="text" 
-                size="small" 
-                onClick={clearFilters}
-                className="clear-filters"
-              >
+              <Button variant="text" size="small" onClick={clearFilters}>
                 Clear ({getActiveFiltersCount()})
               </Button>
             )}
@@ -273,6 +388,7 @@ const CourseCatalog = () => {
             filters={filters}
             onFilterChange={handleFilterChange}
             onClearFilters={clearFilters}
+            categories={categories}
           />
         </div>
 
@@ -280,13 +396,8 @@ const CourseCatalog = () => {
           <div className="content-header">
             <div className="results-info">
               <span className="results-count">
-                {loading ? 'Loading...' : `${courses.length} courses found`}
+                {isLoading ? 'Loading...' : `${pagination.totalCourses} courses found`}
               </span>
-              {filters.search && (
-                <span className="search-term">
-                  for "{filters.search}"
-                </span>
-              )}
             </div>
 
             <div className="content-controls">
@@ -294,92 +405,71 @@ const CourseCatalog = () => {
                 <button
                   className={`view-btn ${viewMode === 'grid' ? 'active' : ''}`}
                   onClick={() => setViewMode('grid')}
-                  title="Grid view"
                 >
-                  ⊞
+                  Grid
                 </button>
                 <button
                   className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
                   onClick={() => setViewMode('list')}
-                  title="List view"
                 >
-                  ☰
+                  List
                 </button>
               </div>
 
-              <div className="sort-controls">
-                <select
-                  value={filters.sortBy}
-                  onChange={(e) => handleFilterChange('sortBy', e.target.value)}
-                  className="sort-select"
-                >
-                  <option value="popularity">Most Popular</option>
-                  <option value="rating">Highest Rated</option>
-                  <option value="price-low">Price: Low to High</option>
-                  <option value="price-high">Price: High to Low</option>
-                  <option value="newest">Newest First</option>
-                </select>
-              </div>
-
-              <button
-                className="filters-toggle mobile-only"
-                onClick={() => setShowFilters(!showFilters)}
+              <select
+                value={filters.sortBy}
+                onChange={(e) => handleFilterChange('sortBy', e.target.value)}
+                className="sort-select"
               >
-                Filters {getActiveFiltersCount() > 0 && `(${getActiveFiltersCount()})`}
-              </button>
+                <option value="newest">Newest First</option>
+                <option value="popularity">Most Popular</option>
+                <option value="rating">Highest Rated</option>
+                <option value="price-low">Price: Low to High</option>
+                <option value="price-high">Price: High to Low</option>
+              </select>
             </div>
           </div>
 
-          {loading ? (
+          {isLoading ? (
             <Loading message="Loading courses..." />
+          ) : courses.length === 0 ? (
+            <div className="no-courses">
+              <div className="no-courses-content">
+                <h3>No courses found</h3>
+                <p>Try adjusting your search criteria.</p>
+                <Button onClick={clearFilters} variant="outline">
+                  Clear Filters
+                </Button>
+              </div>
+            </div>
           ) : (
             <>
-              {renderCourseGrid()}
-              
-              {totalPages > 1 && (
-                <div className="pagination-section">
-                  <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={(page) => fetchCourses({ ...filters, page })}
+              <div className={`courses-grid ${viewMode}`}>
+                {courses.map(course => (
+                  <CourseCard
+                    key={course._id || course.id}
+                    course={course}
+                    variant="catalog"
+                    onEnroll={handleEnrollment}
+                    onAddToWishlist={handleWishlistAdd}
+                    isEnrolled={user?.enrolledCourses?.includes(course._id || course.id)}
+                    isInWishlist={user?.wishlist?.includes(course._id || course.id)}
+                    loadingAction={loadingAction}
                   />
-                </div>
+                ))}
+              </div>
+              
+              {pagination.totalPages > 1 && (
+                <Pagination
+                  currentPage={pagination.currentPage}
+                  totalPages={pagination.totalPages}
+                  onPageChange={handlePageChange}
+                />
               )}
             </>
           )}
         </div>
       </div>
-
-      {/* Mobile filters overlay */}
-      {showFilters && (
-        <div className="mobile-filters-overlay">
-          <div className="mobile-filters">
-            <div className="mobile-filters-header">
-              <h3>Filters</h3>
-              <button 
-                className="close-filters"
-                onClick={() => setShowFilters(false)}
-              >
-                ×
-              </button>
-            </div>
-            <CourseFilters
-              filters={filters}
-              onFilterChange={handleFilterChange}
-              onClearFilters={clearFilters}
-            />
-            <div className="mobile-filters-footer">
-              <Button 
-                onClick={() => setShowFilters(false)}
-                variant="primary"
-                fullWidth
-              >
-                Show Results
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

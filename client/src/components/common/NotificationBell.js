@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useAuth } from '../../hooks/useAuth';
 import { useNotification } from '../../context/NotificationContext';
 import '../../styles/components/NotificationBell.css';
 
 const NotificationBell = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, isAuthenticated } = useAuth();
   const { notifications, unreadCount, markAsRead, markAllAsRead, deleteNotification } = useNotification();
   const dropdownRef = useRef(null);
 
@@ -19,6 +21,11 @@ const NotificationBell = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  // Don't render if user is not authenticated
+  if (!isAuthenticated || !user) {
+    return null;
+  }
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);

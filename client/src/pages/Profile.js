@@ -175,7 +175,6 @@ const Profile = () => {
     setIsLoading(true);
     try {
       await deleteAccount();
-      // Redirect will be handled by the auth hook
     } catch (error) {
       setErrors({ delete: error.message || 'Failed to delete account' });
     } finally {
@@ -277,10 +276,10 @@ const Profile = () => {
   }
 
   return (
-    <div className="profile-container">
+    <div className="profile-container profile-dark-mode-fix">
       <div className="profile-header">
         <h1>Profile Settings</h1>
-        <p>Manage your account preferences and personal information</p>
+        
       </div>
 
       {successMessage && (
@@ -304,11 +303,11 @@ const Profile = () => {
           </nav>
         </div>
 
-        <div className="profile-main">
+        <div className="profile-main profile-content-area">
           {activeTab === 'profile' && (
-            <form onSubmit={handleProfileSubmit} className="profile-form" style={{ backgroundColor: 'white', color: 'black' }}>
-              <div className="form-section" style={{ backgroundColor: 'white', color: 'black' }}>
-                <h2 style={{ color: 'black' }}>Profile Information</h2>
+            <form onSubmit={handleProfileSubmit} className="profile-form">
+              <div className="form-section">
+                <h2>Profile Information</h2>
                 
                 <div className="avatar-section">
                   <div className="avatar-container">
@@ -319,7 +318,7 @@ const Profile = () => {
                     />
                     {isUploading && (
                       <div className="avatar-overlay">
-                        <div style={{ color: 'black' }}>Loading...</div>
+                        <div>Loading...</div>
                       </div>
                     )}
                   </div>
@@ -343,14 +342,13 @@ const Profile = () => {
 
                 <div className="form-row">
                   <div className="form-group">
-                    <label className="form-label" style={{ color: 'black' }}>First Name *</label>
+                    <label className="form-label">First Name *</label>
                     <input
                       type="text"
                       name="firstName"
                       value={profileData.firstName}
                       onChange={handleInputChange}
                       className={errors.firstName ? 'error' : ''}
-                      style={{ backgroundColor: 'white', color: 'black', border: '1px solid #ddd' }}
                       required
                     />
                     {errors.firstName && (
@@ -358,14 +356,13 @@ const Profile = () => {
                     )}
                   </div>
                   <div className="form-group">
-                    <label className="form-label" style={{ color: 'black' }}>Last Name *</label>
+                    <label className="form-label">Last Name *</label>
                     <input
                       type="text"
                       name="lastName"
                       value={profileData.lastName}
                       onChange={handleInputChange}
                       className={errors.lastName ? 'error' : ''}
-                      style={{ backgroundColor: 'white', color: 'black', border: '1px solid #ddd' }}
                       required
                     />
                     {errors.lastName && (
@@ -375,14 +372,13 @@ const Profile = () => {
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label" style={{ color: 'black' }}>Email *</label>
+                  <label className="form-label">Email *</label>
                   <input
                     type="email"
                     name="email"
                     value={profileData.email}
                     onChange={handleInputChange}
                     className={errors.email ? 'error' : ''}
-                    style={{ backgroundColor: 'white', color: 'black', border: '1px solid #ddd' }}
                     required
                   />
                   {errors.email && (
@@ -391,7 +387,7 @@ const Profile = () => {
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label" style={{ color: 'black' }}>Bio</label>
+                  <label className="form-label">Bio</label>
                   <textarea
                     name="bio"
                     value={profileData.bio}
@@ -399,40 +395,37 @@ const Profile = () => {
                     placeholder="Tell us about yourself..."
                     rows={4}
                     maxLength={500}
-                    style={{ backgroundColor: 'white', color: 'black', border: '1px solid #ddd' }}
                   />
-                  <div className="character-count" style={{ color: 'black' }}>
+                  <div className="character-count">
                     {profileData.bio.length}/500
                   </div>
                 </div>
 
                 <div className="form-row">
                   <div className="form-group">
-                    <label className="form-label" style={{ color: 'black' }}>Profession</label>
+                    <label className="form-label">Profession</label>
                     <input
                       type="text"
                       name="profession"
                       value={profileData.profession}
                       onChange={handleInputChange}
                       placeholder="e.g., Software Developer"
-                      style={{ backgroundColor: 'white', color: 'black', border: '1px solid #ddd' }}
                     />
                   </div>
                   <div className="form-group">
-                    <label className="form-label" style={{ color: 'black' }}>Location</label>
+                    <label className="form-label">Location</label>
                     <input
                       type="text"
                       name="location"
                       value={profileData.location}
                       onChange={handleInputChange}
                       placeholder="e.g., New York, NY"
-                      style={{ backgroundColor: 'white', color: 'black', border: '1px solid #ddd' }}
                     />
                   </div>
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label" style={{ color: 'black' }}>Website</label>
+                  <label className="form-label">Website</label>
                   <input
                     type="url"
                     name="website"
@@ -440,7 +433,6 @@ const Profile = () => {
                     onChange={handleInputChange}
                     placeholder="https://yourwebsite.com"
                     className={errors.website ? 'error' : ''}
-                    style={{ backgroundColor: 'white', color: 'black', border: '1px solid #ddd' }}
                   />
                   {errors.website && (
                     <div className="error-message">{errors.website}</div>
@@ -449,25 +441,23 @@ const Profile = () => {
 
                 <div className="form-row">
                   <div className="form-group">
-                    <label className="form-label" style={{ color: 'black' }}>LinkedIn</label>
+                    <label className="form-label">LinkedIn</label>
                     <input
                       type="url"
                       name="linkedIn"
                       value={profileData.linkedIn}
                       onChange={handleInputChange}
                       placeholder="https://linkedin.com/in/username"
-                      style={{ backgroundColor: 'white', color: 'black', border: '1px solid #ddd' }}
                     />
                   </div>
                   <div className="form-group">
-                    <label className="form-label" style={{ color: 'black' }}>Twitter</label>
+                    <label className="form-label">Twitter</label>
                     <input
                       type="url"
                       name="twitter"
                       value={profileData.twitter}
                       onChange={handleInputChange}
                       placeholder="https://twitter.com/username"
-                      style={{ backgroundColor: 'white', color: 'black', border: '1px solid #ddd' }}
                     />
                   </div>
                 </div>
@@ -659,7 +649,7 @@ const Profile = () => {
       {/* Password Change Modal */}
       {showPasswordModal && (
         <div className="modal-overlay" onClick={() => setShowPasswordModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content profile-modal-content" onClick={(e) => e.stopPropagation()}>
             <h2>Change Password</h2>
             <form onSubmit={handlePasswordSubmit}>
               <div className="form-group">
@@ -726,7 +716,7 @@ const Profile = () => {
       {/* Delete Account Modal */}
       {showDeleteModal && (
         <div className="modal-overlay" onClick={() => setShowDeleteModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content profile-modal-content" onClick={(e) => e.stopPropagation()}>
             <h2>Delete Account</h2>
             <div className="delete-confirmation">
               <p>
@@ -741,7 +731,7 @@ const Profile = () => {
                   Cancel
                 </button>
                 <button onClick={handleDeleteAccount} disabled={isLoading}>
-                  {isLoading ? 'Loading...' : 'Yes, Delete My Account'}
+                  {isLoading ? 'Loading.....' : 'Yes, Delete My Account'}
                 </button>
               </div>
             </div>

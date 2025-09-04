@@ -1,0 +1,511 @@
+/* PaymentSuccess.css - Payment success page styles (Scoped Version) */
+
+/* Scope all styles to payment success page only */
+.payment-success-page {
+  /* CSS Variables scoped to this component */
+  --ps-primary-light: #eff6ff;
+  --ps-secondary-light: #f0f9ff;
+  --ps-card-background: #ffffff;
+  --ps-success-color: #10b981;
+  --ps-success-dark: #059669;
+  --ps-primary-color: #3b82f6;
+  --ps-primary-dark: #2563eb;
+  --ps-text-primary: #1f2937;
+  --ps-text-secondary: #6b7280;
+  --ps-background-secondary: #f9fafb;
+  --ps-border-light: #f3f4f6;
+  --ps-border-color: #e5e7eb;
+  --ps-background-hover: #f9fafb;
+  --ps-warning-color: #f59e0b;
+  --ps-purple-color: #8b5cf6;
+}
+
+.payment-success-page.payment-success {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: linear-gradient(135deg, var(--ps-primary-light) 0%, var(--ps-secondary-light) 100%);
+}
+
+.payment-success-page .success-container {
+  background: var(--ps-card-background);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.payment-success-page .success-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--ps-success-color) 0%, var(--ps-primary-color) 100%);
+}
+
+/* Success Animation */
+.payment-success-page .success-animation {
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.payment-success-page .success-icon {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(135deg, var(--ps-success-color) 0%, var(--ps-success-dark) 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  position: relative;
+  animation: ps-successPulse 2s ease-out;
+}
+
+.payment-success-page .success-icon::after {
+  content: '✓';
+  color: white;
+  font-size: 48px;
+  font-weight: bold;
+  animation: ps-checkmarkAppear 0.8s ease-out 0.5s both;
+}
+
+.payment-success-page .success-confetti {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.payment-success-page .confetti-piece {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--ps-primary-color);
+  animation: ps-confettiFall 3s ease-out forwards;
+}
+
+.payment-success-page .confetti-piece:nth-child(2n) {
+  background: var(--ps-success-color);
+  animation-delay: 0.2s;
+}
+
+.payment-success-page .confetti-piece:nth-child(3n) {
+  background: var(--ps-warning-color);
+  animation-delay: 0.4s;
+  width: 6px;
+  height: 6px;
+}
+
+.payment-success-page .confetti-piece:nth-child(4n) {
+  background: var(--ps-purple-color);
+  animation-delay: 0.6s;
+}
+
+/* Content */
+.payment-success-page .success-header {
+  margin-bottom: 30px;
+}
+
+.payment-success-page .success-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--ps-text-primary);
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, var(--ps-success-color) 0%, var(--ps-primary-color) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.2;
+}
+
+.payment-success-page .success-subtitle {
+  font-size: 1.2rem;
+  color: var(--ps-text-secondary);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.payment-success-page .success-message {
+  font-size: 1rem;
+  color: var(--ps-text-secondary);
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+/* Payment Details */
+.payment-success-page .payment-details {
+  background: var(--ps-background-secondary);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 30px;
+  border: 1px solid var(--ps-border-light);
+}
+
+.payment-success-page .details-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.payment-success-page .details-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ps-text-primary);
+}
+
+.payment-success-page .details-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--ps-primary-color);
+}
+
+.payment-success-page .details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.payment-success-page .detail-item {
+  text-align: center;
+}
+
+.payment-success-page .detail-label {
+  font-size: 0.85rem;
+  color: var(--ps-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.payment-success-page .detail-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--ps-text-primary);
+  word-break: break-word;
+}
+
+.payment-success-page .amount {
+  font-size: 1.5rem;
+  color: var(--ps-success-color);
+  font-weight: 700;
+}
+
+/* Course Info */
+.payment-success-page .course-info {
+  background: linear-gradient(135deg, var(--ps-primary-light) 0%, var(--ps-secondary-light) 100%);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 30px;
+  border: 1px solid var(--ps-primary-color);
+  position: relative;
+  overflow: hidden;
+}
+
+.payment-success-page .course-info::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--ps-primary-color) 0%, var(--ps-success-color) 100%);
+}
+
+.payment-success-page .course-thumbnail {
+  width: 80px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin: 0 auto 16px;
+  display: block;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.payment-success-page .course-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--ps-text-primary);
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.payment-success-page .course-instructor {
+  color: var(--ps-text-secondary);
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+
+.payment-success-page .course-features {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.payment-success-page .feature-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: var(--ps-text-secondary);
+}
+
+.payment-success-page .feature-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--ps-primary-color);
+}
+
+/* Action Buttons */
+.payment-success-page .success-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.payment-success-page .action-btn {
+  padding: 16px 32px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.payment-success-page .btn-primary {
+  background: linear-gradient(135deg, var(--ps-primary-color) 0%, var(--ps-primary-dark) 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.payment-success-page .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+}
+
+.payment-success-page .btn-secondary {
+  background: var(--ps-card-background);
+  color: var(--ps-text-primary);
+  border: 2px solid var(--ps-border-color);
+}
+
+.payment-success-page .btn-secondary:hover {
+  background: var(--ps-background-hover);
+  border-color: var(--ps-primary-color);
+  transform: translateY(-1px);
+}
+
+.payment-success-page .btn-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Footer Info */
+.payment-success-page .success-footer {
+  padding-top: 20px;
+  border-top: 1px solid var(--ps-border-light);
+}
+
+.payment-success-page .footer-message {
+  font-size: 0.9rem;
+  color: var(--ps-text-secondary);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+
+.payment-success-page .support-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--ps-text-secondary);
+}
+
+.payment-success-page .support-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--ps-primary-color);
+}
+
+/* Animations - Scoped with unique names */
+@keyframes ps-successPulse {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes ps-checkmarkAppear {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes ps-confettiFall {
+  0% {
+    transform: translateY(-100px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(400px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Loading Animation */
+.payment-success-page .loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.payment-success-page .loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--ps-border-color);
+  border-top-color: var(--ps-primary-color);
+  border-radius: 50%;
+  animation: ps-spin 1s linear infinite;
+}
+
+@keyframes ps-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Dark Theme Support - Scoped */
+@media (prefers-color-scheme: dark) {
+  .payment-success-page {
+    --ps-card-background: #374151;
+    --ps-text-primary: #f9fafb;
+    --ps-text-secondary: #d1d5db;
+    --ps-border-color: #4b5563;
+    --ps-background-secondary: #4b5563;
+    --ps-background-hover: #6b7280;
+    --ps-border-light: #4b5563;
+    --ps-primary-light: rgba(59, 130, 246, 0.2);
+    --ps-secondary-light: rgba(16, 185, 129, 0.2);
+  }
+  
+  .payment-success-page .loading-overlay {
+    background: rgba(55, 65, 81, 0.9);
+  }
+}
+
+/* Mobile Responsive - Scoped */
+@media (max-width: 768px) {
+  .payment-success-page.payment-success {
+    padding: 15px;
+  }
+  
+  .payment-success-page .success-container {
+    padding: 30px 20px;
+  }
+  
+  .payment-success-page .success-title {
+    font-size: 2rem;
+  }
+  
+  .payment-success-page .success-subtitle {
+    font-size: 1.1rem;
+  }
+  
+  .payment-success-page .success-icon {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .payment-success-page .success-icon::after {
+    font-size: 36px;
+  }
+  
+  .payment-success-page .details-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .payment-success-page .course-features {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .payment-success-page .success-actions {
+    gap: 12px;
+  }
+  
+  .payment-success-page .action-btn {
+    padding: 14px 24px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .payment-success-page .success-container {
+    padding: 25px 15px;
+    border-radius: 16px;
+  }
+  
+  .payment-success-page .success-title {
+    font-size: 1.75rem;
+  }
+  
+  .payment-success-page .payment-details,
+  .payment-success-page .course-info {
+    padding: 20px 16px;
+  }
+  
+  .payment-success-page .details-grid {
+    gap: 12px;
+  }
+  
+  .payment-success-page .detail-value {
+    font-size: 1rem;
+  }
+  
+  .payment-success-page .amount {
+    font-size: 1.3rem;
+  }
+}

@@ -1,174 +1,173 @@
-/* CourseForm.css - Dark/Light Mode Compatible */
+/* CourseForm.css - Scoped to prevent affecting other pages */
 
-/* CSS Custom Properties for Theme Variables */
-:root {
+/* Scope all styles to the course form container */
+.course-form-scope {
+  /* CSS Custom Properties scoped to this component */
   /* Light Mode Colors */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f9fafb;
-  --bg-tertiary: #f3f4f6;
-  --text-primary: #1f2937;
-  --text-secondary: #6b7280;
-  --text-tertiary: #9ca3af;
-  --border-primary: #d1d5db;
-  --border-secondary: #e5e7eb;
-  --accent-primary: #2563eb;
-  --accent-secondary: #3b82f6;
-  --accent-hover: #1d4ed8;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --error: #ef4444;
-  --tag-bg: #dbeafe;
-  --tag-text: #1e40af;
-  --input-focus: #3b82f6;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-}
-
-/* Dark Mode Colors */
-[data-theme="dark"] {
-  --bg-primary: #1f2937;
-  --bg-secondary: #111827;
-  --bg-tertiary: #0f172a;
-  --text-primary: #f9fafb;
-  --text-secondary: #d1d5db;
-  --text-tertiary: #9ca3af;
-  --border-primary: #374151;
-  --border-secondary: #4b5563;
-  --accent-primary: #3b82f6;
-  --accent-secondary: #60a5fa;
-  --accent-hover: #2563eb;
-  --success: #34d399;
-  --warning: #fbbf24;
-  --error: #f87171;
-  --tag-bg: #1e3a8a;
-  --tag-text: #93c5fd;
-  --input-focus: #60a5fa;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
-}
-
-/* Auto Dark Mode (respects system preference) */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg-primary: #1f2937;
-    --bg-secondary: #111827;
-    --bg-tertiary: #0f172a;
-    --text-primary: #f9fafb;
-    --text-secondary: #d1d5db;
-    --text-tertiary: #9ca3af;
-    --border-primary: #374151;
-    --border-secondary: #4b5563;
-    --accent-primary: #3b82f6;
-    --accent-secondary: #60a5fa;
-    --accent-hover: #2563eb;
-    --success: #34d399;
-    --warning: #fbbf24;
-    --error: #f87171;
-    --tag-bg: #1e3a8a;
-    --tag-text: #93c5fd;
-    --input-focus: #60a5fa;
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
-  }
-}
-
-/* Font Imports - Works well in both light and dark modes */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-/* Base Styles */
-* {
+  --cf-bg-primary: #ffffff;
+  --cf-bg-secondary: #f9fafb;
+  --cf-bg-tertiary: #f3f4f6;
+  --cf-text-primary: #1f2937;
+  --cf-text-secondary: #6b7280;
+  --cf-text-tertiary: #9ca3af;
+  --cf-border-primary: #d1d5db;
+  --cf-border-secondary: #e5e7eb;
+  --cf-accent-primary: #2563eb;
+  --cf-accent-secondary: #3b82f6;
+  --cf-accent-hover: #1d4ed8;
+  --cf-success: #10b981;
+  --cf-warning: #f59e0b;
+  --cf-error: #ef4444;
+  --cf-tag-bg: #dbeafe;
+  --cf-tag-text: #1e40af;
+  --cf-input-focus: #3b82f6;
+  --cf-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --cf-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --cf-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  line-height: 1.6;
+  color: var(--cf-text-primary);
+  background-color: var(--cf-bg-tertiary);
+  transition: background-color 0.3s ease, color 0.3s ease;
   box-sizing: border-box;
 }
 
-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-  line-height: 1.6;
-  color: var(--text-primary);
-  background-color: var(--bg-tertiary);
-  transition: background-color 0.3s ease, color 0.3s ease;
+/* Dark Mode Colors - only when parent has dark theme */
+.course-form-scope[data-theme="dark"] {
+  --cf-bg-primary: #1f2937;
+  --cf-bg-secondary: #111827;
+  --cf-bg-tertiary: #0f172a;
+  --cf-text-primary: #f9fafb;
+  --cf-text-secondary: #d1d5db;
+  --cf-text-tertiary: #9ca3af;
+  --cf-border-primary: #374151;
+  --cf-border-secondary: #4b5563;
+  --cf-accent-primary: #3b82f6;
+  --cf-accent-secondary: #60a5fa;
+  --cf-accent-hover: #2563eb;
+  --cf-success: #34d399;
+  --cf-warning: #fbbf24;
+  --cf-error: #f87171;
+  --cf-tag-bg: #1e3a8a;
+  --cf-tag-text: #93c5fd;
+  --cf-input-focus: #60a5fa;
+  --cf-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --cf-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --cf-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+}
+
+/* Auto Dark Mode (respects system preference) - only for this component */
+@media (prefers-color-scheme: dark) {
+  .course-form-scope:not([data-theme="light"]) {
+    --cf-bg-primary: #1f2937;
+    --cf-bg-secondary: #111827;
+    --cf-bg-tertiary: #0f172a;
+    --cf-text-primary: #f9fafb;
+    --cf-text-secondary: #d1d5db;
+    --cf-text-tertiary: #9ca3af;
+    --cf-border-primary: #374151;
+    --cf-border-secondary: #4b5563;
+    --cf-accent-primary: #3b82f6;
+    --cf-accent-secondary: #60a5fa;
+    --cf-accent-hover: #2563eb;
+    --cf-success: #34d399;
+    --cf-warning: #fbbf24;
+    --cf-error: #f87171;
+    --cf-tag-bg: #1e3a8a;
+    --cf-tag-text: #93c5fd;
+    --cf-input-focus: #60a5fa;
+    --cf-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --cf-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+    --cf-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+  }
+}
+
+/* All child elements inherit box-sizing */
+.course-form-scope *,
+.course-form-scope *::before,
+.course-form-scope *::after {
+  box-sizing: border-box;
 }
 
 /* Course Form Container */
-.course-form-container {
+.course-form-scope .course-form-container {
   max-width: 1024px;
   margin: 0 auto;
   padding: 24px;
-  background-color: var(--bg-primary);
+  background-color: var(--cf-bg-primary);
   border-radius: 12px;
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--cf-shadow-lg);
   transition: all 0.3s ease;
 }
 
-.course-form-demo {
+.course-form-scope .course-form-demo {
   min-height: 100vh;
-  background-color: var(--bg-tertiary);
+  background-color: var(--cf-bg-tertiary);
   padding: 32px 0;
   transition: background-color 0.3s ease;
 }
 
-.course-form-demo-wrapper {
+.course-form-scope .course-form-demo-wrapper {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 16px;
 }
 
-.course-form-title {
+.course-form-scope .course-form-title {
   font-size: 32px;
   font-weight: 700;
   text-align: center;
   margin-bottom: 32px;
-  color: var(--text-primary);
+  color: var(--cf-text-primary);
   letter-spacing: -0.025em;
 }
 
 /* Form Sections */
-.form-section {
-  background-color: var(--bg-secondary);
+.course-form-scope .form-section {
+  background-color: var(--cf-bg-secondary);
   padding: 24px;
   border-radius: 8px;
   margin-bottom: 32px;
-  border: 1px solid var(--border-secondary);
+  border: 1px solid var(--cf-border-secondary);
   transition: all 0.3s ease;
 }
 
-.form-section:hover {
-  box-shadow: var(--shadow-md);
+.course-form-scope .form-section:hover {
+  box-shadow: var(--cf-shadow-md);
 }
 
-.section-title {
+.course-form-scope .section-title {
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 16px;
-  color: var(--text-primary);
+  color: var(--cf-text-primary);
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.section-title::before {
+.course-form-scope .section-title::before {
   content: '';
   width: 4px;
   height: 18px;
-  background-color: var(--accent-primary);
+  background-color: var(--cf-accent-primary);
   border-radius: 2px;
 }
 
 /* Grid Layout */
-.form-grid {
+.course-form-scope .form-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 16px;
 }
 
-.form-grid-full {
+.course-form-scope .form-grid-full {
   grid-column: 1 / -1;
 }
 
 /* Button Styles */
-.btn {
+.course-form-scope .btn {
   padding: 10px 20px;
   border: none;
   border-radius: 6px;
@@ -185,46 +184,46 @@ body {
   min-height: 40px;
 }
 
-.btn:focus {
-  outline: 2px solid var(--accent-primary);
+.course-form-scope .btn:focus {
+  outline: 2px solid var(--cf-accent-primary);
   outline-offset: 2px;
 }
 
-.btn-primary {
-  background-color: var(--accent-primary);
+.course-form-scope .btn-primary {
+  background-color: var(--cf-accent-primary);
   color: #ffffff;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--cf-shadow-sm);
 }
 
-.btn-primary:hover:not(:disabled) {
-  background-color: var(--accent-hover);
-  box-shadow: var(--shadow-md);
+.course-form-scope .btn-primary:hover:not(:disabled) {
+  background-color: var(--cf-accent-hover);
+  box-shadow: var(--cf-shadow-md);
   transform: translateY(-1px);
 }
 
-.btn-secondary {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  border: 1px solid var(--border-primary);
+.course-form-scope .btn-secondary {
+  background-color: var(--cf-bg-primary);
+  color: var(--cf-text-primary);
+  border: 1px solid var(--cf-border-primary);
 }
 
-.btn-secondary:hover:not(:disabled) {
-  background-color: var(--bg-secondary);
-  border-color: var(--border-secondary);
+.course-form-scope .btn-secondary:hover:not(:disabled) {
+  background-color: var(--cf-bg-secondary);
+  border-color: var(--cf-border-secondary);
 }
 
-.btn:disabled {
+.course-form-scope .btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none !important;
 }
 
-.btn-loading {
+.course-form-scope .btn-loading {
   position: relative;
   color: transparent;
 }
 
-.btn-loading::after {
+.course-form-scope .btn-loading::after {
   content: '';
   position: absolute;
   width: 16px;
@@ -236,145 +235,145 @@ body {
   border: 2px solid transparent;
   border-top-color: currentColor;
   border-radius: 50%;
-  animation: button-loading-spinner 1s ease infinite;
+  animation: cf-button-loading-spinner 1s ease infinite;
 }
 
-@keyframes button-loading-spinner {
+@keyframes cf-button-loading-spinner {
   from { transform: rotate(0turn); }
   to { transform: rotate(1turn); }
 }
 
 /* Input Styles */
-.input-group {
+.course-form-scope .input-group {
   width: 100%;
   margin-bottom: 16px;
 }
 
-.input-label {
+.course-form-scope .input-label {
   display: block;
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 6px;
-  color: var(--text-primary);
+  color: var(--cf-text-primary);
 }
 
-.input-required {
-  color: var(--error);
+.course-form-scope .input-required {
+  color: var(--cf-error);
   margin-left: 2px;
 }
 
-.input-field {
+.course-form-scope .input-field {
   width: 100%;
   padding: 10px 14px;
-  border: 1px solid var(--border-primary);
+  border: 1px solid var(--cf-border-primary);
   border-radius: 6px;
   font-size: 14px;
   font-family: inherit;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+  background-color: var(--cf-bg-primary);
+  color: var(--cf-text-primary);
   transition: all 0.2s ease;
 }
 
-.input-field:focus {
+.course-form-scope .input-field:focus {
   outline: none;
-  border-color: var(--input-focus);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--input-focus) 10%, transparent);
+  border-color: var(--cf-input-focus);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cf-input-focus) 10%, transparent);
 }
 
-.input-field::placeholder {
-  color: var(--text-tertiary);
+.course-form-scope .input-field::placeholder {
+  color: var(--cf-text-tertiary);
 }
 
-.input-field.error {
-  border-color: var(--error);
+.course-form-scope .input-field.error {
+  border-color: var(--cf-error);
 }
 
-.input-field.error:focus {
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--error) 10%, transparent);
+.course-form-scope .input-field.error:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cf-error) 10%, transparent);
 }
 
-.input-helper {
+.course-form-scope .input-helper {
   margin-top: 4px;
   font-size: 12px;
-  color: var(--text-secondary);
+  color: var(--cf-text-secondary);
 }
 
-.input-error {
+.course-form-scope .input-error {
   margin-top: 4px;
   font-size: 12px;
-  color: var(--error);
+  color: var(--cf-error);
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
-.input-error::before {
+.course-form-scope .input-error::before {
   content: '⚠';
   font-size: 10px;
 }
 
 /* Select Styles */
-.select-field {
+.course-form-scope .select-field {
   width: 100%;
   padding: 10px 14px;
-  border: 1px solid var(--border-primary);
+  border: 1px solid var(--cf-border-primary);
   border-radius: 6px;
   font-size: 14px;
   font-family: inherit;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+  background-color: var(--cf-bg-primary);
+  color: var(--cf-text-primary);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.select-field:focus {
+.course-form-scope .select-field:focus {
   outline: none;
-  border-color: var(--input-focus);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--input-focus) 10%, transparent);
+  border-color: var(--cf-input-focus);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--cf-input-focus) 10%, transparent);
 }
 
 /* Character Counter */
-.char-counter {
+.course-form-scope .char-counter {
   font-size: 12px;
   text-align: right;
   margin-top: 4px;
 }
 
-.char-counter.warning {
-  color: var(--warning);
+.course-form-scope .char-counter.warning {
+  color: var(--cf-warning);
 }
 
-.char-counter.error {
-  color: var(--error);
+.course-form-scope .char-counter.error {
+  color: var(--cf-error);
 }
 
 /* Thumbnail Upload */
-.thumbnail-container {
+.course-form-scope .thumbnail-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
 }
 
-.thumbnail-preview {
+.course-form-scope .thumbnail-preview {
   position: relative;
   display: inline-block;
 }
 
-.thumbnail-image {
+.course-form-scope .thumbnail-image {
   width: 192px;
   height: 128px;
   object-fit: cover;
   border-radius: 8px;
-  border: 1px solid var(--border-primary);
-  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--cf-border-primary);
+  box-shadow: var(--cf-shadow-sm);
 }
 
-.thumbnail-remove {
+.course-form-scope .thumbnail-remove {
   position: absolute;
   top: -8px;
   right: -8px;
-  background-color: var(--error);
+  background-color: var(--cf-error);
   color: white;
   border-radius: 50%;
   width: 24px;
@@ -386,51 +385,51 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--cf-shadow-sm);
   transition: all 0.2s ease;
 }
 
-.thumbnail-remove:hover {
+.course-form-scope .thumbnail-remove:hover {
   background-color: #dc2626;
   transform: scale(1.1);
 }
 
-.thumbnail-placeholder {
+.course-form-scope .thumbnail-placeholder {
   width: 192px;
   height: 128px;
-  border: 2px dashed var(--border-primary);
+  border: 2px dashed var(--cf-border-primary);
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: var(--bg-secondary);
+  background-color: var(--cf-bg-secondary);
   transition: all 0.3s ease;
 }
 
-.thumbnail-placeholder:hover {
-  border-color: var(--accent-primary);
-  background-color: color-mix(in srgb, var(--accent-primary) 5%, var(--bg-secondary));
+.course-form-scope .thumbnail-placeholder:hover {
+  border-color: var(--cf-accent-primary);
+  background-color: color-mix(in srgb, var(--cf-accent-primary) 5%, var(--cf-bg-secondary));
 }
 
-.thumbnail-placeholder-icon {
+.course-form-scope .thumbnail-placeholder-icon {
   font-size: 32px;
   margin-bottom: 8px;
   opacity: 0.6;
 }
 
-.thumbnail-placeholder-text {
-  color: var(--text-secondary);
+.course-form-scope .thumbnail-placeholder-text {
+  color: var(--cf-text-secondary);
   font-size: 14px;
   text-align: center;
 }
 
-.upload-input {
+.course-form-scope .upload-input {
   display: none;
 }
 
-.upload-label {
-  background-color: var(--accent-primary);
+.course-form-scope .upload-label {
+  background-color: var(--cf-accent-primary);
   color: white;
   padding: 10px 20px;
   border-radius: 6px;
@@ -444,28 +443,28 @@ body {
   gap: 8px;
 }
 
-.upload-label:hover {
-  background-color: var(--accent-hover);
+.course-form-scope .upload-label:hover {
+  background-color: var(--cf-accent-hover);
   transform: translateY(-1px);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--cf-shadow-sm);
 }
 
 /* Tags */
-.tags-container {
+.course-form-scope .tags-container {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 16px;
   min-height: 32px;
   padding: 8px;
-  border: 1px solid var(--border-secondary);
+  border: 1px solid var(--cf-border-secondary);
   border-radius: 6px;
-  background-color: var(--bg-primary);
+  background-color: var(--cf-bg-primary);
 }
 
-.tag {
-  background-color: var(--tag-bg);
-  color: var(--tag-text);
+.course-form-scope .tag {
+  background-color: var(--cf-tag-bg);
+  color: var(--cf-tag-text);
   padding: 6px 12px;
   border-radius: 16px;
   font-size: 13px;
@@ -473,15 +472,15 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  animation: tag-appear 0.2s ease;
+  animation: cf-tag-appear 0.2s ease;
 }
 
-@keyframes tag-appear {
+@keyframes cf-tag-appear {
   from { opacity: 0; transform: scale(0.8); }
   to { opacity: 1; transform: scale(1); }
 }
 
-.tag-remove {
+.course-form-scope .tag-remove {
   background: none;
   border: none;
   color: inherit;
@@ -498,71 +497,71 @@ body {
   transition: all 0.2s ease;
 }
 
-.tag-remove:hover {
-  background-color: color-mix(in srgb, var(--tag-text) 20%, transparent);
+.course-form-scope .tag-remove:hover {
+  background-color: color-mix(in srgb, var(--cf-tag-text) 20%, transparent);
 }
 
-.tag-input-container {
+.course-form-scope .tag-input-container {
   display: flex;
   gap: 8px;
   align-items: flex-start;
 }
 
 /* List Items */
-.list-container {
+.course-form-scope .list-container {
   margin-bottom: 16px;
   max-height: 300px;
   overflow-y: auto;
 }
 
-.list-item {
+.course-form-scope .list-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  background-color: var(--bg-primary);
+  background-color: var(--cf-bg-primary);
   padding: 12px;
   border-radius: 6px;
-  border: 1px solid var(--border-secondary);
+  border: 1px solid var(--cf-border-secondary);
   margin-bottom: 8px;
   transition: all 0.2s ease;
-  animation: list-item-appear 0.3s ease;
+  animation: cf-list-item-appear 0.3s ease;
 }
 
-@keyframes list-item-appear {
+@keyframes cf-list-item-appear {
   from { opacity: 0; transform: translateX(-10px); }
   to { opacity: 1; transform: translateX(0); }
 }
 
-.list-item:hover {
-  border-color: var(--border-primary);
-  box-shadow: var(--shadow-sm);
+.course-form-scope .list-item:hover {
+  border-color: var(--cf-border-primary);
+  box-shadow: var(--cf-shadow-sm);
 }
 
-.list-item-icon {
+.course-form-scope .list-item-icon {
   font-size: 16px;
   width: 20px;
   text-align: center;
 }
 
-.list-item-icon.success {
-  color: var(--success);
+.course-form-scope .list-item-icon.success {
+  color: var(--cf-success);
 }
 
-.list-item-icon.warning {
-  color: var(--warning);
+.course-form-scope .list-item-icon.warning {
+  color: var(--cf-warning);
 }
 
-.list-item-text {
+.course-form-scope .list-item-text {
   flex: 1;
-  color: var(--text-primary);
+  color: var(--cf-text-primary);
   font-size: 14px;
   line-height: 1.4;
 }
 
-.list-item-remove {
+.course-form-scope .list-item-remove {
   background: none;
   border: none;
-  color: var(--error);
+  color: var(--cf-error);
   font-weight: bold;
   cursor: pointer;
   font-size: 18px;
@@ -576,75 +575,73 @@ body {
   justify-content: center;
 }
 
-.list-item-remove:hover {
-  background-color: color-mix(in srgb, var(--error) 10%, transparent);
+.course-form-scope .list-item-remove:hover {
+  background-color: color-mix(in srgb, var(--cf-error) 10%, transparent);
   transform: scale(1.1);
 }
 
-.add-item-container {
+.course-form-scope .add-item-container {
   display: flex;
   gap: 8px;
   align-items: flex-start;
 }
 
 /* Form Actions */
-.form-actions {
+.course-form-scope .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 16px;
   padding-top: 24px;
-  border-top: 1px solid var(--border-secondary);
+  border-top: 1px solid var(--cf-border-secondary);
   margin-top: 32px;
 }
 
-
-
 /* Responsive Design */
 @media (max-width: 768px) {
-  .course-form-container {
+  .course-form-scope .course-form-container {
     margin: 16px;
     padding: 16px;
   }
   
-  .form-grid {
+  .course-form-scope .form-grid {
     grid-template-columns: 1fr;
   }
   
-  .course-form-title {
+  .course-form-scope .course-form-title {
     font-size: 24px;
   }
   
-  .form-actions {
+  .course-form-scope .form-actions {
     flex-direction: column-reverse;
   }
   
-  .btn {
+  .course-form-scope .btn {
     width: 100%;
     justify-content: center;
   }
   
-  .add-item-container,
-  .tag-input-container {
+  .course-form-scope .add-item-container,
+  .course-form-scope .tag-input-container {
     flex-direction: column;
   }
 }
 
 @media (max-width: 480px) {
-  .course-form-demo-wrapper {
+  .course-form-scope .course-form-demo-wrapper {
     padding: 0 8px;
   }
   
-  .thumbnail-image,
-  .thumbnail-placeholder {
+  .course-form-scope .thumbnail-image,
+  .course-form-scope .thumbnail-placeholder {
     width: 150px;
     height: 100px;
   }
   
-  .tags-container {
+  .course-form-scope .tags-container {
     padding: 6px;
   }
   
-  .tag {
+  .course-form-scope .tag {
     font-size: 12px;
     padding: 4px 8px;
   }
@@ -652,16 +649,16 @@ body {
 
 /* Print Styles */
 @media print {
-  .form-actions {
+  .course-form-scope .form-actions {
     display: none;
   }
   
-  .course-form-container {
+  .course-form-scope .course-form-container {
     box-shadow: none;
     border: 1px solid #ccc;
   }
   
-  .form-section {
+  .course-form-scope .form-section {
     break-inside: avoid;
     page-break-inside: avoid;
   }
@@ -669,22 +666,22 @@ body {
 
 /* High Contrast Mode */
 @media (prefers-contrast: high) {
-  :root {
-    --border-primary: #000000;
-    --border-secondary: #333333;
+  .course-form-scope {
+    --cf-border-primary: #000000;
+    --cf-border-secondary: #333333;
   }
   
-  [data-theme="dark"] {
-    --border-primary: #ffffff;
-    --border-secondary: #cccccc;
+  .course-form-scope[data-theme="dark"] {
+    --cf-border-primary: #ffffff;
+    --cf-border-secondary: #cccccc;
   }
 }
 
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  .course-form-scope *,
+  .course-form-scope *::before,
+  .course-form-scope *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

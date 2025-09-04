@@ -1,209 +1,351 @@
-// utils/config.js
+// src/utils/config.js - Enhanced configuration for backend integration
 
-// API Configuration
+// Determine environment
+const isDevelopment = process.env.NODE_ENV === 'development';
+const isProduction = process.env.NODE_ENV === 'production';
+
+// Backend configuration with fallbacks - FIXED TO REMOVE DOUBLE PREFIX
 export const API_CONFIG = {
+  // Base URL configuration - FIXED: Ensure no double /api prefix
   baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api',
-  timeout: 10000,
-  retryAttempts: 3,
-  retryDelay: 1000,
+  timeout: parseInt(process.env.REACT_APP_API_TIMEOUT) || 30000, // 30 seconds
+  
+  // Retry configuration for rate limiting
+  maxRetries: 3,
+  retryDelay: 2000, // 2 seconds base delay
+  
+  // Development flags
+  USE_MOCK: process.env.REACT_APP_USE_MOCK === 'true' || false,
+  DEBUG_API: isDevelopment && process.env.REACT_APP_DEBUG_API === 'true',
+  
+  // Headers
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'X-Client-Version': process.env.REACT_APP_VERSION || '1.0.0',
+  }
 };
 
-// Authentication Configuration
-export const AUTH_CONFIG = {
-  tokenKey: 'lms_token',
-  refreshTokenKey: 'lms_refresh_token',
-  userKey: 'lms_user',
-  sessionTimeout: 24 * 60 * 60 * 1000, // 24 hours
-  rememberMeDuration: 30 * 24 * 60 * 60 * 1000, // 30 days
-};
-
-// Cloudinary Configuration
-export const CLOUDINARY_CONFIG = {
-  cloudName: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
-  apiKey: process.env.REACT_APP_CLOUDINARY_API_KEY,
-  uploadPreset: process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET,
-  maxFileSize: 100 * 1024 * 1024, // 100MB
-  allowedVideoTypes: ['mp4', 'mov', 'avi', 'wmv', 'flv', 'webm'],
-  allowedImageTypes: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'],
-};
-
-// Stripe Configuration
-export const STRIPE_CONFIG = {
-  publishableKey: process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY,
-  currency: 'usd',
-  country: 'US',
-};
-
-// Application Configuration
-export const APP_CONFIG = {
-  name: 'Learning Management System',
-  version: '1.0.0',
-  description: 'A comprehensive online learning platform',
-  supportEmail: 'support@lms.com',
-  maxCoursePrice: 500,
-  minCoursePrice: 5,
-  courseThumbnailSize: {
-    width: 480,
-    height: 270,
+// API Endpoints mapping - FIXED: All routes are correct without double prefix
+export const API_ENDPOINTS = {
+  // Authentication endpoints
+  auth: {
+    login: '/auth/login',
+    register: '/auth/register',
+    logout: '/auth/logout',
+    refresh: '/auth/refresh',
+    forgotPassword: '/auth/forgot-password',
+    resetPassword: '/auth/reset-password',
+    verifyEmail: '/auth/verify-email',
+    validateToken: '/auth/validate-token',
   },
-  videoPlayerSettings: {
-    controls: true,
-    playbackRates: [0.5, 1, 1.25, 1.5, 2],
-    fluid: true,
-    responsive: true,
+  
+  // Course endpoints - CORRECTED to match backend exactly
+  courses: {
+    base: '/courses',
+    getAll: '/courses',
+    getById: (id) => `/courses/${id}`,
+    create: '/courses',
+    update: (id) => `/courses/${id}`,
+    delete: (id) => `/courses/${id}`,
+    categories: '/courses/categories', // FIXED: Correct route
+    featured: '/courses/featured',
+    search: '/courses/search',
+    instructorCourses: '/courses/instructor/my-courses', // FIXED: Correct route
+    enroll: (id) => `/courses/${id}/enroll`,
+    unenroll: (id) => `/courses/${id}/unenroll`,
   },
+  
+  // User endpoints
+  users: {
+    profile: '/users/profile',
+    updateProfile: '/users/profile',
+    getAllUsers: '/admin/users',
+    getUserById: (id) => `/users/${id}`,
+    deleteUser: (id) => `/admin/users/${id}`,
+    updateUserRole: (id) => `/admin/users/${id}/role`,
+  },
+  
+  // Student endpoints
+  student: {
+    dashboard: '/student/dashboard',
+    courses: '/student/courses',
+    enrolledCourses: '/student/courses/enrolled',
+    progress: '/student/progress',
+    wishlist: '/student/wishlist',
+    addToWishlist: (courseId) => `/student/wishlist/${courseId}`,
+    removeFromWishlist: (courseId) => `/student/wishlist/${courseId}`,
+  },
+  
+  // Instructor endpoints
+  instructor: {
+    dashboard: '/instructor/dashboard',
+    courses: '/instructor/courses',
+    createCourse: '/instructor/courses',
+    updateCourse: (id) => `/instructor/courses/${id}`,
+    deleteCourse: (id) => `/instructor/courses/${id}`,
+    analytics: '/instructor/analytics',
+    students: '/instructor/students',
+    earnings: '/instructor/earnings',
+  },
+  
+  // Admin endpoints
+  admin: {
+    dashboard: '/admin/dashboard',
+    users: '/admin/users',
+    courses: '/admin/courses',
+    analytics: '/admin/analytics',
+    settings: '/admin/settings',
+    transactions: '/admin/transactions',
+  },
+  
+  // Upload endpoints - FIXED to match backend
+  uploads: {
+    video: (courseId) => `/uploads/course/${courseId}/video`,
+    image: '/uploads/image',
+    thumbnail: (courseId) => `/uploads/course/${courseId}/thumbnail`,
+    document: '/uploads/document',
+    deleteFile: (publicId) => `/uploads/delete/${publicId}`,
+  },
+  
+  // Payment endpoints - FIXED
+  payments: {
+    createIntent: '/payments/create-intent',
+    confirm: '/payments/confirm',
+    webhook: '/payments/webhook',
+    history: '/payments/history',
+  },
+  
+  // Notification endpoints
+  notifications: {
+    getAll: '/notifications',
+    markAsRead: (id) => `/notifications/${id}/read`,
+    markAllAsRead: '/notifications/read-all',
+    delete: (id) => `/notifications/${id}`,
+  },
+  
+  // Progress endpoints
+  progress: {
+    getCourseProgress: (courseId) => `/progress/course/${courseId}`,
+    updateProgress: (courseId) => `/progress/course/${courseId}`,
+    getLessonProgress: (lessonId) => `/progress/lesson/${lessonId}`,
+    updateLessonProgress: (lessonId) => `/progress/lesson/${lessonId}`,
+  },
+  
+  // Analytics endpoints
+  analytics: {
+    dashboard: '/analytics/dashboard',
+    courses: '/analytics/courses',
+    users: '/analytics/users',
+    revenue: '/analytics/revenue',
+    engagement: '/analytics/engagement',
+  }
 };
 
-// Pagination Configuration
-export const PAGINATION_CONFIG = {
-  defaultPageSize: 12,
-  pageSizeOptions: [6, 12, 24, 48],
-  maxPages: 10,
+// Feature flags
+export const FEATURES = {
+  enablePayments: process.env.REACT_APP_ENABLE_PAYMENTS === 'true',
+  enableNotifications: process.env.REACT_APP_ENABLE_NOTIFICATIONS !== 'false',
+  enableAnalytics: process.env.REACT_APP_ENABLE_ANALYTICS !== 'false',
+  enableVideoStreaming: process.env.REACT_APP_ENABLE_VIDEO_STREAMING !== 'false',
+  enableOfflineMode: process.env.REACT_APP_ENABLE_OFFLINE === 'true',
+  enablePWA: process.env.REACT_APP_ENABLE_PWA === 'true',
 };
 
-// Upload Configuration
-export const UPLOAD_CONFIG = {
-  maxVideoSize: 500 * 1024 * 1024, // 500MB
-  maxImageSize: 10 * 1024 * 1024, // 10MB
-  maxDocumentSize: 50 * 1024 * 1024, // 50MB
-  chunkSize: 1024 * 1024, // 1MB chunks for large uploads
-  supportedVideoFormats: ['mp4', 'webm', 'ogg', 'mov', 'avi'],
-  supportedImageFormats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
-  supportedDocumentFormats: ['pdf', 'doc', 'docx', 'ppt', 'pptx'],
-};
-
-// Notification Configuration
-export const NOTIFICATION_CONFIG = {
-  position: 'top-right',
-  autoClose: 5000,
-  hideProgressBar: false,
-  newestOnTop: true,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
-  types: {
-    success: 'success',
-    error: 'error',
-    warning: 'warning',
-    info: 'info',
+// Third-party service configurations
+export const SERVICES = {
+  // Cloudinary configuration
+  cloudinary: {
+    cloudName: process.env.REACT_APP_CLOUDINARY_CLOUD_NAME,
+    apiKey: process.env.REACT_APP_CLOUDINARY_API_KEY,
+    uploadPreset: process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET,
   },
-};
-
-// Theme Configuration
-export const THEME_CONFIG = {
-  defaultTheme: 'light',
-  themes: {
-    light: {
-      primary: '#3b82f6',
-      secondary: '#64748b',
-      success: '#10b981',
-      danger: '#ef4444',
-      warning: '#f59e0b',
-      info: '#06b6d4',
-      background: '#ffffff',
-      surface: '#f8fafc',
-      text: '#1e293b',
-      muted: '#64748b',
-    },
-    dark: {
-      primary: '#60a5fa',
-      secondary: '#94a3b8',
-      success: '#34d399',
-      danger: '#f87171',
-      warning: '#fbbf24',
-      info: '#22d3ee',
-      background: '#0f172a',
-      surface: '#1e293b',
-      text: '#f1f5f9',
-      muted: '#94a3b8',
-    },
+  
+  // Stripe configuration
+  stripe: {
+    publishableKey: process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY,
+    successUrl: process.env.REACT_APP_STRIPE_SUCCESS_URL || `${window.location.origin}/payment/success`,
+    cancelUrl: process.env.REACT_APP_STRIPE_CANCEL_URL || `${window.location.origin}/payment/cancel`,
   },
-};
-
-// Validation Configuration
-export const VALIDATION_CONFIG = {
-  password: {
-    minLength: 8,
-    requireUppercase: true,
-    requireLowercase: true,
-    requireNumbers: true,
-    requireSpecialChars: true,
+  
+  // Google Analytics
+  googleAnalytics: {
+    trackingId: process.env.REACT_APP_GA_TRACKING_ID,
   },
-  username: {
-    minLength: 3,
-    maxLength: 20,
-    allowedChars: /^[a-zA-Z0-9_-]+$/,
-  },
+  
+  // Email service
   email: {
-    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+    serviceId: process.env.REACT_APP_EMAIL_SERVICE_ID,
+    templateId: process.env.REACT_APP_EMAIL_TEMPLATE_ID,
+    userId: process.env.REACT_APP_EMAIL_USER_ID,
+  }
+};
+
+// App configuration
+export const APP_CONFIG = {
+  name: process.env.REACT_APP_NAME || 'EduPlatform',
+  version: process.env.REACT_APP_VERSION || '1.0.0',
+  description: process.env.REACT_APP_DESCRIPTION || 'Online Learning Platform',
+  
+  // Pagination
+  defaultPageSize: 12,
+  maxPageSize: 50,
+  
+  // File upload limits
+  maxFileSize: 100 * 1024 * 1024, // 100MB
+  maxVideoSize: 500 * 1024 * 1024, // 500MB
+  allowedImageTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
+  allowedVideoTypes: ['video/mp4', 'video/webm', 'video/ogg'],
+  allowedDocumentTypes: ['application/pdf', 'text/plain', 'application/msword'],
+  
+  // Course configuration
+  maxCourseTitleLength: 100,
+  maxCourseDescriptionLength: 2000,
+  maxLearningObjectives: 10,
+  maxRequirements: 10,
+  
+  // User configuration
+  maxUsernameLength: 30,
+  minPasswordLength: 8,
+  maxBioLength: 500,
+  
+  // UI configuration
+  theme: {
+    defaultTheme: 'light',
+    enableDarkMode: true,
   },
-  course: {
-    title: {
-      minLength: 10,
-      maxLength: 100,
-    },
-    description: {
-      minLength: 50,
-      maxLength: 2000,
-    },
-    price: {
-      min: 0,
-      max: 1000,
-    },
+  
+  // Cache configuration
+  cacheTimeout: 5 * 60 * 1000, // 5 minutes
+  
+  // Rate limiting configuration (frontend awareness)
+  rateLimits: {
+    search: { max: 30, window: 60000 }, // 30 per minute
+    upload: { max: 10, window: 60000 }, // 10 per minute
+    auth: { max: 5, window: 900000 }, // 5 per 15 minutes
+  }
+};
+
+// Validation rules
+export const VALIDATION_RULES = {
+  email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
+  username: /^[a-zA-Z0-9_]{3,30}$/,
+  phone: /^\+?[\d\s-()]{10,15}$/,
+  url: /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/,
+};
+
+// Environment-specific configurations
+export const ENV_CONFIG = {
+  development: {
+    enableDebug: true,
+    enableMockData: process.env.REACT_APP_USE_MOCK === 'true',
+    apiTimeout: 10000,
+    showDetailedErrors: true,
   },
+  
+  production: {
+    enableDebug: false,
+    enableMockData: false,
+    apiTimeout: 30000,
+    showDetailedErrors: false,
+  },
+  
+  test: {
+    enableDebug: true,
+    enableMockData: true,
+    apiTimeout: 5000,
+    showDetailedErrors: true,
+  }
 };
 
-// Error Messages Configuration
-export const ERROR_MESSAGES = {
-  network: 'Network error. Please check your connection.',
-  server: 'Server error. Please try again later.',
-  unauthorized: 'You are not authorized to perform this action.',
-  notFound: 'The requested resource was not found.',
-  validation: 'Please check your input and try again.',
-  upload: 'File upload failed. Please try again.',
-  payment: 'Payment processing failed. Please try again.',
-  generic: 'Something went wrong. Please try again.',
+// Get current environment config
+export const getCurrentEnvConfig = () => {
+  const env = process.env.NODE_ENV || 'development';
+  return ENV_CONFIG[env] || ENV_CONFIG.development;
 };
 
-// Success Messages Configuration
-export const SUCCESS_MESSAGES = {
-  login: 'Successfully logged in!',
-  register: 'Account created successfully!',
-  logout: 'Successfully logged out!',
-  profileUpdate: 'Profile updated successfully!',
-  courseCreate: 'Course created successfully!',
-  courseUpdate: 'Course updated successfully!',
-  courseDelete: 'Course deleted successfully!',
-  enrollment: 'Successfully enrolled in course!',
-  payment: 'Payment completed successfully!',
-  upload: 'File uploaded successfully!',
-};
-
-// Local Storage Keys
+// Storage keys
 export const STORAGE_KEYS = {
+  authToken: 'lms_auth_token',
+  refreshToken: 'lms_refresh_token',
+  user: 'lms_user',
   theme: 'lms_theme',
   language: 'lms_language',
   preferences: 'lms_preferences',
   cart: 'lms_cart',
-  recentCourses: 'lms_recent_courses',
-  searchHistory: 'lms_search_history',
+  recentSearches: 'lms_recent_searches',
+  viewMode: 'lms_view_mode',
+  filters: 'lms_filters',
 };
 
-// Feature Flags
-export const FEATURE_FLAGS = {
-  enableVideoDownload: process.env.REACT_APP_ENABLE_VIDEO_DOWNLOAD === 'true',
-  enableCourseRatings: process.env.REACT_APP_ENABLE_COURSE_RATINGS !== 'false',
-  enableDiscounts: process.env.REACT_APP_ENABLE_DISCOUNTS === 'true',
-  enableCertificates: process.env.REACT_APP_ENABLE_CERTIFICATES === 'true',
-  enableMultiLanguage: process.env.REACT_APP_ENABLE_MULTI_LANGUAGE === 'true',
-  enableDarkMode: process.env.REACT_APP_ENABLE_DARK_MODE !== 'false',
+// Error types
+export const ERROR_TYPES = {
+  NETWORK_ERROR: 'NETWORK_ERROR',
+  AUTHENTICATION_ERROR: 'AUTHENTICATION_ERROR',
+  AUTHORIZATION_ERROR: 'AUTHORIZATION_ERROR',
+  VALIDATION_ERROR: 'VALIDATION_ERROR',
+  SERVER_ERROR: 'SERVER_ERROR',
+  RATE_LIMIT_ERROR: 'RATE_LIMIT_ERROR',
+  FILE_UPLOAD_ERROR: 'FILE_UPLOAD_ERROR',
+  PAYMENT_ERROR: 'PAYMENT_ERROR',
 };
 
-// Environment Configuration
-export const ENV_CONFIG = {
-  isDevelopment: process.env.NODE_ENV === 'development',
-  isProduction: process.env.NODE_ENV === 'production',
-  isTest: process.env.NODE_ENV === 'test',
-  enableLogging: process.env.REACT_APP_ENABLE_LOGGING !== 'false',
-  enableAnalytics: process.env.REACT_APP_ENABLE_ANALYTICS === 'true',
+// Success message types
+export const SUCCESS_TYPES = {
+  COURSE_CREATED: 'Course created successfully',
+  COURSE_UPDATED: 'Course updated successfully',
+  COURSE_DELETED: 'Course deleted successfully',
+  ENROLLMENT_SUCCESS: 'Successfully enrolled in course',
+  PROFILE_UPDATED: 'Profile updated successfully',
+  PASSWORD_CHANGED: 'Password changed successfully',
+  EMAIL_VERIFIED: 'Email verified successfully',
+  PAYMENT_SUCCESS: 'Payment completed successfully',
+};
+
+// Route configurations
+export const ROUTES = {
+  HOME: '/',
+  LOGIN: '/login',
+  REGISTER: '/register',
+  DASHBOARD: '/dashboard',
+  COURSES: '/courses',
+  COURSE_DETAIL: '/courses/:id',
+  PROFILE: '/profile',
+  SETTINGS: '/settings',
+  CART: '/cart',
+  CHECKOUT: '/checkout',
+  PAYMENT_SUCCESS: '/payment/success',
+  PAYMENT_CANCEL: '/payment/cancel',
+  
+  // Student routes
+  STUDENT_DASHBOARD: '/student/dashboard',
+  MY_LEARNING: '/student/learning',
+  WISHLIST: '/student/wishlist',
+  
+  // Instructor routes
+  INSTRUCTOR_DASHBOARD: '/instructor/dashboard',
+  CREATE_COURSE: '/instructor/courses/create',
+  EDIT_COURSE: '/instructor/courses/:id/edit',
+  MY_COURSES: '/instructor/courses',
+  
+  // Admin routes
+  ADMIN_DASHBOARD: '/admin/dashboard',
+  ADMIN_USERS: '/admin/users',
+  ADMIN_COURSES: '/admin/courses',
+  ADMIN_SETTINGS: '/admin/settings',
+};
+
+export default {
+  API_CONFIG,
+  API_ENDPOINTS,
+  FEATURES,
+  SERVICES,
+  APP_CONFIG,
+  VALIDATION_RULES,
+  getCurrentEnvConfig,
+  STORAGE_KEYS,
+  ERROR_TYPES,
+  SUCCESS_TYPES,
+  ROUTES
 };

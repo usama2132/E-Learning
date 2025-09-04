@@ -1,637 +1,1542 @@
-/* InstructorProfile.css - Modern Professional Styling */
+/* Lightning-Fast InstructorProfile CSS with Dark/Light Mode & WhatsApp-style Image Upload */
 
+/* Scoped CSS Custom Properties - Only for Instructor Profile */
 .instructor-profile {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-  background: #f8fafc;
+  /* Light Mode Colors - Scoped */
+  --ip-bg-primary: #ffffff;
+  --ip-bg-secondary: #f8fafc;
+  --ip-bg-tertiary: #f1f5f9;
+  --ip-text-primary: #1e293b;
+  --ip-text-secondary: #64748b;
+  --ip-text-muted: #94a3b8;
+  --ip-border-color: #e2e8f0;
+  --ip-border-focus: #3b82f6;
+  --ip-accent-primary: #3b82f6;
+  --ip-accent-secondary: #10b981;
+  --ip-accent-danger: #ef4444;
+  --ip-accent-warning: #f59e0b;
+  --ip-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --ip-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --ip-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --ip-radius-sm: 0.375rem;
+  --ip-radius-md: 0.5rem;
+  --ip-radius-lg: 0.75rem;
+  --ip-transition-fast: 0.15s ease-in-out;
+  --ip-transition-normal: 0.25s ease-in-out;
+}
+
+/* Dark Theme Variables - Only for Instructor Profile */
+.instructor-profile[data-theme="dark"],
+.instructor-profile.dark {
+  --ip-bg-primary: #0f172a;
+  --ip-bg-secondary: #1e293b;
+  --ip-bg-tertiary: #334155;
+  --ip-text-primary: #f1f5f9;
+  --ip-text-secondary: #cbd5e1;
+  --ip-text-muted: #94a3b8;
+  --ip-border-color: #334155;
+  --ip-border-focus: #60a5fa;
+  --ip-accent-primary: #60a5fa;
+  --ip-accent-secondary: #34d399;
+  --ip-accent-danger: #f87171;
+  --ip-accent-warning: #fbbf24;
+  --ip-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --ip-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --ip-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+}
+
+/* Auto Dark Mode Support - Only for Instructor Profile */
+@media (prefers-color-scheme: dark) {
+  .instructor-profile:not([data-theme="light"]) {
+    --ip-bg-primary: #0f172a;
+    --ip-bg-secondary: #1e293b;
+    --ip-bg-tertiary: #334155;
+    --ip-text-primary: #f1f5f9;
+    --ip-text-secondary: #cbd5e1;
+    --ip-text-muted: #94a3b8;
+    --ip-border-color: #334155;
+    --ip-border-focus: #60a5fa;
+    --ip-accent-primary: #60a5fa;
+    --ip-accent-secondary: #34d399;
+    --ip-accent-danger: #f87171;
+    --ip-accent-warning: #fbbf24;
+    --ip-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --ip-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+    --ip-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+  }
+}
+
+/* Performance Optimizations - Scoped */
+.instructor-profile,
+.instructor-profile *,
+.instructor-profile *::before,
+.instructor-profile *::after {
+  box-sizing: border-box;
+  transition: var(--ip-transition-fast);
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Main Container - Properly Scoped */
+.instructor-profile {
+  background: var(--ip-bg-primary);
+  color: var(--ip-text-primary);
   min-height: 100vh;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-}
-
-/* Profile Header */
-.profile-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 24px;
-  padding: 3rem;
-  margin-bottom: 2rem;
+  padding: 1rem;
+  will-change: transform;
   position: relative;
-  overflow: hidden;
-  color: white;
-  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+  isolation: isolate; /* Creates stacking context */
 }
 
-.profile-header::before {
-  content: '';
+/* Profile Header - Scoped */
+.instructor-profile .profile-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  border-radius: var(--ip-radius-lg);
+  padding: 2rem;
+  box-shadow: var(--ip-shadow-md);
+  margin-bottom: 2rem;
+  will-change: transform;
+  background: var(--ip-bg-secondary);
+  overflow: visible; /* Ensure nothing gets clipped */
+}
+
+.instructor-profile .profile-image-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  min-height: 140px; /* Ensure enough space for the image */
+  justify-content: center;
+}
+
+.instructor-profile .profile-image-container {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  border-radius: 50%;
+  /* Perfect WhatsApp-style circular profile image */
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+.instructor-profile .profile-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  border: 3px solid var(--ip-accent-primary);
+  transition: var(--ip-transition-normal);
+  will-change: transform;
+  transform: scale(1);
+  cursor: pointer;
+  background: var(--ip-bg-tertiary);
+  display: block; /* Remove any inline styling issues */
+}
+
+/* Default placeholder for no image */
+.instructor-profile .profile-image.no-image {
+  background: var(--ip-bg-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: var(--ip-text-muted);
+}
+
+.instructor-profile .profile-image.no-image::before {
+  content: "👤";
+}
+
+.instructor-profile .profile-image:hover {
+  transform: scale(1.05);
+  border-color: var(--ip-accent-secondary);
+}
+
+.instructor-profile .image-edit-btn {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: var(--ip-accent-primary);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  transition: var(--ip-transition-fast);
+  will-change: transform;
+  box-shadow: var(--ip-shadow-sm);
+}
+
+.instructor-profile .image-edit-btn:hover {
+  transform: scale(1.1);
+  background: var(--ip-accent-secondary);
+  box-shadow: var(--ip-shadow-md);
+}
+
+/* Updated Profile Stats Section - Replace existing .profile-stats styles */
+.instructor-profile .profile-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.instructor-profile .stat {
+  text-align: center;
+  padding: 1rem 0.75rem;
+  background: var(--ip-bg-tertiary);
+  border-radius: var(--ip-radius-md);
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  transition: var(--ip-transition-fast);
+  will-change: transform;
+}
+
+.instructor-profile .stat:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ip-shadow-lg);
+}
+
+.instructor-profile .stat-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ip-accent-primary);
+  line-height: 1.2;
+}
+
+.instructor-profile .stat-label {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--ip-text-secondary);
+  margin-top: 0.25rem;
+}
+
+/* Tablet and small desktop - horizontal layout */
+@media (min-width: 640px) {
+  .instructor-profile .profile-stats {
+    flex-direction: row;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  
+  .instructor-profile .stat {
+    flex: 1;
+    min-width: 0;
+    padding: 1rem 0.75rem;
+    display: block;
+    text-align: center;
+  }
+  
+  .instructor-profile .stat-value {
+    display: block;
+  }
+  
+  .instructor-profile .stat-label {
+    display: block;
+  }
+}
+
+/* Medium desktop - slightly more spacing */
+@media (min-width: 768px) {
+  .instructor-profile .profile-stats {
+    gap: 1.25rem;
+  }
+  
+  .instructor-profile .stat {
+    padding: 1.25rem 1rem;
+  }
+  
+  .instructor-profile .stat-value {
+    font-size: 1.65rem;
+  }
+}
+
+/* Large desktop - more spacing */
+@media (min-width: 1024px) {
+  .instructor-profile .profile-stats {
+    gap: 1.5rem;
+  }
+  
+  .instructor-profile .stat {
+    padding: 1.5rem 1rem;
+  }
+  
+  .instructor-profile .stat-value {
+    font-size: 1.75rem;
+  }
+  
+  .instructor-profile .stat-label {
+    font-size: 1rem;
+  }
+}
+
+/* Extra large desktop - maximum spacing */
+@media (min-width: 1200px) {
+  .instructor-profile .profile-stats {
+    gap: 2rem;
+  }
+  
+  .instructor-profile .stat {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 639px) {
+  .instructor-profile .crop-selection {
+    min-width: 80px; /* Larger minimum size for mobile */
+    min-height: 80px;
+    border-width: 4px; /* Thicker border for better visibility */
+    /* Ensure proper touch handling */
+    -webkit-user-drag: none;
+    -webkit-transform: translateZ(0); /* Force hardware acceleration */
+    transform: translateZ(0);
+  }
+  
+  .instructor-profile .crop-handle {
+    width: 28px; /* Even larger on mobile */
+    height: 28px;
+    bottom: -14px;
+    right: -14px;
+    border-width: 4px;
+    /* Better touch target */
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .instructor-profile .preview-avatar {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .instructor-profile .crop-result-preview {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+/* SECTION 9: Touch device optimizations for crop */
+@media (hover: none) and (pointer: coarse) {
+  .instructor-profile .crop-selection {
+    min-width: 100px; /* Larger for touch devices */
+    min-height: 100px;
+    border-width: 4px;
+    /* Improve touch responsiveness */
+    will-change: transform;
+  }
+  
+  .instructor-profile .crop-handle {
+    width: 32px; /* Large touch target */
+    height: 32px;
+    bottom: -16px;
+    right: -16px;
+    border-width: 4px;
+    /* Remove hover effects that interfere with touch */
+    transition: none;
+  }
+  
+  .instructor-profile .crop-handle:hover {
+    background: #00ff00; /* Keep same color */
+    transform: none; /* Remove scale transform */
+  }
+}
+
+/* Mobile optimization - maintain center alignment */
+@media (max-width: 639px) {
+  .instructor-profile .profile-stats {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .instructor-profile .stat {
+    width: 100%;
+    padding: 1rem;
+    text-align: center;
+    display: block;
+  }
+  
+  .instructor-profile .stat-value {
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+  
+  .instructor-profile .stat-label {
+    font-size: 0.875rem;
+    display: block;
+  }
+  
+  /* Perfect circle on mobile */
+  .instructor-profile .profile-image-container {
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+  }
+  
+  .instructor-profile .profile-image {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+.instructor-profile .profile-info {
+  text-align: center;
+  flex: 1;
+}
+
+.instructor-profile .profile-info h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  color: var(--ip-text-primary);
+}
+
+.instructor-profile .profile-title {
+  color: var(--ip-text-secondary);
+  font-size: 1.125rem;
+  margin: 0 0 1.5rem 0;
+}
+
+.instructor-profile .profile-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Buttons - Scoped */
+.instructor-profile .edit-btn, 
+.instructor-profile .save-btn, 
+.instructor-profile .cancel-btn, 
+.instructor-profile .add-btn, 
+.instructor-profile .done-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--ip-radius-md);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--ip-transition-fast);
+  border: none;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  will-change: transform;
+  font-family: inherit;
+}
+
+.instructor-profile .edit-btn, 
+.instructor-profile .save-btn {
+  background: var(--ip-accent-primary);
+  color: white;
+}
+
+.instructor-profile .edit-btn:hover, 
+.instructor-profile .save-btn:hover {
+  background: var(--ip-accent-secondary);
+  transform: translateY(-1px);
+  box-shadow: var(--ip-shadow-md);
+}
+
+.instructor-profile .save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.instructor-profile .cancel-btn {
+  background: var(--ip-bg-tertiary);
+  color: var(--ip-text-primary);
+  border: 1px solid var(--ip-border-color);
+}
+
+.instructor-profile .cancel-btn:hover {
+  background: var(--ip-border-color);
+  transform: translateY(-1px);
+}
+
+.instructor-profile .add-btn, 
+.instructor-profile .done-btn {
+  background: var(--ip-accent-secondary);
+  color: white;
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+}
+
+.instructor-profile .add-btn:hover, 
+.instructor-profile .done-btn:hover {
+  background: var(--ip-accent-primary);
+  transform: translateY(-1px);
+}
+
+.instructor-profile .edit-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Form Sections - Scoped */
+.instructor-profile .profile-form {
+  will-change: transform;
+}
+
+.instructor-profile .form-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.instructor-profile .form-section {
+  background: var(--ip-bg-secondary);
+  border-radius: var(--ip-radius-lg);
+  padding: 2rem;
+  box-shadow: var(--ip-shadow-sm);
+  will-change: transform;
+}
+
+.instructor-profile .form-section h3 {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--ip-text-primary);
+  border-bottom: 2px solid var(--ip-accent-primary);
+  padding-bottom: 0.5rem;
+}
+
+.instructor-profile .form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.instructor-profile .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.instructor-profile .form-group label {
+  font-weight: 500;
+  color: var(--ip-text-primary);
+  font-size: 0.875rem;
+}
+
+.instructor-profile .form-group input,
+.instructor-profile .form-group textarea {
+  padding: 0.75rem;
+  border: 1px solid var(--ip-border-color);
+  border-radius: var(--ip-radius-md);
+  background: var(--ip-bg-primary);
+  color: var(--ip-text-primary);
+  font-size: 0.875rem;
+  transition: var(--ip-transition-fast);
+  will-change: transform;
+  font-family: inherit;
+}
+
+.instructor-profile .form-group input:focus,
+.instructor-profile .form-group textarea:focus {
+  outline: none;
+  border-color: var(--ip-border-focus);
+  box-shadow: 0 0 0 3px rgb(59 130 246 / 0.1);
+  transform: translateY(-1px);
+}
+
+.instructor-profile .form-group input:disabled,
+.instructor-profile .form-group textarea:disabled {
+  background: var(--ip-bg-tertiary);
+  color: var(--ip-text-muted);
+  cursor: not-allowed;
+}
+
+.instructor-profile .form-group textarea {
+  resize: vertical;
+  min-height: 6rem;
+}
+
+/* Skills Section - Scoped */
+.instructor-profile .skills-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.instructor-profile .skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.instructor-profile .skill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: var(--ip-accent-primary);
+  color: white;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--ip-radius-sm);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition: var(--ip-transition-fast);
+  will-change: transform;
+}
+
+.instructor-profile .skill-tag:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--ip-shadow-sm);
+}
+
+.instructor-profile .skill-remove,
+.instructor-profile .achievement-remove {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0;
+  width: 1rem;
+  height: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: var(--ip-transition-fast);
+  will-change: transform;
+}
+
+.instructor-profile .skill-remove:hover,
+.instructor-profile .achievement-remove:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.2);
+}
+
+.instructor-profile .add-skill,
+.instructor-profile .add-achievement {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+.instructor-profile .skill-input,
+.instructor-profile .achievement-input {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--ip-border-color);
+  border-radius: var(--ip-radius-sm);
+  background: var(--ip-bg-primary);
+  color: var(--ip-text-primary);
+  font-size: 0.8125rem;
+  transition: var(--ip-transition-fast);
+  will-change: transform;
+  font-family: inherit;
+}
+
+.instructor-profile .skill-input:focus,
+.instructor-profile .achievement-input:focus {
+  outline: none;
+  border-color: var(--ip-border-focus);
+  box-shadow: 0 0 0 2px rgb(59 130 246 / 0.1);
+  transform: translateY(-1px);
+}
+
+/* Achievements Section - Scoped */
+.instructor-profile .achievements-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.instructor-profile .achievements-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.instructor-profile .achievement-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--ip-bg-tertiary);
+  padding: 0.75rem 1rem;
+  border-radius: var(--ip-radius-md);
+  border: 1px solid var(--ip-border-color);
+  transition: var(--ip-transition-fast);
+  will-change: transform;
+}
+
+.instructor-profile .achievement-item:hover {
+  transform: translateX(4px);
+  box-shadow: var(--ip-shadow-sm);
+}
+
+.instructor-profile .achievement-icon {
+  font-size: 1.25rem;
+  color: var(--ip-accent-warning);
+}
+
+.instructor-profile .achievement-item span:nth-child(2) {
+  flex: 1;
+  color: var(--ip-text-primary);
+  font-weight: 500;
+}
+
+.instructor-profile .achievement-remove {
+  background: var(--ip-accent-danger);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--ip-transition-fast);
+  will-change: transform;
+}
+
+.instructor-profile .achievement-remove:hover {
+  background: var(--ip-accent-danger);
+  transform: scale(1.1);
+  box-shadow: var(--ip-shadow-sm);
+}
+
+/* WhatsApp-style Image Upload Modal - Enhanced */
+.instructor-profile-image-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  backdrop-filter: blur(4px);
+  animation: instructor-fadeIn 0.3s ease-out;
+}
+
+@keyframes instructor-fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.instructor-profile-image-modal {
+  background: var(--ip-bg-primary);
+  border-radius: var(--ip-radius-lg);
+  box-shadow: var(--ip-shadow-lg);
+  width: 100%;
+  max-width: 500px;
+  max-height: 95vh; /* Increased from 90vh */
+  overflow-y: auto; /* Allow scrolling if needed */
+  animation: instructor-slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes instructor-slideUp {
+  from {
+    transform: translateY(50px) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Image Modal Header */
+.instructor-profile .image-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--ip-border-color);
+  background: var(--ip-bg-secondary);
+}
+
+.instructor-profile .image-modal-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--ip-text-primary);
+}
+
+.instructor-profile .close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--ip-text-secondary);
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: var(--ip-transition-fast);
+  will-change: transform;
+}
+
+.instructor-profile .close-btn:hover {
+  background: var(--ip-bg-tertiary);
+  color: var(--ip-text-primary);
+  transform: scale(1.1);
+}
+
+/* Image Upload Section */
+.instructor-profile .image-upload-modal {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.instructor-profile .image-input {
+  width: 100%;
+  padding: 1rem;
+  border: 2px dashed var(--ip-border-color);
+  border-radius: var(--ip-radius-md);
+  background: var(--ip-bg-secondary);
+  cursor: pointer;
+  margin-bottom: 1rem;
+  transition: var(--ip-transition-fast);
+  color: var(--ip-text-primary);
+  font-family: inherit;
+  font-size: 0.875rem;
+}
+
+.instructor-profile .image-input:hover {
+  border-color: var(--ip-accent-primary);
+  background: var(--ip-bg-tertiary);
+  transform: translateY(-2px);
+}
+
+/* WhatsApp-style Image Preview & Crop Section */
+.instructor-profile .image-preview-section {
+  display: none;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.instructor-profile .image-preview-section.active {
+  display: block;
+}
+
+.instructor-profile .image-preview-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: 400px;
+  overflow: hidden;
+  background: #000;
+  border-radius: var(--ip-radius-md);
+  margin: 0 auto;
+  /* Ensure proper touch handling */
+  touch-action: manipulation;
+  -webkit-overflow-scrolling: touch;
+}
+
+
+.instructor-profile .preview-image {
+  max-width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+  /* Prevent image dragging on mobile */
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.instructor-profile .crop-overlay {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+  pointer-events: none; /* Allow clicks to pass through */
+}
+
+.instructor-profile .crop-overlay:active {
+  cursor: grabbing;
+}
+
+.instructor-profile .crop-preview-container {
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem 1.5rem;
+  background: var(--ip-bg-tertiary);
+  border-radius: var(--ip-radius-md);
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.instructor-profile canvas {
+  object-fit: cover !important;
+  background-color: var(--ip-bg-primary) !important;
+}
+
+.instructor-profile .crop-preview-container > div {
+  text-align: center;
+}
+
+.instructor-profile .crop-preview-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ip-text-secondary);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+/* Target the main preview canvas specifically */
+.instructor-profile .crop-preview-container canvas {
+  width: 180px !important; /* Much larger main preview */
+  height: 180px !important;
+  border-radius: 50% !important; /* Fix border radius syntax */
+  border: 4px solid var(--ip-accent-primary) !important;
+  background: var(--ip-bg-primary) !important;
+  display: block !important;
+  box-shadow: var(--ip-shadow-md);
+}
+
+.instructor-profile .crop-preview-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ip-text-secondary);
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.instructor-profile .crop-result-preview {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--ip-accent-primary);
+  background: var(--ip-bg-primary);
+  aspect-ratio: 1 / 1;
+}
+
+
+.instructor-profile .crop-selection {
+  position: absolute;
+  border: 3px solid #00ff00;
+  background: transparent;
+  cursor: move;
+  pointer-events: auto;
+  border-radius: 0;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7);
+  min-width: 60px;
+  min-height: 60px;
+  /* Add touch-action for better mobile handling */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  /* Ensure it's above other elements */
+  z-index: 100;
+}
+
+
+
+.instructor-profile .crop-selection::before,
+.instructor-profile .crop-selection::after {
+  display: none !important;
+  content: none !important;
+}
+
+.instructor-profile .crop-selection:hover {
+  border-color: #00cc00;
+}
+
+/* Crop Handle */
+.instructor-profile .crop-handle {
+  position: absolute;
+  bottom: -8px;
+  right: -8px;
+  width: 24px; /* Larger for mobile */
+  height: 24px; /* Larger for mobile */
+  background: #00ff00;
+  border: 3px solid white;
+  border-radius: 50%;
+  cursor: se-resize;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  pointer-events: auto;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  z-index: 101; /* Above crop selection */
+}
+
+.instructor-profile .crop-handle:hover {
+  background: #00cc00;
+  transform: scale(1.1);
+}
+
+.instructor-profile .crop-selection * {
   pointer-events: none;
 }
 
-.profile-header > * {
-  position: relative;
-  z-index: 1;
+.instructor-profile .crop-handle {
+  pointer-events: auto !important;
 }
 
-.profile-image-section {
-  display: flex;
-  align-items: flex-start;
-  gap: 3rem;
-  margin-bottom: 2rem;
+/* Remove any blue dot from browser default styles */
+.instructor-profile .crop-selection {
+  outline: none !important;
+  list-style: none !important;
 }
 
-.profile-image-container {
-  position: relative;
-  flex-shrink: 0;
+.instructor-profile .crop-selection:focus {
+  outline: none !important;
 }
 
-.profile-image {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 6px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.profile-image:hover {
-  transform: scale(1.05);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-}
-
-.image-edit-btn {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  background: #4f46e5;
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  color: white;
-  cursor: pointer;
+/* Profile Preview */
+.instructor-profile .profile-preview {
   display: flex;
   align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
-  transition: all 0.3s ease;
-}
-
-.image-edit-btn:hover {
-  background: #3730a3;
-  transform: scale(1.1);
-}
-
-.profile-stats {
-  display: flex;
-  gap: 2rem;
-  align-items: center;
-}
-
-.stat {
-  text-align: center;
-  padding: 1rem 1.5rem;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: all 0.3s ease;
-}
-
-.stat:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-}
-
-.stat-value {
-  display: block;
-  font-size: 2rem;
-  font-weight: 700;
-  color: #fff;
-  margin-bottom: 0.25rem;
-}
-
-.stat-label {
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.8);
-  font-weight: 500;
-}
-
-.profile-info h1 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin: 0 0 0.5rem 0;
-  color: #fff;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.profile-title {
-  font-size: 1.25rem;
-  color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 2rem;
-  font-weight: 500;
-}
-
-.profile-actions {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.edit-actions {
-  display: flex;
-  gap: 1rem;
-}
-
-/* Form Sections */
-.profile-form {
-  background: #ffffff;
-  border-radius: 24px;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.form-sections {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-section {
-  padding: 2.5rem;
-  border-bottom: 1px solid #e5e7eb;
-  transition: all 0.3s ease;
-}
-
-.form-section:last-child {
-  border-bottom: none;
-}
-
-.form-section:hover {
-  background: #f9fafb;
-}
-
-.form-section h3 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #1f2937;
-  margin-bottom: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.form-section h3::before {
-  content: '';
-  width: 4px;
-  height: 24px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  border-radius: 2px;
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
-  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  background: var(--ip-bg-secondary);
+  border-radius: var(--ip-radius-md);
+  border: 1px solid var(--ip-border-color);
+  margin: 1.5rem 0;
 }
 
-.form-group {
-  margin-bottom: 1.5rem;
+/* Target the smaller preview canvas specifically */
+.instructor-profile .profile-preview canvas {
+  width: 80px !important; /* Smaller but still visible */
+  height: 80px !important;
+  border-radius: 50% !important; /* Fix border radius syntax */
+  border: 3px solid var(--ip-accent-primary) !important;
+  flex-shrink: 0 !important; /* Prevent shrinking */
+  display: block !important;
 }
 
-.form-group label {
-  display: block;
-  font-weight: 600;
-  color: #374151;
-  margin-bottom: 0.5rem;
-  font-size: 0.875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.form-textarea {
-  width: 100%;
-  min-height: 120px;
-  padding: 1rem;
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
-  font-family: inherit;
-  font-size: 1rem;
-  resize: vertical;
-  transition: all 0.3s ease;
-  background: #fff;
-}
-
-.form-textarea:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-  transform: translateY(-1px);
-}
-
-.form-textarea:disabled {
-  background: #f9fafb;
-  color: #6b7280;
-  cursor: not-allowed;
-}
-
-/* Skills and Tags */
-.skills-section, .achievements-section {
-  background: #f9fafb;
-  border-radius: 16px;
-  padding: 2rem;
-  border: 2px dashed #d1d5db;
-  transition: all 0.3s ease;
-}
-
-.skills-section:hover, .achievements-section:hover {
-  border-color: #667eea;
-  background: #f8faff;
-}
-
-.skills-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
-}
-
-.skill-tag {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 25px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.skill-tag::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.6s ease;
-}
-
-.skill-tag:hover::before {
-  left: 100%;
-}
-
-.skill-tag:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-}
-
-.skill-remove {
-  background: rgba(255, 255, 255, 0.3);
-  border: none;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: white;
-  font-size: 0.75rem;
-  transition: all 0.2s ease;
-}
-
-.skill-remove:hover {
-  background: rgba(255, 255, 255, 0.5);
-  transform: scale(1.1);
-}
-
-.add-skill {
-  display: flex;
-  gap: 1rem;
-  align-items: flex-end;
-}
-
-.add-skill input {
+.instructor-profile .preview-info {
   flex: 1;
+  text-align: left;
 }
 
-/* Achievements */
-.achievements-list {
+.instructor-profile .preview-name {
+  fontWeight: '600';
+  color: var(--ip-text-primary);
+  marginBottom: '0.5rem';
+  fontSize: '1.1rem'; /* Slightly larger text */
+}
+
+.instructor-profile .preview-desc {
+  fontSize: '0.95rem'; /* Slightly larger text */
+  color: var(--ip-text-secondary);
+}
+
+
+/* Modal Action Buttons */
+.instructor-profile .modal-actions {
   display: flex;
-  flex-direction: column;
   gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.achievement-item {
-  background: white;
-  padding: 1rem 1.5rem;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.achievement-item::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
+  justify-content: center;
+  padding: 1.5rem; /* More padding */
+  background: var(--ip-bg-secondary);
+  border-top: 1px solid var(--ip-border-color);
+  position: sticky; /* Make it stick to bottom */
   bottom: 0;
-  width: 4px;
-  background: linear-gradient(135deg, #f59e0b, #d97706);
+  z-index: 10;
 }
 
-.achievement-item:hover {
-  transform: translateX(4px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
 
-.achievement-item i {
-  color: #f59e0b;
-  font-size: 1.25rem;
-  flex-shrink: 0;
-}
-
-.achievement-item span {
-  flex: 1;
-  font-weight: 500;
-  color: #374151;
-}
-
-.achievement-remove {
-  background: #fee2e2;
-  border: none;
-  border-radius: 6px;
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: #dc2626;
-  transition: all 0.2s ease;
-}
-
-.achievement-remove:hover {
-  background: #fecaca;
-  transform: scale(1.1);
-}
-
-.add-achievement {
-  display: flex;
-  gap: 1rem;
-  align-items: flex-end;
-}
-
-.add-achievement input {
-  flex: 1;
-}
-
-/* Modal Styling */
-.image-upload-modal {
-  text-align: center;
-  padding: 2rem;
-}
-
-.image-input {
-  width: 100%;
-  padding: 1rem;
-  border: 2px dashed #d1d5db;
-  border-radius: 12px;
-  margin-bottom: 1rem;
-  background: #f9fafb;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.image-input:hover {
-  border-color: #667eea;
-  background: #f8faff;
-}
-
-.modal-actions {
-  margin-top: 2rem;
-  display: flex;
-  justify-content: center;
-}
-
-/* Button Styling */
-button {
+.instructor-profile .confirm-btn,
+.instructor-profile .cancel-upload-btn {
   padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 12px;
-  font-weight: 600;
-  font-size: 0.875rem;
+  border-radius: var(--ip-radius-md);
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  position: relative;
-  overflow: hidden;
+  transition: var(--ip-transition-fast);
+  border: none;
+  font-size: 0.875rem;
+  font-family: inherit;
+  min-width: 100px;
 }
 
-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.6s ease;
+.instructor-profile .confirm-btn {
+  background: var(--ip-accent-primary);
+  color: white;
 }
 
-button:hover::before {
-  left: 100%;
-}
-
-button:hover {
-  transform: translateY(-2px);
-}
-
-/* Input Styling */
-input {
-  width: 100%;
-  padding: 1rem;
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  background: #fff;
-}
-
-input:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+.instructor-profile .confirm-btn:hover {
+  background: var(--ip-accent-secondary);
   transform: translateY(-1px);
 }
 
-input:disabled {
-  background: #f9fafb;
-  color: #6b7280;
-  cursor: not-allowed;
+.instructor-profile .cancel-upload-btn {
+  background: var(--ip-bg-tertiary);
+  color: var(--ip-text-primary);
+  border: 1px solid var(--ip-border-color);
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
+.instructor-profile .cancel-upload-btn:hover {
+  background: var(--ip-border-color);
+  transform: translateY(-1px);
+}
+
+.instructor-profile .image-upload-modal p {
+  color: var(--ip-text-secondary);
+  margin: 0 0 1.5rem 0;
+  font-size: 0.875rem;
+}
+
+.instructor-profile .upload-tip {
+  font-size: 0.75rem;
+  color: var(--ip-text-muted);
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: var(--ip-bg-tertiary);
+  border-radius: var(--ip-radius-sm);
+  border-left: 3px solid var(--ip-accent-primary);
+}
+
+/* Responsive Design - Scoped */
+@media (min-width: 640px) {
   .instructor-profile {
-    padding: 1rem;
-  }
-  
-  .profile-header {
     padding: 2rem;
   }
   
-  .profile-image-section {
-    flex-direction: column;
+  .instructor-profile .profile-header {
+    flex-direction: row;
     align-items: center;
-    text-align: center;
+  }
+  
+  .instructor-profile .profile-image-section {
+    flex-direction: row;
+    flex: 0 0 auto;
+  }
+  
+  .instructor-profile .profile-info {
+    text-align: left;
+    flex: 1;
+  }
+  
+  .instructor-profile .profile-actions {
+    justify-content: flex-start;
+  }
+  
+  .instructor-profile .profile-image-container {
+    width: 140px;
+    height: 140px;
+    flex-shrink: 0;
+  }
+  
+  .instructor-profile .profile-image {
+    width: 140px;
+    height: 140px;
+  }
+  
+  .instructor-profile .profile-stats {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .instructor-profile .stat {
+    min-width: 6rem;
+  }
+  
+  .instructor-profile .add-skill,
+  .instructor-profile .add-achievement {
+    max-width: 24rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .instructor-profile .profile-header {
+    padding: 3rem;
+  }
+  
+  .instructor-profile .form-section {
+    padding: 2.5rem;
+  }
+  
+  .instructor-profile .form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .instructor-profile .profile-info h1 {
+    font-size: 2.5rem;
+  }
+  
+  .instructor-profile .profile-title {
+    font-size: 1.25rem;
+  }
+  
+  .instructor-profile .profile-image-container {
+    width: 160px;
+    height: 160px;
+    flex-shrink: 0;
+  }
+  
+  .instructor-profile .profile-image {
+    width: 160px;
+    height: 160px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .instructor-profile {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem;
+  }
+  
+  .instructor-profile .form-sections {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+  
+  .instructor-profile .form-section:first-child,
+  .instructor-profile .form-section:nth-child(2) {
+    grid-column: 1 / -1;
+  }
+  
+  .instructor-profile .profile-stats {
+    flex-direction: row;
     gap: 2rem;
   }
-  
-  .profile-stats {
-    flex-wrap: wrap;
-    justify-content: center;
+}
+
+@media (min-width: 1280px) {
+  .instructor-profile .form-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 639px) {
+  .instructor-profile-image-modal {
+    max-width: 95vw;
+    margin: 0.5rem;
+    max-height: 90vh;
   }
   
-  .profile-info h1 {
-    font-size: 2rem;
+  .instructor-profile .crop-preview-container {
+    gap: 1rem;
+    padding: 1.5rem 1rem;
+    flex-direction: column;
   }
   
-  .form-section {
+ .instructor-profile .profile-preview canvas {
+    width: 70px !important;
+    height: 70px !important;
+  }
+  
+  .instructor-profile .profile-preview {
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .instructor-profile .modal-actions {
+    flex-direction: column;
+    padding: 1rem;
+  }
+  
+  .instructor-profile .confirm-btn,
+  .instructor-profile .cancel-upload-btn {
+    width: 100%;
+  }
+}
+
+/* Mobile Optimization - Scoped */
+@media (max-width: 639px) {
+  .instructor-profile {
+    padding: 1rem 0.5rem;
+  }
+  
+  .instructor-profile .profile-header {
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
+  
+  .instructor-profile .form-section {
     padding: 1.5rem;
   }
   
-  .form-grid {
+  .instructor-profile .form-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
   
-  .add-skill, .add-achievement {
+  .instructor-profile .profile-stats {
+    gap: 1rem;
+  }
+  
+  .instructor-profile .stat {
+    min-width: 4rem;
+    padding: 0.75rem;
+  }
+  
+  .instructor-profile .stat-value {
+    font-size: 1.25rem;
+  }
+  
+  .instructor-profile .profile-info h1 {
+    font-size: 1.75rem;
+  }
+  
+  .instructor-profile .edit-actions {
     flex-direction: column;
-    align-items: stretch;
+    width: 100%;
   }
   
-  .edit-actions {
-    flex-direction: column;
-  }
-}
-
-@media (max-width: 480px) {
-  .profile-image {
-    width: 120px;
-    height: 120px;
+  .instructor-profile .edit-btn, 
+  .instructor-profile .save-btn, 
+  .instructor-profile .cancel-btn {
+    width: 100%;
+    justify-content: center;
   }
   
-  .stat {
-    padding: 0.75rem 1rem;
+  .instructor-profile .skills-list {
+    gap: 0.375rem;
   }
   
-  .stat-value {
-    font-size: 1.5rem;
+  .instructor-profile .skill-tag {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
   }
   
-  .skills-list {
+  .instructor-profile .achievement-item {
+    padding: 0.5rem 0.75rem;
     gap: 0.5rem;
   }
   
-  .skill-tag {
-    font-size: 0.75rem;
-    padding: 0.375rem 0.75rem;
+  .instructor-profile .add-skill,
+  .instructor-profile .add-achievement {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .instructor-profile .skill-input,
+  .instructor-profile .achievement-input {
+    width: 100%;
+  }
+  
+  /* Mobile modal adjustments */
+  .instructor-profile-image-modal {
+    max-width: 90vw;
+    margin: 1rem;
+  }
+  
+  .instructor-profile .image-preview-container {
+    max-height: 300px;
+  }
+  
+  .instructor-profile .modal-actions {
+    flex-direction: column;
+  }
+  
+  .instructor-profile .confirm-btn,
+  .instructor-profile .cancel-upload-btn {
+    width: 100%;
   }
 }
 
-/* Loading States */
-.loading-shimmer {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: loading 1.5s infinite;
-}
-
-@keyframes loading {
-  0% {
-    background-position: 200% 0;
+/* High Performance Animations - Scoped */
+@media (prefers-reduced-motion: no-preference) {
+  .instructor-profile {
+    animation: instructor-slideInUp 0.6s ease-out;
   }
-  100% {
-    background-position: -200% 0;
+  
+  @keyframes instructor-slideInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .instructor-profile .form-section {
+    animation: instructor-fadeInScale 0.4s ease-out forwards;
+    animation-delay: calc(var(--ip-section-index, 0) * 0.1s);
+    opacity: 0;
+  }
+  
+  @keyframes instructor-fadeInScale {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  /* Crop selection animation */
+  .instructor-profile .crop-selection {
+    animation: instructor-cropPulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes instructor-cropPulse {
+    0%, 100% {
+      border-color: var(--ip-accent-primary);
+      box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+    }
+    50% {
+      border-color: var(--ip-accent-secondary);
+      box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
+    }
   }
 }
 
-/* Smooth Animations */
-* {
-  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+/* Reduced Motion Support - Scoped */
+@media (prefers-reduced-motion: reduce) {
+  .instructor-profile,
+  .instructor-profile *,
+  .instructor-profile *::before,
+  .instructor-profile *::after {
+    transition: none !important;
+    animation: none !important;
+  }
 }
 
-/* Focus Styles for Accessibility */
-*:focus {
-  outline: 2px solid #667eea;
+/* Focus States - Scoped */
+.instructor-profile .edit-btn:focus-visible,
+.instructor-profile .save-btn:focus-visible,
+.instructor-profile .cancel-btn:focus-visible,
+.instructor-profile .add-btn:focus-visible,
+.instructor-profile .done-btn:focus-visible,
+.instructor-profile .confirm-btn:focus-visible,
+.instructor-profile .cancel-upload-btn:focus-visible,
+.instructor-profile .form-group input:focus-visible,
+.instructor-profile .form-group textarea:focus-visible,
+.instructor-profile .skill-input:focus-visible,
+.instructor-profile .achievement-input:focus-visible,
+.instructor-profile .close-btn:focus-visible,
+.instructor-profile .image-edit-btn:focus-visible,
+.instructor-profile .image-input:focus-visible {
+  outline: 2px solid var(--ip-accent-primary);
   outline-offset: 2px;
 }
 
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
+/* Print Styles - Scoped */
+@media print {
   .instructor-profile {
-    background: #0f172a;
-    color: #f1f5f9;
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
   }
   
-  .profile-form {
-    background: #1e293b;
-    border-color: #334155;
+  .instructor-profile .profile-actions,
+  .instructor-profile .image-edit-btn,
+  .instructor-profile .skill-remove,
+  .instructor-profile .achievement-remove,
+  .instructor-profile .add-skill,
+  .instructor-profile .add-achievement,
+  .instructor-profile-image-modal-overlay {
+    display: none !important;
   }
   
-  .form-section {
-    border-color: #334155;
-  }
-  
-  .form-section:hover {
-    background: #334155;
-  }
-  
-  .form-section h3 {
-    color: #f1f5f9;
-  }
-  
-  .form-textarea, input {
-    background: #334155;
-    border-color: #475569;
-    color: #f1f5f9;
-  }
-  
-  .form-textarea:disabled, input:disabled {
-    background: #1e293b;
-    color: #64748b;
-  }
-  
-  .skills-section, .achievements-section {
-    background: #334155;
-    border-color: #475569;
-  }
-  
-  .achievement-item {
-    background: #475569;
-    color: #f1f5f9;
+  .instructor-profile .form-section {
+    break-inside: avoid;
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
   }
 }
+
+/* Performance Optimizations - Scoped */
+.instructor-profile .profile-header,
+.instructor-profile .form-section,
+.instructor-profile .stat,
+.instructor-profile .achievement-item {
+  contain: layout style;
+}
+
+.instructor-profile-image-modal-overlay {
+  contain: layout style paint;
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .instructor-profile .profile-image:hover,
+  .instructor-profile .stat:hover,
+  .instructor-profile .achievement-item:hover {
+    transform: none;
+  }
+  
+  .instructor-profile .image-edit-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+  
+  .instructor-profile .crop-selection {
+    min-width: 100px;
+    min-height: 100px;
+  }
+  
+  .instructor-profile .crop-handle {
+    width: 16px;
+    height: 16px;
+    bottom: -8px;
+    right: -8px;
+  }
+}
+
+/* Enhanced Accessibility */
+.instructor-profile .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Loading States */
+.instructor-profile .loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.instructor-profile .loading::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid var(--ip-text-muted);
+  border-top: 2px solid var(--ip-accent-primary);
+  border-radius: 50%;
+  animation: instructor-spin 1s linear infinite;
+  z-index: 1;
+}
+
+@keyframes instructor-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+

@@ -19,7 +19,13 @@ const styles = `
   .navbar-container {
     max-width: 1280px;
     margin: 0 auto;
-    padding: 0 1rem;
+    padding: 0 0.75rem;
+  }
+
+  @media (min-width: 768px) {
+    .navbar-container {
+      padding: 0 1rem;
+    }
   }
 
   .navbar-content {
@@ -27,12 +33,22 @@ const styles = `
     justify-content: space-between;
     align-items: center;
     height: 4rem;
+    gap: 0.5rem;
   }
 
   .navbar-left {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
+    min-width: 0;
+    flex: 1;
+  }
+
+  @media (min-width: 768px) {
+    .navbar-left {
+      gap: 1rem;
+      flex: none;
+    }
   }
 
   .sidebar-toggle {
@@ -43,6 +59,11 @@ const styles = `
     color: white;
     cursor: pointer;
     transition: background-color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
   }
 
   .sidebar-toggle:hover {
@@ -54,22 +75,49 @@ const styles = `
     align-items: center;
     text-decoration: none;
     color: white;
+    min-width: 0;
+    outline: none;
+    border: none;
+  }
+
+  .logo:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+    border-radius: 0.375rem;
   }
 
   .logo-icon {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2rem;
+    height: 2rem;
     background-color: rgba(255, 255, 255, 0.2);
     border-radius: 0.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 0.75rem;
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 768px) {
+    .logo-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      margin-right: 0.75rem;
+    }
   }
 
   .logo-text {
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  @media (min-width: 768px) {
+    .logo-text {
+      font-size: 1.25rem;
+    }
   }
 
   .nav-links {
@@ -88,17 +136,35 @@ const styles = `
     color: white;
     text-decoration: none;
     font-weight: 500;
+    font-size: 0.875rem;
     transition: color 0.2s;
+    white-space: nowrap;
+    outline: none;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
   }
 
   .nav-link:hover {
     color: #bfdbfe;
   }
 
+  .nav-link:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+  }
+
   .navbar-right {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  @media (min-width: 768px) {
+    .navbar-right {
+      gap: 1rem;
+    }
   }
 
   .theme-toggle, .notification-btn {
@@ -110,6 +176,12 @@ const styles = `
     cursor: pointer;
     transition: background-color 0.2s;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    flex-shrink: 0;
   }
 
   .theme-toggle:hover, .notification-btn:hover {
@@ -136,11 +208,13 @@ const styles = `
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
     font-weight: 500;
+    font-size: 0.875rem;
     cursor: pointer;
     transition: background-color 0.2s;
+    white-space: nowrap;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     .create-course-btn {
       display: flex;
     }
@@ -168,12 +242,21 @@ const styles = `
     border: none;
     color: white;
     font-weight: 500;
+    font-size: 0.875rem;
     cursor: pointer;
     transition: color 0.2s;
+    white-space: nowrap;
+    outline: none;
+    border-radius: 0.25rem;
   }
 
   .sign-in-btn:hover {
     color: #bfdbfe;
+  }
+
+  .sign-in-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
   }
 
   .sign-up-btn {
@@ -183,12 +266,20 @@ const styles = `
     border: none;
     border-radius: 0.5rem;
     font-weight: 500;
+    font-size: 0.875rem;
     cursor: pointer;
     transition: background-color 0.2s;
+    white-space: nowrap;
+    outline: none;
   }
 
   .sign-up-btn:hover {
     background-color: #1d4ed8;
+  }
+
+  .sign-up-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
   }
 
   .profile-dropdown {
@@ -198,14 +289,24 @@ const styles = `
   .profile-btn {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.25rem;
     background: transparent;
     border: none;
     color: white;
-    padding: 0.5rem;
+    padding: 0.25rem;
     border-radius: 0.5rem;
     cursor: pointer;
     transition: background-color 0.2s;
+    min-width: 0;
+    max-width: 150px;
+  }
+
+  @media (min-width: 768px) {
+    .profile-btn {
+      gap: 0.5rem;
+      padding: 0.5rem;
+      max-width: none;
+    }
   }
 
   .profile-btn:hover {
@@ -213,15 +314,24 @@ const styles = `
   }
 
   .profile-icon {
-    width: 2rem;
-    height: 2rem;
+    width: 1.75rem;
+    height: 1.75rem;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     font-weight: 600;
-    font-size: 0.875rem;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 768px) {
+    .profile-icon {
+      width: 2rem;
+      height: 2rem;
+      font-size: 0.875rem;
+    }
   }
 
   .profile-icon.instructor {
@@ -239,7 +349,12 @@ const styles = `
   .profile-text {
     display: none;
     font-weight: 500;
+    font-size: 0.875rem;
     text-transform: capitalize;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
   }
 
   @media (min-width: 768px) {
@@ -271,6 +386,9 @@ const styles = `
     font-weight: 500;
     color: #111827;
     margin: 0 0 0.25rem 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .dropdown-header p:last-child {
@@ -289,6 +407,7 @@ const styles = `
     color: #374151;
     text-decoration: none;
     transition: background-color 0.2s;
+    cursor: pointer;
   }
 
   .dropdown-item:hover {
@@ -305,6 +424,9 @@ const styles = `
     color: white;
     cursor: pointer;
     transition: background-color 0.2s;
+    min-width: 40px;
+    height: 40px;
+    flex-shrink: 0;
   }
 
   @media (min-width: 768px) {
@@ -326,6 +448,8 @@ const styles = `
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     border-top: 1px solid #e5e7eb;
     z-index: 40;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
   }
 
   .mobile-menu-content {
@@ -343,6 +467,7 @@ const styles = `
     color: #374151;
     text-decoration: none;
     font-weight: 500;
+    font-size: 0.875rem;
     padding: 0.5rem 0;
     transition: color 0.2s;
   }
@@ -363,6 +488,7 @@ const styles = `
     padding: 0.75rem 1rem;
     border-radius: 0.5rem;
     font-weight: 500;
+    font-size: 0.875rem;
     cursor: pointer;
     transition: background-color 0.2s;
     margin-bottom: 1rem;
@@ -386,6 +512,7 @@ const styles = `
     background: transparent;
     border: none;
     font-weight: 500;
+    font-size: 0.875rem;
     padding: 0.5rem 0;
     text-align: left;
     cursor: pointer;
@@ -404,8 +531,10 @@ const styles = `
     padding: 0.75rem 1rem;
     border-radius: 0.5rem;
     font-weight: 500;
+    font-size: 0.875rem;
     cursor: pointer;
     transition: background-color 0.2s;
+    text-align: left;
   }
 
   .mobile-sign-up:hover {
@@ -430,6 +559,9 @@ const styles = `
     font-weight: 500;
     color: #111827;
     margin: 0 0 0.25rem 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .mobile-profile-header p:last-child {
@@ -448,6 +580,7 @@ const styles = `
     color: #374151;
     text-decoration: none;
     transition: color 0.2s;
+    cursor: pointer;
   }
 
   .mobile-dropdown-item:hover {
@@ -467,6 +600,7 @@ const styles = `
     color: #374151;
     border: none;
     padding: 0.5rem 0;
+    text-align: left;
   }
 
   .mobile-menu-open .mobile-sign-up:hover {
@@ -474,12 +608,108 @@ const styles = `
     color: #2563eb;
   }
 
-  /* REMOVED: The problematic body padding rule that was causing white space */
-  /* 
-  body {
-    padding-top: 4rem;
+  /* Responsive improvements */
+  @media (max-width: 480px) {
+    .navbar-container {
+      padding: 0 0.5rem;
+    }
+
+    .navbar-content {
+      gap: 0.25rem;
+    }
+
+    .navbar-left {
+      gap: 0.25rem;
+    }
+
+    .logo-text {
+      font-size: 0.875rem;
+    }
+
+    .logo-icon {
+      width: 1.75rem;
+      height: 1.75rem;
+      margin-right: 0.25rem;
+    }
+
+    .profile-btn {
+      max-width: 120px;
+    }
+
+    .profile-icon {
+      width: 1.5rem;
+      height: 1.5rem;
+      font-size: 0.6875rem;
+    }
+
+    .sidebar-toggle, .theme-toggle, .notification-btn, .mobile-toggle {
+      min-width: 36px;
+      height: 36px;
+      padding: 0.375rem;
+    }
   }
-  */
+
+  /* Performance optimizations */
+  .navbar * {
+    -webkit-tap-highlight-color: transparent;
+    outline: none !important;
+  }
+
+  .navbar *:focus {
+    outline: none !important;
+  }
+
+  /* Remove default browser outlines and add custom focus styles */
+  /* Remove default browser outlines and add custom focus styles */
+  .navbar button,
+  .navbar a,
+  .navbar input {
+    outline: none !important;
+    border: none;
+  }
+
+  .navbar button:focus,
+  .navbar a:focus {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  .navbar,
+  .dropdown-menu,
+  .mobile-menu {
+    will-change: transform;
+  }
+
+  /* Smooth animations */
+  .dropdown-menu {
+    animation: fadeInDown 0.15s ease-out;
+  }
+
+  .mobile-menu {
+    animation: slideDown 0.2s ease-out;
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 `;
 
 // Base Navbar Component
@@ -497,9 +727,10 @@ const BaseNavbar = ({
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
-  const toggleMobileMenu = useCallback(() => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  }, [isMobileMenuOpen]);
+  const toggleMobileMenu = useCallback((e) => {
+    if (e) e.stopPropagation();
+    setIsMobileMenuOpen(prev => !prev);
+  }, []);
 
   const toggleProfileDropdown = useCallback(() => {
     setIsProfileDropdownOpen(!isProfileDropdownOpen);
@@ -514,8 +745,20 @@ const BaseNavbar = ({
     }
   }, [logout, navigate]);
 
+  // Updated create course handler with correct path matching sidebar
   const handleCreateCourse = useCallback(() => {
-    navigate('/instructor/create-course');
+    console.log('Create Course clicked'); // Debug log
+    try {
+      // Use the same path as defined in the sidebar component
+      navigate('/instructor/courses/create');
+      
+      // Close mobile menu if open
+      setIsMobileMenuOpen(false);
+    } catch (error) {
+      console.error('Navigation error:', error);
+      // Fallback navigation
+      window.location.href = '/instructor/courses/create';
+    }
   }, [navigate]);
 
   const handleSignIn = useCallback(() => {
@@ -538,6 +781,7 @@ const BaseNavbar = ({
         return [
           { icon: Layout, label: 'Dashboard', path: '/instructor/dashboard' },
           { icon: BookOpen, label: 'My Courses', path: '/instructor/courses' },
+          { icon: Plus, label: 'Create Course', path: '/instructor/courses/create' }, // Updated to match sidebar path
           { icon: Users, label: 'Students', path: '/instructor/students' },
           { icon: BarChart3, label: 'Analytics', path: '/instructor/analytics' },
           { icon: CreditCard, label: 'Earnings', path: '/instructor/earnings' },
@@ -594,6 +838,24 @@ const BaseNavbar = ({
     return () => window.removeEventListener('resize', handleResize);
   }, [isMobileMenuOpen]);
 
+  // Close dropdowns when clicking outside (but not mobile toggle)
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Don't close mobile menu if clicking on mobile toggle button
+      if (event.target.closest('.mobile-toggle')) {
+        return;
+      }
+      
+      if (!event.target.closest('.profile-dropdown') && !event.target.closest('.mobile-menu')) {
+        setIsProfileDropdownOpen(false);
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
   return (
     <>
       <style>{styles}</style>
@@ -610,7 +872,7 @@ const BaseNavbar = ({
               
               <Link to="/" className="logo">
                 <div className="logo-icon">
-                  <BookOpen size={24} />
+                  <BookOpen size={20} />
                 </div>
                 <span className="logo-text">EduPlatform</span>
               </Link>
@@ -627,20 +889,20 @@ const BaseNavbar = ({
             {/* Right Section */}
             <div className="navbar-right">
               {/* Theme Toggle */}
-              <button className="theme-toggle" onClick={toggleTheme}>
-                <div style={{
-                  width: '20px', 
-                  height: '20px', 
-                  backgroundColor: theme === 'dark' ? '#fbbf24' : '#f59e0b', 
-                  borderRadius: '50%'
-                }}></div>
-              </button>
+            <button className="theme-toggle" onClick={toggleTheme}>
+              <div style={{
+                width: '20px', 
+                height: '20px', 
+                backgroundColor: theme === 'light' ? '#fbbf24' : 'transparent',
+                borderRadius: '50%',
+                boxShadow: theme === 'light' ? 'none' : 'inset 6px 0px 0px #e5e7eb'
+              }}></div>
+            </button>
 
               {/* Notifications */}
               {userType !== 'guest' && (
                 <button className="notification-btn">
                   <Bell size={20} />
-                  <span className="notification-badge"></span>
                 </button>
               )}
 
@@ -665,7 +927,7 @@ const BaseNavbar = ({
                       {(user?.name || userName).charAt(0).toUpperCase()}
                     </div>
                     <span className="profile-text">{userType}</span>
-                    <ChevronDown size={16} />
+                    <ChevronDown size={14} />
                   </button>
 
                   {isProfileDropdownOpen && (
@@ -679,7 +941,6 @@ const BaseNavbar = ({
                           key={index} 
                           className="dropdown-item"
                           onClick={() => handleMenuItemClick(item)}
-                          style={{ cursor: 'pointer' }}
                         >
                           <item.icon size={16} />
                           <span>{item.label}</span>
@@ -691,8 +952,11 @@ const BaseNavbar = ({
               )}
 
               {/* Mobile Menu Toggle */}
-              <button className="mobile-toggle" onClick={toggleMobileMenu}>
-                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              <button className="mobile-toggle" onClick={(e) => {
+                e.stopPropagation();
+                toggleMobileMenu();
+              }}>
+                {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
               </button>
             </div>
           </div>
@@ -735,7 +999,6 @@ const BaseNavbar = ({
                       key={index} 
                       className="mobile-dropdown-item"
                       onClick={() => handleMenuItemClick(item)}
-                      style={{ cursor: 'pointer' }}
                     >
                       <item.icon size={16} />
                       <span>{item.label}</span>
@@ -749,7 +1012,8 @@ const BaseNavbar = ({
 
         {/* Overlay */}
         {(isMobileMenuOpen || isProfileDropdownOpen) && (
-          <div className="overlay" onClick={() => {
+          <div className="overlay" onClick={(e) => {
+            e.stopPropagation();
             setIsMobileMenuOpen(false);
             setIsProfileDropdownOpen(false);
           }}></div>

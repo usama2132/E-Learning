@@ -1,11 +1,13 @@
-/* Pending Courses Dashboard Styles */
-.pending-courses-container {
+/* Scoped Pending Courses Dashboard Styles */
+/* Wrap all styles under a main container class to prevent conflicts */
+
+.pending-courses-dashboard {
   padding: 2rem;
   background: var(--background-primary);
   min-height: 100vh;
 }
 
-.pending-courses-header {
+.pending-courses-dashboard .dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -14,7 +16,7 @@
   border-bottom: 2px solid var(--border-light);
 }
 
-.pending-courses-title {
+.pending-courses-dashboard .dashboard-title {
   font-size: 2rem;
   font-weight: 700;
   color: var(--text-primary);
@@ -23,12 +25,12 @@
   gap: 0.75rem;
 }
 
-.pending-courses-title::before {
+.pending-courses-dashboard .dashboard-title::before {
   content: "⏳";
   font-size: 1.5rem;
 }
 
-.pending-count-badge {
+.pending-courses-dashboard .count-badge {
   background: var(--warning-color);
   color: white;
   padding: 0.25rem 0.75rem;
@@ -38,7 +40,7 @@
   margin-left: 0.5rem;
 }
 
-.pending-courses-filters {
+.pending-courses-dashboard .dashboard-filters {
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
@@ -46,93 +48,106 @@
   align-items: center;
 }
 
-.filter-group {
+.pending-courses-dashboard .filter-group {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.filter-label {
+.pending-courses-dashboard .filter-label {
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-secondary);
+  white-space: nowrap;
 }
 
-.filter-select,
-.filter-input {
+.pending-courses-dashboard .filter-select,
+.pending-courses-dashboard .filter-input {
   padding: 0.5rem 1rem;
   border: 2px solid var(--border-light);
   border-radius: 0.5rem;
   font-size: 0.875rem;
   background: var(--background-secondary);
   color: var(--text-primary);
-  transition: all 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  min-width: 120px;
 }
 
-.filter-select:focus,
-.filter-input:focus {
+.pending-courses-dashboard .filter-select:focus,
+.pending-courses-dashboard .filter-input:focus {
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px var(--primary-color-light);
 }
 
-.pending-courses-grid {
+.pending-courses-dashboard .courses-grid {
   display: grid;
   gap: 1.5rem;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
 }
 
-.pending-course-card {
+.pending-courses-dashboard .course-card {
   background: var(--background-secondary);
   border-radius: 1rem;
   padding: 1.5rem;
   box-shadow: var(--shadow-medium);
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   border: 2px solid transparent;
   position: relative;
+  will-change: transform;
 }
 
-.pending-course-card:hover {
+.pending-courses-dashboard .course-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-large);
   border-color: var(--primary-color-light);
 }
 
-.course-card-header {
+.pending-courses-dashboard .card-header {
   display: flex;
-  justify-content: between;
+  justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 1rem;
 }
 
-.course-thumbnail {
+.pending-courses-dashboard .course-thumbnail {
   width: 80px;
   height: 60px;
   border-radius: 0.5rem;
   object-fit: cover;
   background: var(--background-tertiary);
   margin-right: 1rem;
+  flex-shrink: 0;
 }
 
-.course-basic-info {
+.pending-courses-dashboard .basic-info {
   flex: 1;
+  min-width: 0; /* Prevents flex item from overflowing */
 }
 
-.course-title {
+.pending-courses-dashboard .course-title {
   font-size: 1.125rem;
   font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 0.25rem;
   line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
-.course-instructor {
+.pending-courses-dashboard .course-instructor {
   font-size: 0.875rem;
   color: var(--text-secondary);
   margin-bottom: 0.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.course-category {
+.pending-courses-dashboard .course-category {
   display: inline-block;
   background: var(--primary-color-light);
   color: var(--primary-color);
@@ -142,7 +157,7 @@
   font-weight: 600;
 }
 
-.course-details {
+.pending-courses-dashboard .course-details {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
@@ -152,13 +167,13 @@
   border-radius: 0.5rem;
 }
 
-.detail-item {
+.pending-courses-dashboard .detail-item {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
 
-.detail-label {
+.pending-courses-dashboard .detail-label {
   font-size: 0.75rem;
   color: var(--text-secondary);
   font-weight: 600;
@@ -166,13 +181,13 @@
   letter-spacing: 0.5px;
 }
 
-.detail-value {
+.pending-courses-dashboard .detail-value {
   font-size: 0.875rem;
   color: var(--text-primary);
   font-weight: 500;
 }
 
-.course-submission-date {
+.pending-courses-dashboard .submission-date {
   position: absolute;
   top: 1rem;
   right: 1rem;
@@ -184,91 +199,95 @@
   font-weight: 600;
 }
 
-.course-actions {
+.pending-courses-dashboard .card-actions {
   display: flex;
   gap: 0.75rem;
   margin-top: 1.5rem;
   justify-content: flex-end;
+  flex-wrap: wrap;
 }
 
-.action-btn {
+.pending-courses-dashboard .action-btn {
   padding: 0.5rem 1.25rem;
   border: none;
   border-radius: 0.5rem;
   font-size: 0.875rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  text-decoration: none;
+  flex-shrink: 0;
 }
 
-.btn-view {
+.pending-courses-dashboard .btn-view {
   background: var(--info-color-light);
   color: var(--info-color);
 }
 
-.btn-view:hover {
+.pending-courses-dashboard .btn-view:hover {
   background: var(--info-color);
   color: white;
 }
 
-.btn-approve {
+.pending-courses-dashboard .btn-approve {
   background: var(--success-color-light);
   color: var(--success-color);
 }
 
-.btn-approve:hover {
+.pending-courses-dashboard .btn-approve:hover {
   background: var(--success-color);
   color: white;
 }
 
-.btn-reject {
+.pending-courses-dashboard .btn-reject {
   background: var(--danger-color-light);
   color: var(--danger-color);
 }
 
-.btn-reject:hover {
+.pending-courses-dashboard .btn-reject:hover {
   background: var(--danger-color);
   color: white;
 }
 
-.btn-request-changes {
+.pending-courses-dashboard .btn-request-changes {
   background: var(--warning-color-light);
   color: var(--warning-color);
 }
 
-.btn-request-changes:hover {
+.pending-courses-dashboard .btn-request-changes:hover {
   background: var(--warning-color);
   color: white;
 }
 
-.empty-state {
+.pending-courses-dashboard .empty-state {
   text-align: center;
   padding: 4rem 2rem;
   color: var(--text-secondary);
 }
 
-.empty-state-icon {
+.pending-courses-dashboard .empty-state-icon {
   font-size: 4rem;
   margin-bottom: 1rem;
 }
 
-.empty-state-title {
+.pending-courses-dashboard .empty-state-title {
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
   color: var(--text-primary);
 }
 
-.empty-state-text {
+.pending-courses-dashboard .empty-state-text {
   font-size: 1rem;
   max-width: 400px;
   margin: 0 auto;
+  line-height: 1.5;
 }
 
-.bulk-actions {
+.pending-courses-dashboard .bulk-actions {
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
@@ -276,9 +295,10 @@
   background: var(--background-secondary);
   border-radius: 0.5rem;
   align-items: center;
+  flex-wrap: wrap;
 }
 
-.bulk-select-all {
+.pending-courses-dashboard .bulk-select-all {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -286,13 +306,14 @@
   color: var(--text-secondary);
 }
 
-.bulk-actions-buttons {
+.pending-courses-dashboard .bulk-actions-buttons {
   display: flex;
   gap: 0.75rem;
   margin-left: auto;
+  flex-wrap: wrap;
 }
 
-.course-checkbox {
+.pending-courses-dashboard .course-checkbox {
   position: absolute;
   top: 1rem;
   left: 1rem;
@@ -302,7 +323,7 @@
 }
 
 /* Priority indicators */
-.priority-indicator {
+.pending-courses-dashboard .priority-indicator {
   position: absolute;
   top: 0;
   left: 0;
@@ -311,74 +332,157 @@
   border-radius: 1rem 0 0 1rem;
 }
 
-.priority-high {
+.pending-courses-dashboard .priority-high {
   background: var(--danger-color);
 }
 
-.priority-medium {
+.pending-courses-dashboard .priority-medium {
   background: var(--warning-color);
 }
 
-.priority-low {
+.pending-courses-dashboard .priority-low {
   background: var(--success-color);
 }
 
 /* Loading and pagination */
-.loading-overlay {
+.pending-courses-dashboard .loading-overlay {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 4rem;
 }
 
-.pagination-container {
+.pending-courses-dashboard .pagination-container {
   margin-top: 2rem;
   display: flex;
   justify-content: center;
 }
 
-/* Responsive design */
+/* Performance optimizations */
+.pending-courses-dashboard .course-card,
+.pending-courses-dashboard .action-btn {
+  contain: layout style;
+}
+
+/* Responsive design with better breakpoints */
+@media (max-width: 1200px) {
+  .pending-courses-dashboard .courses-grid {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  }
+}
+
 @media (max-width: 768px) {
-  .pending-courses-container {
+  .pending-courses-dashboard {
     padding: 1rem;
   }
   
-  .pending-courses-header {
+  .pending-courses-dashboard .dashboard-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
   
-  .pending-courses-filters {
+  .pending-courses-dashboard .dashboard-filters {
     flex-direction: column;
     align-items: stretch;
   }
   
-  .pending-courses-grid {
+  .pending-courses-dashboard .filter-group {
+    width: 100%;
+  }
+  
+  .pending-courses-dashboard .filter-select,
+  .pending-courses-dashboard .filter-input {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .pending-courses-dashboard .courses-grid {
     grid-template-columns: 1fr;
   }
   
-  .course-details {
+  .pending-courses-dashboard .course-details {
     grid-template-columns: 1fr;
   }
   
-  .course-actions {
-    flex-wrap: wrap;
-    justify-content: stretch;
+  .pending-courses-dashboard .card-actions {
+    flex-direction: column;
+    align-items: stretch;
   }
   
-  .action-btn {
-    flex: 1;
+  .pending-courses-dashboard .action-btn {
     justify-content: center;
+    width: 100%;
   }
   
-  .bulk-actions {
+  .pending-courses-dashboard .bulk-actions {
     flex-direction: column;
     align-items: stretch;
   }
   
-  .bulk-actions-buttons {
+  .pending-courses-dashboard .bulk-actions-buttons {
     margin-left: 0;
-    justify-content: stretch;
+    width: 100%;
+  }
+  
+  .pending-courses-dashboard .bulk-actions-buttons .action-btn {
+    flex: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .pending-courses-dashboard {
+    padding: 0.75rem;
+  }
+  
+  .pending-courses-dashboard .dashboard-title {
+    font-size: 1.5rem;
+  }
+  
+  .pending-courses-dashboard .course-card {
+    padding: 1rem;
+  }
+  
+  .pending-courses-dashboard .card-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .pending-courses-dashboard .course-thumbnail {
+    width: 100%;
+    height: 120px;
+    margin-right: 0;
+  }
+  
+  .pending-courses-dashboard .submission-date {
+    position: static;
+    align-self: flex-start;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .pending-courses-dashboard .course-card {
+    transition: none;
+  }
+  
+  .pending-courses-dashboard .course-card:hover {
+    transform: none;
+  }
+  
+  .pending-courses-dashboard .action-btn {
+    transition: none;
+  }
+}
+
+/* Dark mode optimizations */
+@media (prefers-color-scheme: dark) {
+  .pending-courses-dashboard .course-card {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  }
+  
+  .pending-courses-dashboard .course-card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
   }
 }
